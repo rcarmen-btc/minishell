@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/01 20:23:00 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/02 00:13:07 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	init_args(t_args *args, int ac, char **av)
 
 void		free_and_exit(t_args *args, int id)
 {
+	char	**tmp;
+
 	if (id == 0)	
 	{
 		free(args);
@@ -70,15 +72,71 @@ void		free_and_exit(t_args *args, int id)
 	else if (id == 1)
 	{
 		free(args->tmp_path);
+		free(args->full_path1);
+		free(args->full_path2);
+		free(args->file1);
+		free(args->file2);
+		tmp = args->command1;
+		while (*args->command1)
+			free(*args->command1++);
+		free(tmp);
+		tmp = args->command2;
+		while (*args->command2)
+			free(*args->command2++);
+		free(tmp);
 		free(args);
 		exit(1);
 	}
 	else if (id == 2)
 	{
 		free(args->tmp_path);
-		free(args);
 		free(args->full_path1);
 		free(args->full_path2);
+		free(args->file1);
+		free(args->file2);
+		tmp = args->command1;
+		while (*args->command1)
+			free(*args->command1++);
+		free(tmp);
+		tmp = args->command2;
+		while (*args->command2)
+			free(*args->command2++);
+		free(tmp);
+		free(args);
+		exit(1);
+	}
+	else if (id == 3)
+	{
+		free(args->full_path1);
+		free(args->full_path2);
+		free(args->file1);
+		free(args->file2);
+		tmp = args->command1;
+		while (*args->command1)
+			free(*args->command1++);
+		free(tmp);
+		tmp = args->command2;
+		while (*args->command2)
+			free(*args->command2++);
+		free(tmp);
+		free(args);
+		exit(1);
+	}
+	else if (id == 4)
+	{
+		free(args->full_path1);
+		free(args->full_path2);
+		free(args->file1);
+		free(args->file2);
+		tmp = args->command1;
+		while (*args->command1)
+			free(*args->command1++);
+		free(tmp);
+		tmp = args->command2;
+		while (*args->command2)
+			free(*args->command2++);
+		free(tmp);
+		free(args);
 		exit(1);
 	}
 }
@@ -87,7 +145,7 @@ void		error(char *output, int id, t_args *args)
 {
 	if (id == 0)
 	{
-		write(1, &output, ft_strlen(output));
+		write(1, output, ft_strlen(output));
 		free_and_exit(args, 0);
 	}
 	else if (id == 1)
@@ -98,8 +156,13 @@ void		error(char *output, int id, t_args *args)
 	}
 	else if (id == 2)
 	{
-		perror(args->file2);
+		perror(args->file1);
 		free_and_exit(args, 2);
+	}	
+	else if (id == 4)
+	{
+		perror(args->file1);
+		free_and_exit(args, 4);
 	}
 }
 
@@ -111,13 +174,18 @@ int	main(int ac, char **av, char **ep)
 
 	args = (t_args *)ft_calloc(sizeof(t_args), 1);
 	if (init_args(args, ac, av) == 1)
-		error("Error. Where ?\n", 0, args);
+		error("Error.\n", 0, args);
 	args->full_path1 = get_path_to_exe(ep, args->command1[0], args);
 	args->full_path2 = get_path_to_exe(ep, args->command2[0], args);
 	pipe(fd);
 	if (fork() == 0)
 	{
+		outfile_fd = open(args->file1, O_RDONLY);
+		if (outfile_fd == -1)
+			error("Man, I love frogs\n", 4, args);
 		close(fd[0]);
+		dup2(outfile_fd, 0);
+		close(outfile_fd);
 		dup2(fd[1], 1);
 		close(fd[1]);
 		execve(args->full_path1, args->command1, NULL);
@@ -128,7 +196,7 @@ int	main(int ac, char **av, char **ep)
 	{
 		outfile_fd = open(args->file2, O_CREAT|O_WRONLY|O_TRUNC, 0666);
 		if (outfile_fd == -1)
-			error("Man, I love frogs\n", 2, args);
+			error("Man, I love frogs\n", 4, args);
 		close(fd[1]);
 		dup2(outfile_fd, 1);
 		close(outfile_fd);
@@ -142,5 +210,6 @@ int	main(int ac, char **av, char **ep)
 	close(fd[1]);
 	wait(NULL);
 	wait(NULL);
+	free_and_exit(args, 3);
 	return (0);
 }
