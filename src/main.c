@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/02 00:13:07 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/02 01:27:39 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void		free_and_exit(t_args *args, int id)
 	}
 	else if (id == 2)
 	{
-		free(args->tmp_path);
 		free(args->full_path1);
 		free(args->full_path2);
 		free(args->file1);
@@ -106,23 +105,6 @@ void		free_and_exit(t_args *args, int id)
 		exit(1);
 	}
 	else if (id == 3)
-	{
-		free(args->full_path1);
-		free(args->full_path2);
-		free(args->file1);
-		free(args->file2);
-		tmp = args->command1;
-		while (*args->command1)
-			free(*args->command1++);
-		free(tmp);
-		tmp = args->command2;
-		while (*args->command2)
-			free(*args->command2++);
-		free(tmp);
-		free(args);
-		exit(1);
-	}
-	else if (id == 4)
 	{
 		free(args->full_path1);
 		free(args->full_path2);
@@ -159,10 +141,10 @@ void		error(char *output, int id, t_args *args)
 		perror(args->file1);
 		free_and_exit(args, 2);
 	}	
-	else if (id == 4)
+	else if (id == 3)
 	{
 		perror(args->file1);
-		free_and_exit(args, 4);
+		free_and_exit(args, 3);
 	}
 }
 
@@ -182,7 +164,7 @@ int	main(int ac, char **av, char **ep)
 	{
 		outfile_fd = open(args->file1, O_RDONLY);
 		if (outfile_fd == -1)
-			error("Man, I love frogs\n", 4, args);
+			error("Man, I love frogs\n", 3, args);
 		close(fd[0]);
 		dup2(outfile_fd, 0);
 		close(outfile_fd);
@@ -196,7 +178,7 @@ int	main(int ac, char **av, char **ep)
 	{
 		outfile_fd = open(args->file2, O_CREAT|O_WRONLY|O_TRUNC, 0666);
 		if (outfile_fd == -1)
-			error("Man, I love frogs\n", 4, args);
+			error("Man, I love frogs\n", 3, args);
 		close(fd[1]);
 		dup2(outfile_fd, 1);
 		close(outfile_fd);
@@ -210,6 +192,6 @@ int	main(int ac, char **av, char **ep)
 	close(fd[1]);
 	wait(NULL);
 	wait(NULL);
-	free_and_exit(args, 3);
+	free_and_exit(args, 2);
 	return (0);
 }
