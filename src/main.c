@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/05 12:49:50 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/05 13:12:15 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*join_in_one_arr(char **args, int start, int end)
 		free(tmp);
 		start++;
 	}
-	return (res);	
+	return (res);
 }
 
 char 	**new_arr_args(char **args, char *qstr, int len)
@@ -100,6 +100,16 @@ char 	**new_arr_args(char **args, char *qstr, int len)
 	return (res);
 }
 
+void	find_start_and_end(int *i, int *j, char **args)
+{
+	while (args[*i])
+	{
+		if (is_exists_quotes(args[*i]) && *j == 0)
+			*j = *i;
+		(*i)++;
+	}
+}
+
 char	**join_in_qoutes(char **args, char *s, char **tmp1)
 {
 	int		i;
@@ -109,14 +119,9 @@ char	**join_in_qoutes(char **args, char *s, char **tmp1)
 	char	*tmp;
 
 	i = 0;
-	args = ft_split(s, ' ');
 	j = 0;
-	while (args[i])
-	{
-		if (is_exists_quotes(args[i]) && j == 0)
-			j = i;
-		i++;
-	}
+	args = ft_split(s, ' ');
+	find_start_and_end(&i, &j, args);
 	qstr = join_in_one_arr(args, j, i - 1);
 	tmp = qstr;
 	if (qstr[0] == '"')
