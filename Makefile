@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#              #
-#    Updated: 2021/06/27 18:12:39 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/07/05 12:38:09 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = pipex
 INC_DIR = include src/libft/inc
 INC = include/main.h src/libft/inc/libft.h
 
-SRC = main.c
+SRC = main.c free_and_exit.c 
 SRC_DIR = src
 
 LIBFT = src/libft/libft.a
@@ -24,7 +24,7 @@ ALL_SRC = $(addprefix $(SRC_DIR)/, $(SRC))
 
 CC = gcc
 
-FLAGS = -g -O0 # -Wall -Werror -Wextra
+FLAGS = -g -O0 -Wall -Werror -Wextra
 
 all: $(NAME)
 
@@ -43,4 +43,3 @@ execlean:
 	rm -f $(NAME)
 
 re: fclean all
-

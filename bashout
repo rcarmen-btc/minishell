@@ -1,18 +1,9 @@
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isalnum.d
--rw-rw-r-- 1 riser riser  97080 Jun 26 07:33 ft_isalnum.o
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isalpha.d
--rw-rw-r-- 1 riser riser  97064 Jun 26 07:33 ft_isalpha.o
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isascii.d
--rw-rw-r-- 1 riser riser  96832 Jun 26 07:33 ft_isascii.o
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isdigit.d
--rw-rw-r-- 1 riser riser  97056 Jun 26 07:33 ft_isdigit.o
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isprint.d
--rw-rw-r-- 1 riser riser  97056 Jun 26 07:33 ft_isprint.o
--rw-rw-r-- 1 riser riser   2662 Jun 26 07:33 ft_isspace.d
--rw-rw-r-- 1 riser riser  96856 Jun 26 07:33 ft_isspace.o
--rwxrwxr-x 1 riser riser 1015 Jun 26 07:33 ft_isalnum.c
--rwxrwxr-x 1 riser riser  993 Jun 26 07:33 ft_isalpha.c
--rwxrwxr-x 1 riser riser  969 Jun 26 07:33 ft_isascii.c
--rwxrwxr-x 1 riser riser  968 Jun 26 07:33 ft_isdigit.c
--rwxrwxr-x 1 riser riser  969 Jun 26 07:33 ft_isprint.c
--rwxrwxr-x 1 riser riser 1051 Jun 26 07:33 ft_isspace.c
+ft_strjoin.c  
+ft_strlcat.c  
+ft_strrchr.c
+ft_strlcpy.c  
+ft_strlen.c   
+ft_strchr.c      
+ft_strcpy.c      
+ft_strdup.c      
+ft_strnew.c   
