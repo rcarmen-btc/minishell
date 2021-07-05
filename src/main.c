@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/05 12:41:45 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/05 12:49:50 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,46 +30,6 @@ void	error(char *output, int id, t_args *args)
 		perror(args->file1);
 		free_and_exit(args, 2);
 	}	
-	// else if (id == 3)
-	// {
-	// 	perror(args->file1);
-	// 	free_and_exit(args, 2);
-	// }
-}
-
-char	*get_path_to_exe(char **ep, char *command, t_args *args)
-{
-	char	**path;
-	char	*slash;
-
-	slash = "/";
-	while (*ep != NULL)
-	{
-		if (ft_strncmp(*ep, "PATH", 4) == 0)
-			break ;
-		ep++;
-	}
-	path = ft_split(*ep, ':');
-	args->tmp_path = path;
-	while (*path != 0)
-	{
-		args->with_slash = ft_strjoin(slash, command);
-		args->full_path = ft_strjoin(*path, args->with_slash);
-		free(args->with_slash);
-		if (access(args->full_path, 0) == 0)
-		{
-			while (*path)
-				free(*path++);
-			free(args->tmp_path);
-			return (args->full_path);
-		}
-		free(args->full_path);
-		free(*path);
-		path++;
-	}
-	error(command, 1, args);
-
-	return (NULL);
 }
 
 int	is_exists_quotes(char *s)
