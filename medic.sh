@@ -59,8 +59,5 @@ printf "$PURPLE$S2$RESET\n"
 < test1 grep hello | awk "'{count++} END {print count}'" > test2 2> test2
 ./pipex user1 "grep hello" "awk \"'{count++} END {print count}'\"" user2 2> user2
 comp test2 user2
-rm -rf test2 user2
-
-rm -rf test1 user1
 
 printf "\033[38;2;255;176;0m\n%80s\n%80s\n%80s\033[0m\n" "Test finished." "@2021, Pipex Medic." "https://github.com/gmarcha"
