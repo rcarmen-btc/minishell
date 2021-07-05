@@ -6,13 +6,13 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/05 13:03:31 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/05 13:21:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-char *get_path_to_exe_heplper(char **path, char *command, t_args *args)
+char	*get_path_to_exe_heplper(char **path, char *command, t_args *args)
 {
 	char	*slash;
 
@@ -49,7 +49,7 @@ char	*get_path_to_exe(char **ep, char *command, t_args *args)
 	}
 	path = ft_split(*ep, ':');
 	args->tmp_path = path;
-	res = get_path_to_exe_heplper(path, command, args); 
+	res = get_path_to_exe_heplper(path, command, args);
 	if (res)
 		return (res);
 	else

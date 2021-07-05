@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#              #
-#    Updated: 2021/07/05 12:49:14 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/07/05 13:22:30 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = pipex
 INC_DIR = include src/libft/inc
 INC = include/main.h src/libft/inc/libft.h
 
-SRC = main.c free_and_exit.c get_path_to_exe.c 
+SRC = main.c free_and_exit.c get_path_to_exe.c init.c strjoin.c error.c
 SRC_DIR = src
 
 LIBFT = src/libft/libft.a

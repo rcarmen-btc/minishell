@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/01 18:21:38 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/07/05 13:23:20 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,10 @@ void		error(char *output, int id, t_args *args);
 void		free_and_exit(t_args *args, int id);
 int			init_args(t_args *args, int ac, char **av);
 char		*get_path_to_exe(char **ep, char *command, t_args *args);
+char		*ft_strjoin_space(char const *s1, char const *s2);
+char		*join_in_one_arr(char **args, int start, int end);
+char		**join_in_qoutes(char **args, char *s, char **tmp1);
+void		find_start_and_end(int *i, int *j, char **args);
+int			is_exists_quotes(char *s);
 
 #endif
