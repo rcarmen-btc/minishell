@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/06/25 13:13:46 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/07/10 00:26:47 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,37 +20,39 @@ SRC =	ft_atoi.c     ft_isascii.c    ft_itoa.c          ft_lstiter.c  ft_memccpy.
 		ft_isalpha.c  ft_itoa_base.c  ft_lstdelone.c     ft_lstsize.c  ft_memdel.c   ft_putnbr_fd.c   ft_strdup.c     ft_strmapi.c  ft_strtrim.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
-INC_DIR = ../../src/libft/inc/
-SRC_DIR = ../../src/libft/src/
-OBJ_DIR = ../../src/libft/od/
+INC_DIR = inc/
+SRC_DIR = src/
+OBJ_DIR = od/
 
 SRC_PATH = $(addprefix $(SRC_DIR), $(SRC))
 OBJ_PATH = $(addprefix $(OBJ_DIR), $(OBJ))
 D_PATH = $(patsubst %.o, %.d, $(OBJ_PATH))
 
 CFLAGS = -Wall -Wextra -Werror
-OPT_FLUGS = -O -g3
+OPT_FLUGS = -O -g3 -pipe
 
 all: od $(NAME)
 
 od:
-	mkdir -p ../../src/libft/od/
+	mkdir -p od/
 
 $(NAME): $(OBJ_PATH)
 	ar rcs $(NAME) $?
+	@echo "\033[90m[\033[32mSuccess\033[90m]\033[32mSuccessfully compiled libft\033[0m"
 
 VPATH = $(SRC_DIR)
 
 $(OBJ_DIR)%.o: %.c
 	gcc $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD -I$(INC_DIR)
+	@echo "\033[90m[\033[32mOK\033[90m]\033[33mCompiling $<\033[0m"
 
 include	$(wildcard $(D_PATH))
 
 print-%: ; @echo $*=$($*)
 
 clean:
-	rm -f $(OBJ_PATH) $(D_PATH) ../../src/libft/od/libft.d
-	rm -rf ../../src/libft/od/
+	rm -f $(OBJ_PATH) $(D_PATH) od/libft.d
+	rm -rf od/
 
 fclean: clean
 	rm -f libft.a

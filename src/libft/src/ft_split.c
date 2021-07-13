@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 16:30:46 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/27 02:57:30 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/06/11 00:39:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ static size_t	get_lttr_cnt(char const *s, char c)
 	return (lttr_cnt);
 }
 
+/*
+ *i++;
+ */
 static char	**get_arr_split(char **arr, char const *s, char c)
 {
 	size_t	i;
