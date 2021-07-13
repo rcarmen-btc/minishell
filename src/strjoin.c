@@ -12,7 +12,7 @@
 
 #include "main.h"
 
-char 	**new_arr_args(char **args, char *qstr, int len)
+char	**new_arr_args(char **args, char *qstr, int len)
 {	
 	char	**res;
 	int		i;

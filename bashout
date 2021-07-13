@@ -1,9 +1,0 @@
-ft_strjoin.c  
-ft_strlcat.c  
-ft_strrchr.c
-ft_strlcpy.c  
-ft_strlen.c   
-ft_strchr.c      
-ft_strcpy.c      
-ft_strdup.c      
-ft_strnew.c   
