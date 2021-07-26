@@ -5,56 +5,92 @@
 #                                                     +:+ +:+         +:+      #
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#              #
-#    Updated: 2021/07/10 19:29:25 by rcarmen          ###   ########.fr        #
+#    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
+#    Updated: 2021/07/10 00:26:47 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
-LIBS = -L./src/libft -lft
+NAME = minishell
 
-CC = gcc
-FLAGS = -g -Wall -Werror -Wextra -pipe 
+INC = libft.h main.h
+INC = src/libft/inc/libft.h inc/main.h
+SRC = main.c
+OBJ =	$(patsubst %.c, %.o, $(SRC))
+LIBS = -L./src/libft -lft -lreadline
 
-INC_DIRS = inc/ src/libft/inc/
+INC_DIR = inc/ src/libft/inc
+SRC_DIR = src/
+OBJ_DIR = od/
 
-SRCS = main.c free_and_exit.c get_path_to_exe.c init.c strjoin.c error.c
-SRCS_DIR = src/
+SRC_PATH = $(addprefix $(SRC_DIR), $(SRC))
+OBJ_PATH = $(addprefix $(OBJ_DIR), $(OBJ))
+D_PATH = $(patsubst %.o, %.d, $(OBJ_PATH))
 
-OBJS = $(patsubst %.c, %.o, $(SRCS))
-OBJS_DIR = od/
+CC = clang
+CFLAGS = #-Wall -Wextra -Werror
+OPT_FLUGS = -O -g3 -pipe
 
-PATH_TO_SRCS = $(addprefix $(SRCS_DIR), $(SRCS))
+COM_COLOR   = \033[0;34m
+OBJ_COLOR   = \033[0;36m
+OK_COLOR    = \033[0;32m
+ERROR_COLOR = \033[0;31m
+WARN_COLOR  = \033[0;33m
+NO_COLOR    = \033[m
 
-PATH_TO_OBJS = $(addprefix $(OBJS_DIR), $(OBJS))
+OK_STRING    = "[OK]"
+ERROR_STRING = "[ERROR]"
+WARN_STRING  = "[WARNING]"
+COM_STRING   = "Compiling"
 
-D_PATH = $(patsubst %.o, %.d, $(PATH_TO_OBJS))
+define run
+printf "%b" "$(COM_COLOR)$(COM_STRING) $(OBJ_COLOR)$(@F)$(NO_COLOR)\r"; \
+$(1) 2> $@.log; \
+RESULT=$$?; \
+if [ $$RESULT -ne 0 ]; then \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $@" "$(ERROR_COLOR)$(ERROR_STRING)$(NO_COLOR)\n"   ; \
+elif [ -s $@.log ]; then \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $@" "$(WARN_COLOR)$(WARN_STRING)$(NO_COLOR)\n"   ; \
+else  \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $(@F)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"   ; \
+fi; \
+cat $@.log; \
+rm -f $@.log; \
+exit $$RESULT
+endef
 
 all: od $(NAME)
 
-$(NAME): $(PATH_TO_OBJS)
-	@$(MAKE) -C src/libft
-	$(CC) $^ -o $(NAME) $(LIBS)
-	@echo "\033[90m[\033[32mSuccess\033[90m]\033[32mSuccessfully compiled pipex\033[0m"
+$(NAME): $(OBJ_PATH)
+	@$(MAKE) all -C src/libft/
+	@$(CC) $^ -o $(NAME) $(LIBS)
 
+
+VPATH = $(SRC_DIR)
+
+$(OBJ_DIR)%.o: %.c
+	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD $(addprefix -I, $(INC_DIR)))
+	
 include	$(wildcard $(D_PATH))
 
-VPATH = $(SRCS_DIR)
-
-$(OBJS_DIR)%.o: %.c $(INC_DIRS)
-	gcc -c -MD $(FLAGS) $< -o $@ -MD $(addprefix -I, $(INC_DIRS))
-	@echo "\033[90m[\033[32mOK\033[90m]\033[33mCompiling $<\033[0m"
-
 od:
-	mkdir -p od/
+	@mkdir -p od/
 
 clean:
-	@$(MAKE) clean -C src/libft
-	rm -rf od/
+	@if [ -e $(OBJ_DIR) ]; then \
+		rm -rf $(OBJ_DIR);	\
+  		printf "%-60b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(OBJ_DIR)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"; \
+	else \
+  		printf "%-41b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(OBJ_DIR)" "$(ERROR_COLOR)[There is no such directory]$(NO_COLOR)\n"; \
+	fi;
 
 fclean: clean
-	@$(MAKE) fclean -C src/libft
-	rm -f $(NAME)
+	@if [ -e $(NAME) ]; then \
+		$(MAKE) fclean -C src/libft; \
+		rm -f $(NAME); \
+  		printf "%-60b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(NAME)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"; \
+	else \
+  		printf "%-41b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(NAME)" "$(ERROR_COLOR)[There is no such file]$(NO_COLOR)\n"; \
+	fi;
 
 re: fclean all
 

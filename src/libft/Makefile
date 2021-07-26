@@ -28,34 +28,68 @@ SRC_PATH = $(addprefix $(SRC_DIR), $(SRC))
 OBJ_PATH = $(addprefix $(OBJ_DIR), $(OBJ))
 D_PATH = $(patsubst %.o, %.d, $(OBJ_PATH))
 
+CC = clang
 CFLAGS = -Wall -Wextra -Werror
 OPT_FLUGS = -O -g3 -pipe
 
+COM_COLOR   = \033[0;34m
+OBJ_COLOR   = \033[0;36m
+OK_COLOR    = \033[0;32m
+ERROR_COLOR = \033[0;31m
+WARN_COLOR  = \033[0;33m
+NO_COLOR    = \033[m
+
+OK_STRING    = "[OK]"
+ERROR_STRING = "[ERROR]"
+WARN_STRING  = "[WARNING]"
+COM_STRING   = "Compiling"
+
+define run
+printf "%b" "$(COM_COLOR)$(COM_STRING) $(OBJ_COLOR)$(@F)$(NO_COLOR)\r"; \
+$(1) 2> $@.log; \
+RESULT=$$?; \
+if [ $$RESULT -ne 0 ]; then \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $@" "$(ERROR_COLOR)$(ERROR_STRING)$(NO_COLOR)\n"   ; \
+elif [ -s $@.log ]; then \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $@" "$(WARN_COLOR)$(WARN_STRING)$(NO_COLOR)\n"   ; \
+else  \
+  printf "%-60b%b" "$(COM_COLOR)$(COM_STRING)$(OBJ_COLOR) $(@F)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"   ; \
+fi; \
+cat $@.log; \
+rm -f $@.log; \
+exit $$RESULT
+endef
+
 all: od $(NAME)
 
-od:
-	mkdir -p od/
-
 $(NAME): $(OBJ_PATH)
-	ar rcs $(NAME) $?
-	@echo "\033[90m[\033[32mSuccess\033[90m]\033[32mSuccessfully compiled libft\033[0m"
+	@ar rcs $(NAME) $?
 
 VPATH = $(SRC_DIR)
 
 $(OBJ_DIR)%.o: %.c
-	gcc $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD -I$(INC_DIR)
-	@echo "\033[90m[\033[32mOK\033[90m]\033[33mCompiling $<\033[0m"
-
+	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD -I$(INC_DIR))
+	
 include	$(wildcard $(D_PATH))
 
-print-%: ; @echo $*=$($*)
+od:
+	@mkdir -p od/
 
 clean:
-	rm -f $(OBJ_PATH) $(D_PATH) od/libft.d
-	rm -rf od/
+	@if [ -e $(OBJ_DIR) ]; then \
+		rm -rf $(OBJ_DIR);	\
+  		printf "%-60b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(OBJ_DIR)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"; \
+	else \
+  		printf "%-41b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(OBJ_DIR)" "$(ERROR_COLOR)[There is no such directory]$(NO_COLOR)\n"; \
+	fi;
 
 fclean: clean
-	rm -f libft.a
+	@if [ -e $(NAME) ]; then \
+		rm -f $(NAME); \
+  		printf "%-60b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(NAME)" "$(OK_COLOR)$(OK_STRING)$(NO_COLOR)\n"; \
+	else \
+  		printf "%-41b%b" "$(COM_COLOR)Deletion $(OBJ_COLOR)$(NAME)" "$(ERROR_COLOR)[There is no such file]$(NO_COLOR)\n"; \
+	fi;
 
 re: fclean all
 

@@ -20,7 +20,7 @@
 # endif
 
 # ifndef IS_LINUX
-#  define IS_LINUX 0
+#  define IS_LINUX 1
 # endif
 
 # ifndef NULL_SIZE
@@ -32,29 +32,6 @@
 # define UTF8_3 0xFFFF
 # define UTF8_4 0x1FFFFF
 
-typedef enum e_type_mods
-{
-	no_type = 0b00000000,
-	character = 0b00000001,
-	string = 0b00000010,
-	digit = 0b00000100,
-	integer = 0b00001000,
-	unsig = 0b00010000,
-	hex = 0b00100000,
-	upper_hex = 0b01000000,
-	percent = 0b00000011,
-	pointer = 0b00000111
-}				t_type_mods;
-
-typedef enum e_flags
-{
-	none = 0b00000000,
-	zero = 0b00000001,
-	minus = 0b00000010,
-	space = 0b00000100,
-	sharp = 0b00001000
-}				t_flags;
-
 typedef struct s_list
 {
 	void			*content;
@@ -62,22 +39,39 @@ typedef struct s_list
 }					t_list;
 
 /*
-**	general prototypes
+**	expects "int nuber" and "fd"; print "number"
 */
 void				ft_putnbr_fd(int n, int fd);
+
+/*
+**	expects "char*" and "fd"; print "char**" and "\n"
+*/
 void				ft_putendl_fd(char *s, int fd);
+
+/*
+**	expects "char*" and "fd"; print "char**"
+*/
 void				ft_putstr_fd(char *s, int fd);
+
+/*
+**	set the mem "s" in "n" poz to zero
+*/
 void				ft_bzero(void *s, size_t n);
+
+/*
+**	man calloc
+*/
 void				*ft_calloc(size_t nmemb, size_t size);
+
 void				*ft_memccpy(void *dest, const void *src, int c, size_t n);
 void				*ft_memchr(const void *a, int c, size_t n);
 int					ft_isspace(char c);
 int					ft_isalnum(int c);
-int					ft_atoi(const char *np);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isdigit(int n);
 int					ft_isprint(int c);
+int					ft_atoi(const char *np);
 int					ft_memcmp(const void *arr1, const void *arr2, size_t n);
 int					ft_strncmp(const char *str1, const char *str2, size_t n);
 int					ft_tolower(int c);
