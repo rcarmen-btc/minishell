@@ -30,6 +30,7 @@ CC = clang
 CFLAGS = #-Wall -Wextra -Werror
 OPT_FLUGS = -O -g3 -pipe
 
+HMM_COLOR   = \033[0;35m
 COM_COLOR   = \033[0;34m
 OBJ_COLOR   = \033[0;36m
 OK_COLOR    = \033[0;32m
@@ -61,13 +62,15 @@ endef
 all: od $(NAME)
 
 $(NAME): $(OBJ_PATH)
-	@$(MAKE) all -C src/libft/
 	@$(CC) $^ -o $(NAME) $(LIBS)
+	@echo "$(OK_COLOR)----SUCCSESS MINISHELL----$(NO_COLOR)"
 
 
 VPATH = $(SRC_DIR)
 
 $(OBJ_DIR)%.o: %.c
+	@$(MAKE) all -C src/libft/
+	@echo "$(HMM_COLOR)----MINISHELL----$(NO_COLOR)"
 	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD $(addprefix -I, $(INC_DIR)))
 	
 include	$(wildcard $(D_PATH))

@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   del_lst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/10 13:20:25 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/11 00:29:26 by rcarmen          ###   ########.fr       */
+/*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
+/*   Updated: 2021/07/09 11:37:11 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void	del_lst(t_lst *head)
 {
-	if (f != NULL)
+	t_lst	*tmp;
+
+	while (head)
 	{
-		while (lst != NULL)
-		{
-			f(lst->content);
-			lst = lst->next;
-		}
+		tmp = head->next;
+		free(head);
+		head = tmp;
 	}
 }

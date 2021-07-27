@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <unistd.h>
 # include <stdlib.h>
+# include "lst.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
@@ -54,7 +55,7 @@ void				ft_putendl_fd(char *s, int fd);
 void				ft_putstr_fd(char *s, int fd);
 
 /*
-**	set the mem "s" in "n" poz to zero
+**	expects "*s" - mem and "size_t size"; set the mem "s" in "n" poz to zero
 */
 void				ft_bzero(void *s, size_t n);
 
@@ -63,7 +64,15 @@ void				ft_bzero(void *s, size_t n);
 */
 void				*ft_calloc(size_t nmemb, size_t size);
 
+
+/*
+**	expects dest - mem, src - mem, c - char, n - len;
+*/
 void				*ft_memccpy(void *dest, const void *src, int c, size_t n);
+
+/*
+**	expects, ;
+*/
 void				*ft_memchr(const void *a, int c, size_t n);
 int					ft_isspace(char c);
 int					ft_isalnum(int c);
