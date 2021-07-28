@@ -78,10 +78,8 @@ $(NAME): $(OBJ_PATH)
 VPATH = $(SRC_DIR)
 
 $(OBJ_DIR)%.o: %.c
-	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD -I$(INC_DIR))
+	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -I$(INC_DIR))
 	
-include	$(wildcard $(D_PATH))
-
 od:
 	@mkdir -p od/
 

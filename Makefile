@@ -14,9 +14,11 @@ NAME = minishell
 
 INC = libft.h main.h
 INC = src/libft/inc/libft.h inc/main.h
-SRC = main.c
-OBJ =	$(patsubst %.c, %.o, $(SRC))
+
 LIBS = -L./src/libft -lft -lreadline
+
+SRC = main.c lexer.c token.c
+OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc
 SRC_DIR = src/
@@ -59,22 +61,21 @@ rm -f $@.log; \
 exit $$RESULT
 endef
 
-all: od $(NAME)
+all: od start $(NAME)
 
 $(NAME): $(OBJ_PATH)
+	@$(MAKE) all -C src/libft/
 	@$(CC) $^ -o $(NAME) $(LIBS)
 	@echo "$(OK_COLOR)----SUCCSESS MINISHELL----$(NO_COLOR)"
 
+start:
+	@echo "$(HMM_COLOR)----MINISHELL----$(NO_COLOR)"
 
 VPATH = $(SRC_DIR)
 
 $(OBJ_DIR)%.o: %.c
-	@$(MAKE) all -C src/libft/
-	@echo "$(HMM_COLOR)----MINISHELL----$(NO_COLOR)"
-	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ -MD $(addprefix -I, $(INC_DIR)))
+	@$(call run, $(CC) $(CFLAGS) $(OPT_FLUGS) -c $< -o $@ $(addprefix -I, $(INC_DIR)))
 	
-include	$(wildcard $(D_PATH))
-
 od:
 	@mkdir -p od/
 

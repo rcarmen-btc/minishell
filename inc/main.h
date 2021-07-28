@@ -29,4 +29,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+void *ft_realloc(void *ptr, size_t origsize ,size_t newsize);
+
 #endif

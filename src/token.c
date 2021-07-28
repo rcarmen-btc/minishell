@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst.h                                              :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/24 03:18:32 by rcarmen          ###   ########.fr       */
+/*   Created: 2021/07/28 21:26:38 by rcarmen           #+#    #+#             */
+/*   Updated: 2021/07/28 21:26:38 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LST_H
-# define LST_H
-# include <stdlib.h>
+#include "token.h"
+#include "main.h"
 
-typedef struct s_lst
+t_token	*init_token(int type, char *value)
 {
-	int	val;
-	struct s_lst	*next;
-}					t_lst;
-
-void	push(t_lst **head, int val);
-void	push_back(t_lst **head, int val);
-int		pop(t_lst **head);
-int		pop_back(t_lst **head);
-t_lst	*get_nth(t_lst *head, int n);
-t_lst	*get_last(t_lst *head);
-t_lst	*get_sec_to_last(t_lst *head);
-size_t	get_lst_len(t_lst *head);
-
-#endif
+	t_token *token = ft_calloc(1, sizeof(t_token));
+	token->type = type;
+	token->value = value;
+	return (token);
+}

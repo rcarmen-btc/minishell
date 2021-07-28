@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst.h                                              :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/24 03:18:32 by rcarmen          ###   ########.fr       */
+/*   Created: 2021/07/28 21:24:31 by rcarmen           #+#    #+#             */
+/*   Updated: 2021/07/28 21:24:33 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LST_H
-# define LST_H
-# include <stdlib.h>
+#ifndef TOKEN_N
+# define TOKEN_N
 
-typedef struct s_lst
+typedef struct s_token
 {
-	int	val;
-	struct s_lst	*next;
-}					t_lst;
+	enum
+	{
+		TOKEN_ID,
+		TOKEN_DSTRING,
+		TOKEN_SSTRING,
+		TOKEN_IN_ONE_DSTRING,
+		TOKEN_IN_ONE_SSTRING,
+		TOKEN_PIPE,
+		TOKEN_RREDIR,
+		TOKEN_LREDIR,
+		TOKEN_HERE_DOC,
+		TOKEN_APPRDIR,
+		TOKEN_NULL = 0
+	}		type;
 
-void	push(t_lst **head, int val);
-void	push_back(t_lst **head, int val);
-int		pop(t_lst **head);
-int		pop_back(t_lst **head);
-t_lst	*get_nth(t_lst *head, int n);
-t_lst	*get_last(t_lst *head);
-t_lst	*get_sec_to_last(t_lst *head);
-size_t	get_lst_len(t_lst *head);
+	char	*value;
+}				t_token;
+
+t_token	*init_token(int type, char *value);
 
 #endif
