@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/24 03:18:32 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/05 00:22:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,24 @@
 
 typedef struct s_lst
 {
-	int	val;
+	int				val;
 	struct s_lst	*next;
 }					t_lst;
 
 void	push(t_lst **head, int val);
+
 void	push_back(t_lst **head, int val);
+
 int		pop(t_lst **head);
+
 int		pop_back(t_lst **head);
+
 t_lst	*get_nth(t_lst *head, int n);
+
 t_lst	*get_last(t_lst *head);
+
 t_lst	*get_sec_to_last(t_lst *head);
+
 size_t	get_lst_len(t_lst *head);
 
 #endif

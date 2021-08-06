@@ -6,12 +6,19 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/28 22:13:17 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/05 21:38:22 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "main.h"
+
+int	is_reserved_symbol(char c)
+{
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return(0);
+}
 
 t_lexer	*init_lexer(char *str)
 {
@@ -50,7 +57,8 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 			lexer_skip_whitespace(lexer);
 		if (lexer->c == '"' || lexer->c == '\'')
 			return (lexer_collect_string(lexer, lexer->c));
-		if (ft_isprint(lexer->c) && !ft_isspace(lexer->c))
+		if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
+		!is_reserved_symbol(lexer->c))
 			return (lexer_collect_id(lexer));
 		if (lexer->c == '|')
 			return (lexer_advance_with_token(lexer, \
@@ -63,7 +71,7 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 			{
 				lexer_advance(lexer);
 				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_APPRDIR, ft_strdup("<<"))));
+				init_token(TOKEN_APPRDIR, ft_strdup(">>"))));
 			}
 			else
 				return (lexer_advance_with_token(lexer, \
@@ -131,7 +139,8 @@ t_token	*lexer_collect_id(t_lexer *lexer)
 
 	value = ft_calloc(1, sizeof(char *));
 	len_val = 1;
-	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c))
+	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
+	!is_reserved_symbol(lexer->c))
 	{
 		s = lexer_get_current_char_as_string(lexer);
 		value = ft_realloc(value, len_val, \
@@ -142,7 +151,7 @@ t_token	*lexer_collect_id(t_lexer *lexer)
 		lexer_advance(lexer);
 	}
 	lexer_advance(lexer);
-	return (init_token(TOKEN_ID, value));
+	return (init_token(TOKEN_CMD, value));
 }
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token)

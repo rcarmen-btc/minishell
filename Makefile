@@ -6,18 +6,18 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/07/10 00:26:47 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/08/01 20:08:10 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-INC = libft.h main.h
+INC = libft.h main.h token.h cmdlst.h
 INC = src/libft/inc/libft.h inc/main.h
 
 LIBS = -L./src/libft -lft -lreadline
 
-SRC = main.c lexer.c token.c
+SRC = main.c lexer.c token.c cmdlst.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc

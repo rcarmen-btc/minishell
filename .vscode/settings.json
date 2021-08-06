@@ -2,7 +2,8 @@
 	"files.associations": {
 		"token.h": "c",
 		"lexer.h": "c",
-		"main.h": "c"
+		"main.h": "c",
+		"cmdlst.h": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }
