@@ -3,7 +3,8 @@
 		"token.h": "c",
 		"lexer.h": "c",
 		"main.h": "c",
-		"cmdlst.h": "c"
+		"cmdlst.h": "c",
+		"type_traits": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }

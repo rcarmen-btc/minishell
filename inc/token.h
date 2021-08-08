@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:24:31 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/05 21:38:21 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/07 10:48:24 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_token
 		TOKEN_EXEC_ARGS,
 		TOKEN_NULL
 	}		type;
-
 	char	*value;
 }				t_token;
 

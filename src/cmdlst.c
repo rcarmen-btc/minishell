@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/01 19:53:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/06 21:32:13 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/08 20:19:43 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,67 +21,67 @@ int		is_id_or_sring(int token)
 	return (0);
 }
 
-void	collect_cmd_and_args(t_token *token, t_lexer **lexer, t_cmdlst **cmdlst)
+void	collect_cmd_and_args(t_lst **linelst, t_cmdlst **cmdlst)
 {
 	(*cmdlst)->type = TOKEN_EXEC_ARGS;
-	(*cmdlst)->cmdline = ft_calloc(2, sizeof(char *));
-	(*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen(token->value) + 1, sizeof(char));
-	ft_strlcpy((*cmdlst)->cmdline[cmd_i], token->value, ft_strlen(token->value) + 1);
-	while ((token = lexer_get_next_token(*lexer)) != (void *)0 && \
-	is_id_or_sring(token->type))
+	// (*cmdlst)->cmdline = ft_calloc(3, sizeof(char *));
+	(*cmdlst)->cmdline = NULL;
+	(*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen((*linelst)->value) + 1, sizeof(char));
+	ft_strlcpy((*cmdlst)->cmdline[cmd_i], (*linelst)->value, ft_strlen((*linelst)->value) + 1);
+	while (*linelst && \
+	is_id_or_sring((*linelst)->type))
 	{
-	    // printf("%d: %s\n", token->type, token->value);
-		cmd_i++;
 		(*cmdlst)->cmdline = ft_realloc((*cmdlst)->cmdline, cmd_i, (cmd_i + 2) * sizeof(char *));
-		(*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen(token->value) + 1, sizeof(char));
-		ft_strlcpy((*cmdlst)->cmdline[cmd_i], token->value, ft_strlen(token->value) + 1);
-		if (token)
-		{
-			free(token->value);
-			free(token);
-		}
+		(*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen((*linelst)->value) + 1, sizeof(char));
+		ft_strlcpy((*cmdlst)->cmdline[cmd_i], (*linelst)->value, ft_strlen((*linelst)->value) + 1);
+		*linelst = (*linelst)->next; 
+		cmd_i++;
 	}
 	cmd_i++;
 	(*cmdlst)->cmdline[cmd_i] = NULL;
-	// if (token != NULL)
-	// 	printf("%d: %s\n", token->type, token->value);
 	cmd_i = 0;
 }
 
 t_cmdlst	*get_last_cmdlst(t_cmdlst *cmdlst)
 {
-	while (cmdlst != NULL)
-		cmdlst = cmdlst->next;
-	return (cmdlst);
+	t_cmdlst	*tmp;
+
+	tmp = cmdlst;
+	if (tmp == NULL)
+		return (NULL);
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
 }
 
-void	cmdlst_push_back(t_token *token, t_lexer **lexer, t_cmdlst **cmdlst)
+void	cmdlst_push_back(t_lst **linelst, t_cmdlst **cmdlst)
 {
 	t_cmdlst	*tmp; 
 
-	if (is_id_or_sring(token->type))
+	if (*linelst && is_id_or_sring((*linelst)->type))
 	{
 		tmp = ft_calloc(1, sizeof(t_cmdlst));
 		tmp->next = NULL;
-		collect_cmd_and_args(token, lexer, &tmp);
+		cmd_i = 0;
+		collect_cmd_and_args(linelst, &tmp);
 		if (*cmdlst == NULL)
 			*cmdlst = tmp;
 		else
 		{
-			printf("%d\n",(get_last_cmdlst(*cmdlst)->type));
+			// printf("%d\n",(get_last_cmdlst(*cmdlst)->type));
 			get_last_cmdlst(*cmdlst)->next = tmp;
 		}
 	}
-	if (token != NULL)
-		printf("<>%d: %s\n", token->type, token->value);
-	if (!is_id_or_sring(token->type))
+	// if (*linelst) 
+		// printf("%d: %s\n", (*linelst)->type, (*linelst)->value);
+	if (*linelst && !is_id_or_sring((*linelst)->type))
 	{
 		tmp = ft_calloc(1, sizeof(t_cmdlst));
 		tmp->next = NULL;
 		tmp->cmdline = ft_calloc(1, sizeof(char *));
-		tmp->cmdline[0] = ft_calloc(ft_strlen(token->value) + 1, sizeof(char));
-		ft_strlcpy(tmp->cmdline[0], token->value, ft_strlen(token->value) + 1);
-		tmp->type = token->type;
+		tmp->cmdline[0] = ft_calloc(ft_strlen((*linelst)->value) + 1, sizeof(char));
+		ft_strlcpy(tmp->cmdline[0], (*linelst)->value, ft_strlen((*linelst)->value) + 1);
+		tmp->type = (*linelst)->type;
 		if (*cmdlst == NULL)
 			*cmdlst = tmp;
 		else
@@ -89,25 +89,13 @@ void	cmdlst_push_back(t_token *token, t_lexer **lexer, t_cmdlst **cmdlst)
 	}
 }
 
-t_cmdlst	*init_cmdlst(char *line)
+void	init_cmdlst(t_lst *linelst, t_cmdlst **cmdlst)
 {
-	t_lexer *lexer;
-	t_token	*token;
-	t_cmdlst *cmdlst;
-
-	cmdlst = NULL;
-	lexer = init_lexer(line);
-	while ((token = lexer_get_next_token(lexer)) != (void *)0)
+	while (linelst)
 	{
-		cmd_i = 0;
-		// printf("%d: %s\n", token->type, token->value);
-		cmdlst_push_back(token, &lexer, &cmdlst);
-		if (token)
-		{
-			free(token->value);
-			free(token);
-		}
+		// printf("> %d: %s\n", linelst->type, linelst->value);
+		cmdlst_push_back(&linelst, cmdlst);
+		if (linelst)
+			linelst = linelst->next;
 	}
-	free(lexer);
-	return (cmdlst);
 }

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/05 21:38:22 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/08 19:50:11 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,17 +104,17 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 	char	in_one;
 	int		len_val;
 
-	in_one = lexer->str[lexer->i - 1];
-	value = ft_calloc(1, sizeof(char *));
-	len_val = 1;
 	lexer_advance(lexer);
+	in_one = lexer->str[lexer->i - 1];
+	value = NULL;
+	len_val = 0;
 	while (lexer->c != type)
 	{
 		s = lexer_get_current_char_as_string(lexer);
 		value = ft_realloc(value, len_val, \
-		(ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
-		len_val = ft_strlen(value) + ft_strlen(s) + 1;
+		(len_val + ft_strlen(s) + 1) * sizeof(char));
 		ft_strlcat(value, s, ft_strlen(value) + ft_strlen(s) + 1);
+		len_val = ft_strlen(value) + ft_strlen(s) + 1;
 		free(s);
 		lexer_advance(lexer);
 	}
@@ -137,14 +137,15 @@ t_token	*lexer_collect_id(t_lexer *lexer)
 	int		len_val;
 	char	*s;
 
-	value = ft_calloc(1, sizeof(char *));
+	// value = ft_calloc(1, sizeof(char *));
+	value = NULL;
 	len_val = 1;
 	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 	!is_reserved_symbol(lexer->c))
 	{
 		s = lexer_get_current_char_as_string(lexer);
 		value = ft_realloc(value, len_val, \
-		(ft_strlen(value) + ft_strlen(s) + 1) * sizeof(char));
+		(len_val + ft_strlen(s) + 1) * sizeof(char));
 		len_val = ft_strlen(value) + ft_strlen(s) + 1;
 		ft_strlcat(value, s, ft_strlen(value) + ft_strlen(s) + 1);
 		free(s);

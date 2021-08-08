@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/06 21:21:59 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/07 20:38:53 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ typedef struct s_cmdlst
 	struct s_cmdlst	*next;
 }					t_cmdlst;
 
-void	collect_cmd_and_args(t_token *token, t_lexer **lexer, t_cmdlst **cmdlst);
+void	collect_cmd_and_args(t_lst **linelst, t_cmdlst **cmdlst);
 
-void	cmdlst_push_back(t_token *token, t_lexer **lexer, t_cmdlst **cmdlst);
+void	cmdlst_push_back(t_lst **linelst, t_cmdlst **cmdlst);
 
-t_cmdlst	*init_cmdlst(char *line);
+void	init_cmdlst(t_lst *linelst, t_cmdlst **cmdlst);
 
 #endif
