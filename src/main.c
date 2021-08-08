@@ -6,94 +6,43 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/08 20:18:08 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/09 00:23:06 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 #include <stddef.h>
 
-void	ft_bcopy (const void *src, void *dest, size_t len)
-{
-  if (dest < src)
-    {
-      const char *firsts = (const char *) src;
-      char *firstd = (char *) dest;
-      while (len--)
-	*firstd++ = *firsts++;
-    }
-  else
-    {
-      const char *lasts = (const char *)src + (len-1);
-      char *lastd = (char *)dest + (len-1);
-      while (len--)
-        *lastd-- = *lasts--;
-    }
-}
+// void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
+// {
+// 	void	*ptrNew; 
 
-// echo "ehh" 'loo'"coo"'dsf' | > < << >> (
-
-void *ft_realloc_ptr(void *ptr, size_t origsize, size_t newsize)
-{
-	void	*ptrNew; 
-
-	if (newsize == 0)
-	{
-		free(ptr);
-		return NULL;
-	}
-	else if (!ptr)
-	{
-		return malloc(newsize);
-	}
-	else if (newsize <= origsize)
-	{
-		return ptr;
-	}
-	else
-	{
-		ptrNew = malloc(newsize * sizeof(char *));
-		if (ptrNew)
-		{
-			ft_memmove(ptrNew, ptr, origsize);
-			// ft_memcpy(ptrNew, ptr, origsize);
-			// ft_bcopy(ptr, ptrNew, origsize);
-			free(ptr);
-		}
-		return ptrNew;
-	}
-}
-
-void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
-{
-	void	*ptrNew; 
-
-	if (newsize == 0)
-	{
-		free(ptr);
-		return NULL;
-	}
-	else if (!ptr)
-	{
-		return ft_calloc(newsize, sizeof(char));
-	}
-	else if (newsize <= origsize)
-	{
-		return ptr;
-	}
-	else
-	{
-		ptrNew = ft_calloc(newsize, sizeof(char));
-		if (ptrNew)
-		{
-			// ft_memmove(ptrNew, ptr, newsize);
-			memmove(ptrNew, ptr, origsize);
-			// ft_bcopy(ptr, ptrNew, newsize);
-			free(ptr);
-		}
-		return ptrNew;
-	}
-}
+// 	if (newsize == 0)
+// 	{
+// 		free(ptr);
+// 		return NULL;
+// 	}
+// 	else if (!ptr)
+// 	{
+// 		return ft_calloc(newsize, sizeof(char));
+// 	}
+// 	else if (newsize <= origsize)
+// 	{
+// 		return ptr;
+// 	}
+// 	else
+// 	{
+// 		ptrNew = ft_calloc(newsize, sizeof(char));
+// 		if (ptrNew)
+// 		{
+// 			ft_memmove(ptrNew, ptr, newsize);
+// 			// memmove(ptrNew, ptr, newsize);
+// 			// ft_bcopy(ptr, ptrNew, newsize);
+// 			free(ptr);
+// 		}
+// 		return ptrNew;
+// 	}
+// }
 
 void	get_linelst(char *line, t_lst **linelst)
 {
@@ -132,23 +81,23 @@ int	main(int ac, char **av, char **ep)
 		// 	printf("%d: %s\n", linelst->type, linelst->value);
 		// 	linelst = linelst->next;
 		// }
-		init_cmdlst(linelst, &cmdlst);
-		while (cmdlst)
-		{
-			int i = 0;
-			printf("==%d==\n", cmdlst->type);
-			if (cmdlst->type == TOKEN_EXEC_ARGS)
-				while (cmdlst->cmdline[i])
-				{
-					printf("- %s\n", cmdlst->cmdline[i]);
-					i++;
-				}
-			else
-			{
-				printf("%s\n", *(cmdlst->cmdline));
-			}
-			cmdlst = cmdlst->next;
-		}
+		// init_cmdlst(linelst, &cmdlst);
+		// while (cmdlst)
+		// {
+		// 	int i = 0;
+		// 	printf("==%d==\n", cmdlst->type);
+		// 	if (cmdlst->type == TOKEN_EXEC_ARGS)
+		// 		while (cmdlst->cmdline[i])
+		// 		{
+		// 			printf("- %s\n", cmdlst->cmdline[i]);
+		// 			i++;
+		// 		}
+		// 	else
+		// 	{
+		// 		printf("%s\n", *(cmdlst->cmdline));
+		// 	}
+		// 	cmdlst = cmdlst->next;
+		// }
 		add_history(line);
 	}	
 

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/01 19:53:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/08 20:19:43 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/08 20:23:36 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	collect_cmd_and_args(t_lst **linelst, t_cmdlst **cmdlst)
 	(*cmdlst)->type = TOKEN_EXEC_ARGS;
 	// (*cmdlst)->cmdline = ft_calloc(3, sizeof(char *));
 	(*cmdlst)->cmdline = NULL;
-	(*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen((*linelst)->value) + 1, sizeof(char));
-	ft_strlcpy((*cmdlst)->cmdline[cmd_i], (*linelst)->value, ft_strlen((*linelst)->value) + 1);
+	// (*cmdlst)->cmdline[cmd_i] = ft_calloc(ft_strlen((*linelst)->value) + 1, sizeof(char));
+	// ft_strlcpy((*cmdlst)->cmdline[cmd_i], (*linelst)->value, ft_strlen((*linelst)->value) + 1);
 	while (*linelst && \
 	is_id_or_sring((*linelst)->type))
 	{
