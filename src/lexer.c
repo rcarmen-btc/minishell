@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/08 21:13:14 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/12 13:37:28 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 		if (lexer->c == '|')
 			return (lexer_advance_with_token(lexer, \
 			init_token(TOKEN_PIPE, \
-			lexer_get_current_char_as_string(lexer))));
+			lexer_get_current_char_as_string(lexer), lexer->c)));
 		if (lexer->c == '>')
 		{
 			if (lexer->str[lexer->i + 1] == '>' && \
@@ -71,12 +71,12 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 			{
 				lexer_advance(lexer);
 				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_APPRDIR, ft_strdup(">>"))));
+				init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c)));
 			}
 			else
 				return (lexer_advance_with_token(lexer, \
 				init_token(TOKEN_RREDIR, \
-				lexer_get_current_char_as_string(lexer))));
+				lexer_get_current_char_as_string(lexer), lexer->c)));
 		}
 		if (lexer->c == '<')
 		{
@@ -85,12 +85,12 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 			{
 				lexer_advance(lexer);
 				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_HERE_DOC, ft_strdup("<<"))));
+				init_token(TOKEN_HERE_DOC, ft_strdup("<<"), lexer->c)));
 			}
 			else
 				return (lexer_advance_with_token(lexer, \
 				init_token(TOKEN_LREDIR, \
-				lexer_get_current_char_as_string(lexer))));
+				lexer_get_current_char_as_string(lexer),  lexer->c)));
 		}
 		lexer_advance(lexer);
 	}
@@ -104,8 +104,8 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 	char	in_one;
 	int		len_val;
 
+	in_one = lexer->str[lexer->i];
 	lexer_advance(lexer);
-	in_one = lexer->str[lexer->i - 1];
 	value = NULL;
 	len_val = 0;
 	while (lexer->c != type)
@@ -120,15 +120,15 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 	}
 	lexer_advance(lexer);
 	if (type == '"' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_DSTRING, value));
+		return (init_token(TOKEN_DSTRING, value, lexer->c));
 	else if (type == '\'' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_SSTRING, value));
+		return (init_token(TOKEN_SSTRING, value, lexer->c));
 	else if (type == '"' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_IN_ONE_DSTRING, value));
+		return (init_token(TOKEN_DSTRING, value, lexer->c));
 	else if (type == '\'' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_IN_ONE_SSTRING, value));
+		return (init_token(TOKEN_SSTRING, value, lexer->c));
 	else
-		return (init_token(TOKEN_NULL, value));
+		return (init_token(TOKEN_NULL, value, lexer->c));
 }
 
 t_token	*lexer_collect_id(t_lexer *lexer)
@@ -140,7 +140,7 @@ t_token	*lexer_collect_id(t_lexer *lexer)
 	// value = ft_calloc(1, sizeof(char *));
 	value = NULL;
 	len_val = 1;
-	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
+	while (ft_isalnum(lexer->c) && !ft_isspace(lexer->c) && \
 	!is_reserved_symbol(lexer->c))
 	{
 		s = lexer_get_current_char_as_string(lexer);
@@ -152,7 +152,7 @@ t_token	*lexer_collect_id(t_lexer *lexer)
 		lexer_advance(lexer);
 	}
 	lexer_advance(lexer);
-	return (init_token(TOKEN_CMD, value));
+	return (init_token(TOKEN_CMD, value, 0));
 }
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token)

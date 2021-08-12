@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/07 20:39:38 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/10 21:28:30 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@ typedef struct s_lst
 {
 	int				type;
 	char			*value;
+	char			**cmd;
+	int				arg_position;
 	struct s_lst	*next;
 }					t_lst;
 
 // void	push(t_lst **head, int val);
 
-void	push_back(t_lst **head, char *val, int type);
+void	push_back_tokenlst(t_lst **head, char *val, int type, int arg_position);
 
+void	push_back(t_lst **head, char *val, int type, int arg_position);
 // int		pop(t_lst **head);
 
 // int		pop_back(t_lst **head);

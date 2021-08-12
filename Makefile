@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/08/01 20:08:10 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/08/12 13:20:13 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ INC = src/libft/inc/libft.h inc/main.h
 
 LIBS = -L./src/libft -lft -lreadline
 
-SRC = main.c lexer.c token.c cmdlst.c
+SRC = main.c lexer.c token.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc
@@ -30,7 +30,7 @@ D_PATH = $(patsubst %.o, %.d, $(OBJ_PATH))
 
 CC = clang
 CFLAGS = #-Wall -Wextra -Werror
-OPT_FLUGS = -O -g3 -pipe
+OPT_FLUGS = -O0 -g3 -pipe
 
 HMM_COLOR   = \033[0;35m
 COM_COLOR   = \033[0;34m

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/08 21:13:36 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/09 08:21:06 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "lexer.h"
-# include "cmdlst.h"
 
 void	*ft_realloc(void *ptr, size_t origsize ,size_t newsize);
-
-void	*ft_realloc_ptr(void *ptr, size_t origsize, size_t newsize);
 
 #endif

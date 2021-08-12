@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:24:31 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/07 10:48:24 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/11 13:11:38 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,17 @@ typedef struct s_token
 		TOKEN_LREDIR,
 		TOKEN_HERE_DOC,
 		TOKEN_APPRDIR,
-		TOKEN_EXEC_ARGS,
+		TOKEN_CMD_ARGS,
 		TOKEN_NULL
 	}		type;
+	enum
+	{
+		ARG_ALONE,
+		ARG_IN_ONE_WITH_NEXT
+	}	arg_position;
 	char	*value;
 }				t_token;
 
-t_token	*init_token(int type, char *value);
+t_token	*init_token(int type, char *value, char lexer_c);
 
 #endif
