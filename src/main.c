@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/13 04:20:43 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/13 11:44:25 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ int	main(int ac, char **av, char **ep)
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// // print_pipelinelst(pipelinelst);
 
-		execute(pipelinelst);
+		// execute(pipelinelst);//пока не работает
 
 		add_history(line);
 	}	
