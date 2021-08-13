@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/09 08:21:06 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/13 02:00:45 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,13 @@
 # include "lexer.h"
 
 void	*ft_realloc(void *ptr, size_t origsize ,size_t newsize);
+
+void	get_tokenlst(char *line, t_lst **tokenlst);
+
+int		is_str_token(int type);
+
+int		get_cmd_args_cnt(t_lst *tokenlst);
+
+void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst);
 
 #endif
