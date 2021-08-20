@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/13 11:44:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/16 13:20:43 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,43 +104,47 @@ void	execute(t_lst *pipelinelst)
 	int fdout;
 	while (pipelinelst != NULL) 
 	{
+		
 		if (pipelinelst->type == TOKEN_CMD_ARGS)
 		{
 			dup2(fdin, 0);
 			close(fdin);
 			if ((outfile = get_outfile_name(pipelinelst)) != NULL)
 			{
-				if ((fdout = open(outfile, O_WRONLY)) == -1)
+				if ((fdout = open(outfile, O_CREAT | O_WRONLY | O_TRUNC, 0666)) != -1)
+					fdout = dup(tmpout);
+				else
 				{
 					perror(infile);
 					return ;
 				}
-				else
-					fdout = dup(tmpout);
 			}
-			else
-			{
-				int fdpipe[2];
-				pipe(fdpipe);
-				fdout = fdpipe[1];
-				fdin = fdpipe[0];
-			}
+			// else
+			// {
+			// 	int fdpipe[2];
+			// 	pipe(fdpipe);
+			// 	fdout = fdpipe[1];
+			// 	fdin = fdpipe[0];
+			// }
 			dup2(fdout, 1);
 			close(fdout);
+
 			// pipelinelst = pipelinelst->next;
 			
 			ret = fork();
-			printf("s\n");
-			printf("-%s\n", pipelinelst->cmd[0]);
+			// printf("s\n");
+			// printf("-%s\n", pipelinelst->cmd[0]);
 			if (ret == 0)
 			{
-				printf("ss\n");
-				printf("-%s\n", pipelinelst->cmd[0]);
+				// printf("-%s\n", pipelinelst->cmd[0]);
 				execvp(pipelinelst->cmd[0], pipelinelst->cmd);
 				perror(pipelinelst->cmd[0]);
 				exit(1);
 			}
+			// wait(&ret);
 		}
+		// printf("-><><><<><><><>\n");
+		exit(1);
 		if (pipelinelst)
 			pipelinelst = pipelinelst->next;
 	}
@@ -185,9 +189,9 @@ int	main(int ac, char **av, char **ep)
 		get_tokenlst(line, &tokenlst);
 
 		get_pipelinelst(tokenlst, &pipelinelst);
-		// // print_pipelinelst(pipelinelst);
+		// print_pipelinelst(pipelinelst);
 
-		// execute(pipelinelst);//пока не работает
+		execute(pipelinelst);//пока не работает
 
 		add_history(line);
 	}	
