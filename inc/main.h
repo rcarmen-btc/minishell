@@ -40,4 +40,8 @@ int		get_cmd_args_cnt(t_lst *tokenlst);
 
 void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst);
 
+// сигналы
+void	in_signals(void);
+void	ex_signals(void);
+
 #endif
