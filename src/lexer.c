@@ -53,9 +53,9 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 	while (lexer->c != '\0' && \
 		lexer->i < ft_strlen(lexer->str))
 	{
-		if (lexer->c == ' ' || lexer->c == 10)
+		if (lexer->c == ' ' || lexer->c == 10) //пропускаем пробелы и табы
 			lexer_skip_whitespace(lexer);
-		if (lexer->c == '"' || lexer->c == '\'')
+		if (lexer->c == '"' || lexer->c == '\'') //пропускаем "" и ''
 			return (lexer_collect_string(lexer, lexer->c));
 		if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 		!is_reserved_symbol(lexer->c))

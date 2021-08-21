@@ -132,12 +132,18 @@ int	main(int ac, char **av, char **ep)
 	char		*promp;
 	t_lst		*pipelinelst_tmp;
 
+	if (ac > 1 && av)
+	{
+		printf("Error message: too many arguments!\n"); // TODO: временно, надо заменить на соотвуствующую ошибку.
+		return(1);
+	}
 	pipelinelst_tmp = pipelinelst;
 	promp = "\033[0;32mchillyshell\033[0;39m$ \033[0m";
 	while (1)
 	{
 		tokenlst = NULL;
 		pipelinelst = NULL;
+		in_signals();
 		line = readline(promp);
 		get_tokenlst(line, &tokenlst);
 

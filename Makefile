@@ -17,7 +17,7 @@ INC = src/libft/inc/libft.h inc/main.h
 
 LIBS = -L./src/libft -lft -lreadline
 
-SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c
+SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc
