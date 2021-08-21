@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/16 13:20:43 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/20 17:22:18 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,75 +83,28 @@ void	execute(t_lst *pipelinelst)
 {
 	int	tmpin = dup(0);
 	int	tmpout = dup(1);
-
 	char	*infile;
 	char	*outfile;
 	int		fdin;
 
-	if ((infile = get_infile_name(pipelinelst)) != NULL)
+	int pipe_fds[2];	
+	
+	pipe(pipe_fds);
+	
+	int children[2];
+	
+	children[0] = fork();
+	if (children[0] == 0)
 	{
-		// printf("%s\n", infile);
-		if ((fdin = open(infile, O_RDONLY)) == -1)
-		{
-			perror(infile);
-			return ;
-		}
+		dup2(pipe_fds[1], 1);
+		close(pipe_fds[0]);
 	}
-	else
-		fdin = dup(tmpin);
-		
-	int ret;
-	int fdout;
-	while (pipelinelst != NULL) 
+	children[1] = fork();
+	if (children[1] == 0)
 	{
-		
-		if (pipelinelst->type == TOKEN_CMD_ARGS)
-		{
-			dup2(fdin, 0);
-			close(fdin);
-			if ((outfile = get_outfile_name(pipelinelst)) != NULL)
-			{
-				if ((fdout = open(outfile, O_CREAT | O_WRONLY | O_TRUNC, 0666)) != -1)
-					fdout = dup(tmpout);
-				else
-				{
-					perror(infile);
-					return ;
-				}
-			}
-			// else
-			// {
-			// 	int fdpipe[2];
-			// 	pipe(fdpipe);
-			// 	fdout = fdpipe[1];
-			// 	fdin = fdpipe[0];
-			// }
-			dup2(fdout, 1);
-			close(fdout);
-
-			// pipelinelst = pipelinelst->next;
-			
-			ret = fork();
-			// printf("s\n");
-			// printf("-%s\n", pipelinelst->cmd[0]);
-			if (ret == 0)
-			{
-				// printf("-%s\n", pipelinelst->cmd[0]);
-				execvp(pipelinelst->cmd[0], pipelinelst->cmd);
-				perror(pipelinelst->cmd[0]);
-				exit(1);
-			}
-			// wait(&ret);
-		}
-		// printf("-><><><<><><><>\n");
-		exit(1);
-		if (pipelinelst)
-			pipelinelst = pipelinelst->next;
+		dup2(pipe_fds[0], 0);
+		close(pipe_fds[1]);
 	}
-	dup2(tmpin, 0);
-	dup2(tmpout, 1);
-	close(tmpin);
-	close(tmpout);
 }
 
 void	print_pipelinelst(t_lst *pipelinelst)
