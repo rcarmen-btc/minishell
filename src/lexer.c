@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/12 13:37:28 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/22 18:10:24 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,11 @@ void	lexer_advance(t_lexer *lexer)
 
 void	lexer_skip_whitespace(t_lexer *lexer)
 {
-	while (lexer->c == ' ' || lexer->c == 10)
-	{
-		lexer_advance(lexer);
-	}
+	if (lexer->c == ' ' || lexer->c == 10) 
+		while (lexer->c == ' ' || lexer->c == 10)
+		{
+			lexer_advance(lexer);
+		}
 }
 
 t_token	*lexer_get_next_token(t_lexer *lexer)
@@ -53,14 +54,13 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 	while (lexer->c != '\0' && \
 		lexer->i < ft_strlen(lexer->str))
 	{
-		if (lexer->c == ' ' || lexer->c == 10) //пропускаем пробелы и табы
-			lexer_skip_whitespace(lexer);
-		if (lexer->c == '"' || lexer->c == '\'') //пропускаем "" и ''
+		lexer_skip_whitespace(lexer); //пропускаем пробелы и табы
+		if (lexer->c == '"' || lexer->c == '\'') //если на данный момент мы находимся на символе " или '
 			return (lexer_collect_string(lexer, lexer->c));
 		if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 		!is_reserved_symbol(lexer->c))
-			return (lexer_collect_id(lexer));
-		if (lexer->c == '|')
+			return (lexer_collect_cmd(lexer));
+		if (lexer->c == '|') //находим пайпы и возвращаем 
 			return (lexer_advance_with_token(lexer, \
 			init_token(TOKEN_PIPE, \
 			lexer_get_current_char_as_string(lexer), lexer->c)));
@@ -94,7 +94,7 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 		}
 		lexer_advance(lexer);
 	}
-	return ((void *)0);
+	return (NULL);
 }
 
 t_token	*lexer_collect_string(t_lexer *lexer, char type)
@@ -131,7 +131,7 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 		return (init_token(TOKEN_NULL, value, lexer->c));
 }
 
-t_token	*lexer_collect_id(t_lexer *lexer)
+t_token	*lexer_collect_cmd(t_lexer *lexer)
 {
 	char	*value;
 	int		len_val;

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/20 17:22:18 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/23 12:23:27 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,13 @@ int	main(int ac, char **av, char **ep)
 	char		*promp;
 	t_lst		*pipelinelst_tmp;
 
-	if (ac > 1 && av)
+	// if (ac > 1 && av)
+	if (ac > 1)
 	{
 		printf("Error message: too many arguments!\n"); // TODO: временно, надо заменить на соотвуствующую ошибку.
 		return(1);
 	}
+	printf("%d\n", ac);
 	pipelinelst_tmp = pipelinelst;
 	promp = "\033[0;32mchillyshell\033[0;39m$ \033[0m";
 	while (1)
@@ -145,13 +147,12 @@ int	main(int ac, char **av, char **ep)
 		pipelinelst = NULL;
 		in_signals();
 		line = readline(promp);
+		add_history(line);
 		get_tokenlst(line, &tokenlst);
-
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
 
-		execute(pipelinelst);//пока не работает
+		// execute(pipelinelst);//пока не работает
 
-		add_history(line);
 	}	
 }

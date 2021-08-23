@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 01:57:46 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/13 01:58:07 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/22 15:24:33 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	get_tokenlst(char *line, t_lst **tokenlst)
 	t_token	*token;
 
 	lexer = init_lexer(line);
-	while ((token = lexer_get_next_token(lexer)) != (void *)0)
+	while ((token = lexer_get_next_token(lexer)) != NULL)
 	{
-		push_back(tokenlst, token->value, token->type, token->arg_position);
+		push_back(tokenlst, token->value, token->type, token->str_position);
 		if (token)
 		{
 			free(token->value);

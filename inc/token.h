@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:24:31 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/11 13:11:38 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/22 04:27:09 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_token
 	{
 		ARG_ALONE,
 		ARG_IN_ONE_WITH_NEXT
-	}	arg_position;
+	}	str_position;
 	char	*value;
 }				t_token;
 

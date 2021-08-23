@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:27:00 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/07/28 21:27:02 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/22 18:10:20 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_token *lexer_get_next_token(t_lexer *lexer);
 
 t_token	*lexer_collect_string(t_lexer *lexer, char type);
 
-t_token	*lexer_collect_id(t_lexer *lexer);
+t_token	*lexer_collect_cmd(t_lexer *lexer);
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token);
 
