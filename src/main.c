@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/23 12:23:27 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/24 18:20:06 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ int	main(int ac, char **av, char **ep)
 		pipelinelst = NULL;
 		in_signals();
 		line = readline(promp);
+		if (line == NULL) // ctrl-d| позже допишу
+			exit(1);
 		add_history(line);
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
