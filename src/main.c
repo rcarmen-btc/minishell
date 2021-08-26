@@ -89,7 +89,7 @@ void	print_pipelinelst(t_lst *pipelinelst)
 		int	i = 0;
 		while (pipelinelst->type == TOKEN_CMD_ARGS && pipelinelst->cmd[i])
 		{
-			printf("%s ", pipelinelst->cmd[i]);
+			printf("[%s | %d] ", pipelinelst->cmd[i], i);
 
 			i++;
 		}
@@ -125,7 +125,7 @@ int get_cmd_line(char *str, char *prompt)
 	char		*prompt_dir_and_name;
 	char		*prompt_dir_and_name_with_arr;
 	char		*colored_prompt;
-	char		*cwd[1024];
+	char		cwd[1024];
   	
 	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
 	prompt_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
@@ -138,7 +138,7 @@ int get_cmd_line(char *str, char *prompt)
 	free(prompt_dir_and_name_with_arr);
 	free(colored_prompt);
 	if (prompt == NULL)
-		exit(1);
+		exit(0);
     else if (strlen(prompt) != 0)
 	{
         add_history(prompt);
@@ -206,7 +206,7 @@ int	main(int ac, char **av, char **ep)
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
-		execute(pipelinelst);//пока не работает
+		execute(pipelinelst);
 		freelst(tokenlst, pipelinelst);
 	}	
 }
