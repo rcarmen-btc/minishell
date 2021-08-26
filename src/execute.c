@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 14:51:01 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 15:42:20 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,8 @@ int		is_builtin_cmd(char *name)
 	i = 0;
 	while (builtins_split[i] != NULL)
 	{
-		// printf("%s - %s\n", name, builtins_split[i]);
 		if (ft_strncmp(name, builtins_split[i], ft_strlen(name)) == 0)
-		{
-			printf("%s - %s\n", name, builtins_split[i]);
 			return (i);
-		}
 		i++;
 	}
 	// TODO: free the builtins_split
