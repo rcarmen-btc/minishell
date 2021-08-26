@@ -6,7 +6,8 @@
 		"cmdlst.h": "c",
 		"type_traits": "c",
 		"builtins.h": "c",
-		"stddef.h": "c"
+		"stddef.h": "c",
+		"execute.h": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }

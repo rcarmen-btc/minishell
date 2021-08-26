@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/13 02:00:45 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 14:29:45 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "lexer.h"
+# define MAXCOM 1024 
 
 void	*ft_realloc(void *ptr, size_t origsize ,size_t newsize);
 

@@ -6,11 +6,24 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 11:18:28 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 15:40:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "builtins.h"
+
+void	builtins(int cmd_number, char **cmd)
+{
+	// if (cmd_number == 0)
+	if (cmd_number == 1)
+		builtin_cd(cmd);
+	if (cmd_number == 2)
+		builtin_pwd();
+	// if (cmd_number == 3)
+	// if (cmd_number == 4)
+	// if (cmd_number == 5)
+	// if (cmd_number == 6)
+}
 
 void	builtin_pwd()
 {

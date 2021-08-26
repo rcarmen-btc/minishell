@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/07 20:10:41 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 11:37:41 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ t_lst	*get_last(t_lst *head)
 // 	return (head);
 // }
 
-// size_t	get_lst_len(t_lst *head)
-// {
-// 	size_t	i;
+size_t	get_lst_len(t_lst *head)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	while (head)
-// 	{
-// 		head = head->next;
-// 		i++;
-// 	}
-// 	return (i);
-// }
+	i = 0;
+	while (head)
+	{
+		head = head->next;
+		i++;
+	}
+	return (i);
+}

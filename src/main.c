@@ -12,6 +12,7 @@
 
 #include "main.h"
 #include "builtins.h"
+#include "execute.h"
 #include <stddef.h>
 
 void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
@@ -80,11 +81,6 @@ char	*get_outfile_name(t_lst *pipelinelst)
 	return (NULL);
 }
 
-void	execute(t_lst *pipelinelst)
-{
-	builtin_pwd();
-	// builtin_cd(pipelinelst->cmd);
-}
 
 void	print_pipelinelst(t_lst *pipelinelst)
 {
@@ -123,27 +119,35 @@ void init_shell()
     sleep(1);
 }
 
-char	*create_promp(char **line)
-{
-	char		*promp_username;
-	char		*promp_dir_and_name;
-	char		*promp_dir_and_name_with_arr;
-	char		*colored_promp;
-
-	promp_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
-	promp_dir_and_name = ft_strjoin(promp_username, getenv("HOME")); // получаем тек. каталог и объединяем с username
-	promp_dir_and_name_with_arr = ft_strjoin(promp_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
-	colored_promp = ft_strjoin("\033[0;32m", promp_dir_and_name_with_arr); // красим в зеленый 
-	*line = readline(colored_promp);
-	free(promp_username);
-	free(promp_dir_and_name);
-	free(promp_dir_and_name_with_arr);
-	free(colored_promp);
-	if (*line == NULL) // TODO: ctrl-d/free and exit  
+int get_cmd_line(char *str, char *prompt)
+{ 
+	char		*prompt_username;
+	char		*prompt_dir_and_name;
+	char		*prompt_dir_and_name_with_arr;
+	char		*colored_prompt;
+	char		*cwd[1024];
+  	
+	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
+	prompt_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
+	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
+	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
+	colored_prompt = ft_strjoin("\033[0;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
+    prompt = readline(colored_prompt);
+	free(prompt_username);
+	free(prompt_dir_and_name);
+	free(prompt_dir_and_name_with_arr);
+	free(colored_prompt);
+	if (prompt == NULL)
+		exit(1);
+    else if (strlen(prompt) != 0)
 	{
-		printf(*line);
-		exit(0);
-	}
+        add_history(prompt);
+        strcpy(str, prompt);
+        return 0;
+    }
+	else
+		return (0);
+
 }
 
 void	freelst(t_lst *tokenlst, t_lst *pipelinelst)
@@ -179,7 +183,7 @@ void	freelst(t_lst *tokenlst, t_lst *pipelinelst)
 
 int	main(int ac, char **av, char **ep)
 {
-	char		*line;
+	char		line[MAXCOM];
 	t_lst		*tokenlst;
 	t_lst		*pipelinelst;
 	t_lst		*pipelinelst_tmp;
@@ -196,13 +200,13 @@ int	main(int ac, char **av, char **ep)
 		tokenlst = NULL;
 		pipelinelst = NULL;
 		in_signals();
-		create_promp(&line);
+		// create_promp(&line);
+		get_cmd_line(line, NULL);
 		add_history(line);
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
 		execute(pipelinelst);//пока не работает
-		free(line);
 		freelst(tokenlst, pipelinelst);
 	}	
 }

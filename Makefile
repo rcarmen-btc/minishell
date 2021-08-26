@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/08/26 10:44:52 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/08/26 11:41:53 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ INC = src/libft/inc/libft.h inc/main.h
 
 LIBS = -L./src/libft -lft -lreadline
 
-SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c
+SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c execute.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdanyel <hdanyel@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 18:32:08 by hdanyel           #+#    #+#             */
-/*   Updated: 2021/08/21 18:32:08 by hdanyel          ###   ########.fr       */
+/*   Updated: 2021/08/26 12:38:30 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static void re_promp(int signal)
 {
 	(void)signal;
 	write(1, "\n", 1);
-	rl_replace_line("", 0); //замена содержимого line ""
 	rl_on_new_line(); //переместились на новую строку
+	rl_replace_line("", 0); //замена содержимого line ""
 	rl_redisplay(); //замена отображаемого, на текущее содержимое
 	// rl_line_buffer(promp)
 }

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/22 18:10:24 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 11:22:55 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 	// value = ft_calloc(1, sizeof(char *));
 	value = NULL;
 	len_val = 1;
-	while (ft_isalnum(lexer->c) && !ft_isspace(lexer->c) && \
+	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 	!is_reserved_symbol(lexer->c))
 	{
 		s = lexer_get_current_char_as_string(lexer);
