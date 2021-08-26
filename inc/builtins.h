@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:46:19 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 12:00:10 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 17:42:09 by hdanyel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 # define BUILTINS_H
 # include "main.h"
 
-void	builtins(int cmd_number, char **cmd);
-void	builtin_pwd();
-void	builtin_cd(char **cmd);
+void	builtins(char **cmd);
+void	builtin_echo(char **cmd);
+void	builtin_cd(char *cmd);
+void	builtin_pwd(void);
+void	builtin_export(char **cmd);
+void	builtin_unset(char **cmd);
+void	builtin_env(void);
+void	builtin_exit(char **cmd);
 
 #endif

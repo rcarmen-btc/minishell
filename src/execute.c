@@ -6,41 +6,34 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 15:42:20 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 19:24:29 by hdanyel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include "builtins.h"
+#include "../inc/builtins.h"
 
-int		is_builtin_cmd(char *name)
+int		is_builtin_cmd(char **cmd)
 {
-	char *builtins;
-	char **builtins_split;
-	int	i;
-
-	builtins = "echo cd pwd export unset env exit";
-	builtins_split = ft_split(builtins, ' ');
-	i = 0;
-	while (builtins_split[i] != NULL)
-	{
-		if (ft_strncmp(name, builtins_split[i], ft_strlen(name)) == 0)
-			return (i);
-		i++;
-	}
-	// TODO: free the builtins_split
+	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo")))
+		|| !(ft_strncmp(cmd[0], "cd", ft_strlen("cd")))
+		|| !(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd")))
+		|| !(ft_strncmp(cmd[0], "export", ft_strlen("export")))
+		|| !(ft_strncmp(cmd[0], "unset", ft_strlen("unset")))
+		|| !(ft_strncmp(cmd[0], "env", ft_strlen("env")))
+		|| !(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
+		return (1);
 	return (-1);
 }
 
 void	cmd_without_pipes(char **cmd)
 {
-	int res;
-    pid_t pid; 
+    pid_t pid;
 
-	res = is_builtin_cmd(cmd[0]); 
-	if (res != -1)
+	if (is_builtin_cmd(cmd) == 1)
 	{
-		builtins(res, cmd);
+		builtins(cmd);
 		return ;
 	}
 	pid = fork(); 

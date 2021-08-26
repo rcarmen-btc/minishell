@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/23 11:58:53 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 19:14:22 by hdanyel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 						pipeline_tmp->cmd[cmd_index] = ft_realloc(pipeline_tmp->cmd[cmd_index], 1, \
 							ft_strlen(pipeline_tmp->cmd[cmd_index]) + ft_strlen(tokenlst->value) + 1);
 						ft_strlcat(pipeline_tmp->cmd[cmd_index], tokenlst->value, ft_strlen(tokenlst->value) + ft_strlen(pipeline_tmp->cmd[cmd_index]) + 1);
-						// if (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type))
-						if (tokenlst->type == TOKEN_CMD)
+						if (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type))
+						//if (tokenlst->type == TOKEN_CMD)
 							tokenlst = tokenlst->next;
 					}
 				}

@@ -6,13 +6,10 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/24 20:42: by rcarmen          ###   ########.fr       */
-/*                                                                            */
+/*   Updated: 2021/08/26 17:41:03 by hdanyel          ###   ########.fr       */
 /* ************************************************************************** */
 
 #include "main.h"
-#include "builtins.h"
-#include "execute.h"
 #include <stddef.h>
 
 void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
@@ -126,8 +123,8 @@ int get_cmd_line(char *str, char *prompt)
 	char		*prompt_dir_and_name_with_arr;
 	char		*colored_prompt;
 	char		*cwd[1024];
-  	
-	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
+
+	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог
 	prompt_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
 	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 

@@ -6,35 +6,89 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 15:40:13 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 21:32:32 by hdanyel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	builtins(int cmd_number, char **cmd)
+void	builtins(char **cmd)
 {
-	// if (cmd_number == 0)
-	if (cmd_number == 1)
-		builtin_cd(cmd);
-	if (cmd_number == 2)
+	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo"))))
+		builtin_echo(cmd);
+	else if (!(ft_strncmp(cmd[0], "cd", ft_strlen("cd"))))
+		builtin_cd(cmd[1]);
+	else if (!(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd"))))
 		builtin_pwd();
-	// if (cmd_number == 3)
-	// if (cmd_number == 4)
-	// if (cmd_number == 5)
-	// if (cmd_number == 6)
+	else if (!(ft_strncmp(cmd[0], "export", ft_strlen("export"))))
+		builtin_export(cmd);
+	else if (!(ft_strncmp(cmd[0], "unset", ft_strlen("unset"))))
+		builtin_unset(cmd);
+	else if (!(ft_strncmp(cmd[0], "env", ft_strlen("env"))))
+		builtin_env();
+	else if (!(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
+		builtin_exit(cmd);
+}
+
+void	builtin_echo(char **cmd)
+{
+	int	n_flag;
+	int		i;
+
+	n_flag = 0;
+	i = 1;
+	if (cmd[1] && ft_strncmp(cmd[1], "-n", 2) == 0)
+	{
+		n_flag = 1;
+		i = 2;
+	}
+	while (cmd[i])
+	{
+		printf("%s ", cmd[i]);
+		i++;
+	}
+	if (n_flag == 0)
+		printf("\n");
+}
+
+void	builtin_cd(char *cmd)
+{
+	if (!cmd)
+	{
+		if(chdir(getenv("HOME")) == -1)
+			perror(cmd);
+	}
+	else
+		if(chdir(cmd) == -1)
+			perror(cmd);
 }
 
 void	builtin_pwd()
 {
 	char buff[1024];
-	if (getcwd(buff, sizeof(buff)) == NULL)
-        perror("getcwd");
+
+	if (getcwd(buff, sizeof(buff)) != NULL)
+		printf("%s\n", buff);
     else
-        printf("%s\n", buff);
+		perror("getcwd");
 }
 
-void	builtin_cd(char **cmd)
+void	builtin_export(char **cmd)
 {
-	chdir(cmd[1]);
+
+}
+
+void	builtin_unset(char **cmd)
+{
+
+}
+
+void	builtin_env(void)
+{
+
+}
+
+void	builtin_exit(char **cmd)
+{
+
 }
