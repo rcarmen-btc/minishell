@@ -4,7 +4,9 @@
 		"lexer.h": "c",
 		"main.h": "c",
 		"cmdlst.h": "c",
-		"type_traits": "c"
+		"type_traits": "c",
+		"builtins.h": "c",
+		"stddef.h": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }

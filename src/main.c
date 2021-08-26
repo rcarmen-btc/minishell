@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "main.h"
+#include "builtins.h"
 #include <stddef.h>
 
 void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
@@ -81,30 +82,7 @@ char	*get_outfile_name(t_lst *pipelinelst)
 
 void	execute(t_lst *pipelinelst)
 {
-	int	tmpin = dup(0);
-	int	tmpout = dup(1);
-	char	*infile;
-	char	*outfile;
-	int		fdin;
-
-	int pipe_fds[2];	
-	
-	pipe(pipe_fds);
-	
-	int children[2];
-	
-	children[0] = fork();
-	if (children[0] == 0)
-	{
-		dup2(pipe_fds[1], 1);
-		close(pipe_fds[0]);
-	}
-	children[1] = fork();
-	if (children[1] == 0)
-	{
-		dup2(pipe_fds[0], 0);
-		close(pipe_fds[1]);
-	}
+	builtin_pwd();
 }
 
 void	print_pipelinelst(t_lst *pipelinelst)
@@ -146,21 +124,24 @@ void init_shell()
 
 char	*create_promp(char **line)
 {
-	char		*promp[2];
+	char		*promp_username;
+	char		*promp_dir_and_name;
+	char		*promp_dir_and_name_with_arr;
+	char		*colored_promp;
 
-	promp[0] = ft_strjoin(getenv("USER"), "\e[95m@\033[0m");
-	promp[1] = ft_strjoin(promp[0], getenv("HOME"));
-	free(promp[0]);
-	promp[0] = ft_strjoin(promp[1], "\033[0;32m> \033[0m");
-	free(promp[1]);
-	promp[1] = ft_strjoin("\033[0;32m", promp[0]);
-	*line = readline(promp[1]);
-	free(promp[0]);
-	free(promp[1]);
-	if (*line == NULL) // ctrl-d| позже допишу
+	promp_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
+	promp_dir_and_name = ft_strjoin(promp_username, getenv("HOME")); // получаем тек. каталог и объединяем с username
+	promp_dir_and_name_with_arr = ft_strjoin(promp_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
+	colored_promp = ft_strjoin("\033[0;32m", promp_dir_and_name_with_arr); // красим в зеленый 
+	*line = readline(colored_promp);
+	free(promp_username);
+	free(promp_dir_and_name);
+	free(promp_dir_and_name_with_arr);
+	free(colored_promp);
+	if (*line == NULL) // TODO: ctrl-d/free and exit  
 	{
 		printf(*line);
-		exit(1);
+		exit(0);
 	}
 }
 
@@ -211,15 +192,15 @@ int	main(int ac, char **av, char **ep)
 	// promp = "\033[0;32mchillyshell\033[0;39m$ \033[0m";
 	while (1)
 	{
-		in_signals();
 		tokenlst = NULL;
 		pipelinelst = NULL;
+		in_signals();
 		create_promp(&line);
 		add_history(line);
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
-		// execute(pipelinelst);//пока не работает
+		execute(pipelinelst);//пока не работает
 		free(line);
 		freelst(tokenlst, pipelinelst);
 	}	
