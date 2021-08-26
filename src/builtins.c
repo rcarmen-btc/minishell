@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 10:51:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/26 11:18:28 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,5 @@ void	builtin_pwd()
 
 void	builtin_cd(char **cmd)
 {
-	
+	chdir(cmd[1]);
 }

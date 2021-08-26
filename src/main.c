@@ -83,6 +83,7 @@ char	*get_outfile_name(t_lst *pipelinelst)
 void	execute(t_lst *pipelinelst)
 {
 	builtin_pwd();
+	// builtin_cd(pipelinelst->cmd);
 }
 
 void	print_pipelinelst(t_lst *pipelinelst)
