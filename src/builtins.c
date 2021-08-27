@@ -6,16 +6,16 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/27 03:43:07 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/27 16:29:55 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	builtins(char **cmd)
+void	builtins(char **cmd, t_lst *pipelinelst)
 {
 	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo"))))
-		builtin_echo(cmd);
+		builtin_echo(cmd, pipelinelst);
 	else if (!(ft_strncmp(cmd[0], "cd", ft_strlen("cd"))))
 		builtin_cd(cmd[1]);
 	else if (!(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd"))))
@@ -30,7 +30,7 @@ void	builtins(char **cmd)
 		builtin_exit(cmd);
 }
 
-void	builtin_echo(char **cmd)
+void	builtin_echo(char **cmd, t_lst *pipelinelst)
 {
 	int	n_flag;
 	int		i;
@@ -45,6 +45,8 @@ void	builtin_echo(char **cmd)
 	while (cmd[i])
 	{
 		printf("%s", cmd[i]);
+		if (cmd[i + 1] != NULL) // если последняя команда не ставим пробел
+			printf(" ");
 		i++;
 	}
 	if (n_flag == 0)

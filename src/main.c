@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/27 03:44:56 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/27 12:08:09 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,40 +44,40 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 	}
 }
 
-char	*get_infile_name(t_lst *pipelinelst)
-{
-	char *save;
+// char	*get_infile_name(t_lst *pipelinelst)
+// {
+// 	char *save;
 
-	save = NULL;
-	while (pipelinelst)
-	{	
-		if (pipelinelst->type == TOKEN_LREDIR)
-		{
-			pipelinelst = pipelinelst->next;
-			if (pipelinelst)	
-				save = pipelinelst->cmd[0];
-		}
-		if (pipelinelst)	
-			pipelinelst = pipelinelst->next;
-	}
-	return (save);
-}
+// 	save = NULL;
+// 	while (pipelinelst)
+// 	{	
+// 		if (pipelinelst->type == TOKEN_LREDIR)
+// 		{
+// 			pipelinelst = pipelinelst->next;
+// 			if (pipelinelst)	
+// 				save = pipelinelst->cmd[0];
+// 		}
+// 		if (pipelinelst)	
+// 			pipelinelst = pipelinelst->next;
+// 	}
+// 	return (save);
+// }
 
-char	*get_outfile_name(t_lst *pipelinelst)
-{
-	while (pipelinelst)
-	{	
-		if (pipelinelst->type == TOKEN_RREDIR)
-		{
-			pipelinelst = pipelinelst->next;
-			if (pipelinelst)	
-				return (pipelinelst->cmd[0]);
-		}
-		if (pipelinelst)	
-			pipelinelst = pipelinelst->next;
-	}
-	return (NULL);
-}
+// char	*get_outfile_name(t_lst *pipelinelst)
+// {
+// 	while (pipelinelst)
+// 	{	
+// 		if (pipelinelst->type == TOKEN_RREDIR)
+// 		{
+// 			pipelinelst = pipelinelst->next;
+// 			if (pipelinelst)	
+// 				return (pipelinelst->cmd[0]);
+// 		}
+// 		if (pipelinelst)	
+// 			pipelinelst = pipelinelst->next;
+// 	}
+// 	return (NULL);
+// }
 
 
 void	print_pipelinelst(t_lst *pipelinelst)

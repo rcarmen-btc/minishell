@@ -6,13 +6,12 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/27 03:54:51 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/27 15:38:59 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "builtins.h"
-#include "../inc/builtins.h"
+#include "main.h"
+#include "token.h"
 
 int		is_builtin_cmd(char **cmd)
 {
@@ -27,13 +26,48 @@ int		is_builtin_cmd(char **cmd)
 	return (-1);
 }
 
-void	cmd_without_pipes(char **cmd)
+char	*get_infile_name(t_lst *pipelinelst)
+{
+	char *save;
+
+	save = NULL;
+	while (pipelinelst)
+	{	
+		if (pipelinelst->type == TOKEN_LREDIR)
+		{
+			pipelinelst = pipelinelst->next;
+			if (pipelinelst)	
+				save = pipelinelst->cmd[0];
+		}
+		if (pipelinelst)	
+			pipelinelst = pipelinelst->next;
+	}
+	return (save);
+}
+
+char	*get_outfile_name(t_lst *pipelinelst)
+{
+	while (pipelinelst)
+	{	
+		if (pipelinelst->type == TOKEN_RREDIR)
+		{
+			pipelinelst = pipelinelst->next;
+			if (pipelinelst)	
+				return (pipelinelst->cmd[0]);
+		}
+		if (pipelinelst)	
+			pipelinelst = pipelinelst->next;
+	}
+	return (NULL);
+}
+
+void	cmd_without_pipes(char **cmd, t_lst *pipelinelst)
 {
     pid_t pid;
 
 	if (is_builtin_cmd(cmd) == 1)
 	{
-		builtins(cmd);
+		builtins(cmd, pipelinelst);
 		return ;
 	}
 	pid = fork(); 
@@ -57,11 +91,48 @@ void	cmd_without_pipes(char **cmd)
     }
 }	
 
+int		is_penultimate_cmd(t_lst *pipelinelst)
+{
+	if (pipelinelst && pipelinelst->next != NULL && pipelinelst->next->next != NULL  && pipelinelst->next->next->next == NULL)	
+		return (1);
+	return (0);
+}
+
+void	pipeline(t_lst *pipelinelst)
+{
+    int i;
+
+	while (pipelinelst->type == TOKEN_CMD_ARGS && is_penultimate_cmd(pipelinelst))
+    {
+		int pd[2];
+		pipe(pd);
+		pid_t pid; 
+
+		if ((pid = fork()) == 0) {
+			dup2(pd[1], 1); // remap output back to parent
+			execvp(pipelinelst->cmd[0], pipelinelst->cmd);
+			perror("exec");
+			abort();
+		}
+		// remap output from previous child to input
+		wait(NULL);
+		dup2(pd[0], 0);
+		close(pd[1]);
+		pipelinelst = pipelinelst->next;
+	}
+	if (!fork()) {
+		execvp(pipelinelst->cmd[0], pipelinelst->cmd);
+		perror("exec");
+		abort();
+	}
+	wait(NULL);
+}
+
 void	execute(t_lst *pipelinelst)
 {
 	if (get_lst_len(pipelinelst) == 1)
-		cmd_without_pipes(pipelinelst->cmd);	
-	
+		cmd_without_pipes(pipelinelst->cmd, pipelinelst);	
+	// pipeline(pipelinelst);
 	// if (get_lst_len(pipelinelst) > 1)
 	// 	cmd_with_pipes();	
 
