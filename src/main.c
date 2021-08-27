@@ -6,7 +6,8 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 17:41:03 by hdanyel          ###   ########.fr       */
+/*   Updated: 2021/08/27 03:44:56 by rcarmen          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
@@ -116,7 +117,7 @@ void init_shell()
     sleep(1);
 }
 
-int get_cmd_line(char *str, char *prompt)
+int get_cmd_line(char *str, char *line)
 { 
 	char		*prompt_username;
 	char		*prompt_dir_and_name;
@@ -129,21 +130,20 @@ int get_cmd_line(char *str, char *prompt)
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
 	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
 	colored_prompt = ft_strjoin("\033[0;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
-    prompt = readline(colored_prompt);
+    line = readline(colored_prompt);
 	free(prompt_username);
 	free(prompt_dir_and_name);
 	free(prompt_dir_and_name_with_arr);
 	free(colored_prompt);
-	if (prompt == NULL)
+	if (line == NULL)
 		exit(0);
-    else if (strlen(prompt) != 0)
+    else if (strlen(line) != 0)
 	{
-        add_history(prompt);
-        strcpy(str, prompt);
-        return 0;
+        add_history(line);
+        strcpy(str, line);
+		free(line);
     }
-	else
-		return (0);
+	return (0);
 
 }
 
@@ -199,7 +199,6 @@ int	main(int ac, char **av, char **ep)
 		in_signals();
 		// create_promp(&line);
 		get_cmd_line(line, NULL);
-		add_history(line);
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 19:24:29 by hdanyel          ###   ########.fr       */
+/*   Updated: 2021/08/27 03:54:51 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	execute(t_lst *pipelinelst)
 		cmd_without_pipes(pipelinelst->cmd);	
 	
 	// if (get_lst_len(pipelinelst) > 1)
-		// cmd_with_pipes();	
+	// 	cmd_with_pipes();	
 
 	// builtin_pwd();
 	// builtin_cd(pipelinelst->cmd);

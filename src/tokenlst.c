@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 01:57:46 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/22 15:24:33 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/27 03:45:07 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ void	get_tokenlst(char *line, t_lst **tokenlst)
 			free(token);
 		}
 	}
+	ft_bzero(line, MAXCOM);
 	free(lexer);
 }

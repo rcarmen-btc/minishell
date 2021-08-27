@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/26 21:32:32 by hdanyel          ###   ########.fr       */
+/*   Updated: 2021/08/27 03:43:07 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	builtin_echo(char **cmd)
 	}
 	while (cmd[i])
 	{
-		printf("%s ", cmd[i]);
+		printf("%s", cmd[i]);
 		i++;
 	}
 	if (n_flag == 0)
