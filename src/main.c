@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/27 12:08:09 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/30 11:52:07 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int get_cmd_line(char *str, char *line)
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
 	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
 	colored_prompt = ft_strjoin("\033[0;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
+	// wait(NULL);
     line = readline(colored_prompt);
 	free(prompt_username);
 	free(prompt_dir_and_name);
@@ -203,6 +204,6 @@ int	main(int ac, char **av, char **ep)
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
 		execute(pipelinelst);
-		freelst(tokenlst, pipelinelst);
+		// freelst(tokenlst, pipelinelst);
 	}	
 }
