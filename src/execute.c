@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/30 11:58:07 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/08/31 04:05:01 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_infile_name(t_lst *pipelinelst)
 		{
 			pipelinelst = pipelinelst->next;
 			if (pipelinelst)	
-				save = pipelinelst->cmd[0];
+				save = pipelinelst->value;
 		}
 		if (pipelinelst)	
 			pipelinelst = pipelinelst->next;
@@ -61,49 +61,118 @@ char	*get_outfile_name(t_lst *pipelinelst)
 	return (NULL);
 }
 
+int		is_exists_pipe(t_lst *pipelinelst)
+{
+	while (pipelinelst != NULL)
+	{
+		if (pipelinelst->type == TOKEN_PIPE)
+			return (1);
+		pipelinelst = pipelinelst->next;
+	}
+	return (0);
+}
+
 void	execute(t_lst *pipelinelst)
 {
-	pid_t pid2;
+	pid_t pid2 = -1;
 	int tmpin = dup(0);
     int i = 0;
-	while(pipelinelst != NULL &&
-		(pipelinelst->type == TOKEN_CMD_ARGS || pipelinelst->type == TOKEN_PIPE) &&
-		pipelinelst->next != NULL)
+	
+	int fdin = -1;	
+	int	fdout = -1;
+	char *outfile;
+	char *infile = get_infile_name(pipelinelst);
+	if (pipelinelst->type == TOKEN_LREDIR)
+		pipelinelst = pipelinelst->next->next;
+	if (infile != NULL)
+		fdin = open(infile, O_RDONLY);
+	else	
+		fdin = dup(0);
+	dup2(fdin, 0);
+	close(fdin);
+	// while(pipelinelst != NULL &&
+	// 	(pipelinelst->type == TOKEN_CMD_ARGS || pipelinelst->type == TOKEN_PIPE || 
+	// 	pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_LREDIR) &&
+	// 	pipelinelst->next != NULL)
+	while (pipelinelst != NULL && is_exists_pipe(pipelinelst))
     {
-		if (pipelinelst->type == TOKEN_CMD_ARGS)
+		if (pipelinelst->type == TOKEN_PIPE)
+		{
+			pipelinelst = pipelinelst->next;
+			continue ;
+		}
+		else if (pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_LREDIR)
+		{
+			pipelinelst = pipelinelst->next->next;
+			continue ;
+		}
+		else if (pipelinelst->type == TOKEN_CMD_ARGS)
 		{
 			int pd[2];
 			pipe(pd);
-			pid_t pid1;
-			if (is_builtin_cmd(pipelinelst->cmd) == 1)
-			{
-				builtins(pipelinelst->cmd, pipelinelst);
-				return ;
-			}
+			pid_t pid1 = -1;
 			if ((pid1 = fork()) == 0) 
 			{
 				close(pd[0]);
-				dup2(pd[1], 1); // remap output back to parent
-				execvp(pipelinelst->cmd[0], pipelinelst->cmd);
+				if (pipelinelst->next != NULL && 
+				(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_APPRDIR))
+				{
+					if (pipelinelst->next->next != NULL)
+					{
+						outfile = pipelinelst->next->next->cmd[0];
+						if (pipelinelst->type == TOKEN_RREDIR)
+							fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+						else if (pipelinelst->type == TOKEN_APPRDIR)
+							fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
+					}
+				}
+				else
+				{
+					fdout = pd[1];
+				}
+				dup2(fdout, 1); 	// remap output back to parent
+				close(fdout);
+				if (is_builtin_cmd(pipelinelst->cmd) == 1)
+				{
+					builtins(pipelinelst->cmd, pipelinelst);
+					exit(0);
+				}
+				else
+					execvp(pipelinelst->cmd[0], pipelinelst->cmd);
 				perror("exec");
 				exit(1);
 			}
-			// remap output from previous child to input
+			// if (pid1 != -1)
 			wait(&pid1);
+			// remap output from previous child to input
 			close(pd[1]);
 			dup2(pd[0], 0);
 			close(pd[0]);
+			pipelinelst = pipelinelst->next;
 		} 
-		pipelinelst = pipelinelst->next;
     }
-	if (is_builtin_cmd(pipelinelst->cmd) == 1)
+	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && is_builtin_cmd(pipelinelst->cmd) == 1)
 	{
 		builtins(pipelinelst->cmd, pipelinelst);
 		return ;
 	}
-	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
+	if (pipelinelst != NULL && (pid2 = fork()) == 0)
 	{
-		// printf("%d\n", );
+		// printf("sadf\n");
+		if (pipelinelst->next != NULL && (pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_APPRDIR))
+		{
+			if (pipelinelst->next->next != NULL)
+			{
+				printf("%s\n", pipelinelst->next->next->cmd[0]);
+				outfile = pipelinelst->next->next->cmd[0];
+				if (pipelinelst->type == TOKEN_RREDIR)
+					fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+				else if (pipelinelst->type == TOKEN_APPRDIR)
+					fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
+				dup2(fdout, 1);
+				close(fdout);
+			}
+		}
 		execvp(pipelinelst->cmd[0], pipelinelst->cmd);
  		perror("exec");
 		exit(1);
