@@ -1,21 +1,39 @@
-MMMMSSSSSSSSSSSSSSSSSMSS;.     .dMMMMSSSSSSMMSSSSSSSSS                       
-MMSSSSSSSMSSSSSMSSSSMMMSS."-.-":MMMMMSSSSMMMMSSMSSSMMS                        
-MSSSSSSSMSSSSMMMSSMMMPTMM;"-/\":MMM^"     MMMSSMMMSSMM                       
-SSSSSSSMMSSMMMMMMMMMP-.MMM :  ;.;P       dMMMMMMMMMP'                         
-SSMSSSMMMSMMMMMMMMMP   :M;`:  ;.'+"""t+dMMMMMMMMMMP                           
-MMMSSMMMMMMMMPTMMMM"""":P `.\// '    ""^^MMMMMMMP'-------------------------   
-MMMMMMPTMMMMP="TMMMsg,      \/   db`c"  dMMMMMP" /                          \ 
-MMMMMM  TMMM   d$$$b ^          /T$; ;-/TMMMP   /         Welcome            \
-MMMMM; .^`M; d$P^T$$b          :  $$ ::  "T(    \   to chillyshell, sempai!  /
-MMMMMM   .-+d$$   $$$;         ; d$$ ;;  __     /                           / 
-MMMMMMb   _d$$$   $$$$         :$$$; :MmMMMMp. / ,--------------------------  
-MMMMMM"  " T$$$._.$$$;          T$P.'MMMSSSSSSb.-                             
-MMM`TMb   -")T$$$$$$P'       `._ ""  :MMSSSMMP'                               
-MMM / \    '  "T$$P"           /     :MMMMMMM                                 
-MMSb`. ;                      "      :MMMMMMM                                 
-MMSSb_lSSSb.      \ `.   .___.       MMMMMMMM                                 
-MMMMSSSSSSSSb.                     .MMMMMMMMM                                 
-MMMMMMMMMMMSSSb                  .dMMMMMMMMM'                                 
-MMMMMMMMMMMMMSS;               .dMMMMMMMMMMP                                  
-MMMMMMMMMMMMMb`;"-.          .dMMMMMMMMMMP'                                   
-MMMMMMMMMMMMMMb    ""--.___.dMMMMMMMMMP^"                                     
+                          __                    __
+          __       __     \_\  __          __   \_\  __   __       __
+          \_\     /_/        \/_/         /_/      \/_/   \_\     /_/
+        .-.  \.-./  .-.   .-./  .-.   .-./  .-.   .-\   .-.  \.-./  .-.
+       //-\\_//-\\_//-\\_//-\\_//-\\_//-\\_// \\_//-\\_//-\\_//-\\_//-\\
+     __(   '-'   '-'\  '-'   '-'  /'-'   '-'\__'-'   '-'__/'-'   '-'\__
+    /_/))            \__       __/\          \_\       /_/           \_\
+ ___\_//              \_\     /_/  \__
+/_/  ((                             \_\
+      ))_
+__   // /_/                _     _ _ _           _          _ _
+\_\_((                 ___| |__ (_) | |_   _ ___| |__   ___| | |
+     \\               / __| '_ \| | | | | | / __| '_ \ / _ \ | |   
+      )) _           | (__| | | | | | | |_| \__ \ | | |  __/ | |
+__   // /_/           \___|_| |_|_|_|_|\__, |___/_| |_|\___|_|_|
+\_\_((_/___                            |___/                    
+     ))  \_\
+     \\
+      )) _           builtins:
+__   // /_/            ◦ echo:                        option -n
+\_\_((_/               ◦ cd:          relative or absolute path
+     \\                ◦ pwd:                        no options
+      )) __            ◦ export:                     no options
+__   // /_/            ◦ unset:                      no options
+\_\_((_/___            ◦ env:           no options or arguments
+     ))  \_\           ◦ exit:                       no options
+     \\             
+      )) _
+__   // /_/                     hdanyel && rcarmen
+\_\_((_/___
+     ))  \_\                __                    __
+     \\     __       __     \_\  __          __   \_\  __   __       __
+  __  ))    \_\     /_/        \/_/         /_/      \/_/   \_\     /_/
+  \_\_((   .-.  \.-./  .-.   .-./  .-.   .-./  .-.   .-\   .-.  \.-./  .-.
+       \\_//-\\_//-\\_//-\\_//-\\_//-\\_//-\\_// \\_//-\\_//-\\_//-\\_//-\\
+        'dc\__'-'   '-'\  '-'   '-'  /'-'   '-'\__'-'   '-'__/'-'   '-'\__
+            \_\         \__       __/\          \_\       /_/           \_\
+                         \_\     /_/  \__
+                                       \_\
