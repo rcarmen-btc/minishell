@@ -7,7 +7,9 @@
 		"type_traits": "c",
 		"builtins.h": "c",
 		"stddef.h": "c",
-		"execute.h": "c"
+		"execute.h": "c",
+		"history.h": "c",
+		"libft.h": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }
