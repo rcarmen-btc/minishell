@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/30 14:12:59 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/01 21:00:18 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,11 @@ void	builtin_cd(char *cmd)
 			perror(cmd);
 	}
 	else
+	{
+		// printf("%s\n", cmd);
 		if(chdir(cmd) == -1)
 			perror(cmd);
+	}
 }
 
 void	builtin_pwd()

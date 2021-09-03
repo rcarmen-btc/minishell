@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/31 12:49:22 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/01 21:08:37 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,10 @@ void	print_pipelinelst(t_lst *pipelinelst)
 
 			i++;
 		}
+		// printf("\n");
 		if (pipelinelst->type != TOKEN_CMD_ARGS)
-			printf("\n%s\n", pipelinelst->value);
+			printf("(%s)", pipelinelst->value);
+		printf("\n");
 		pipelinelst = pipelinelst->next;
 	}
 }
@@ -113,7 +115,7 @@ void init_shell()
 		printf("%s", line);
 		free(line);
 	}
-    printf("\n______________________________________________\n");
+    printf("\n");
     sleep(1);
 }
 
@@ -140,7 +142,7 @@ int get_cmd_line(char *str, char *line)
 		exit(0);
     else if (strlen(line) != 0)
 	{
-        add_history(line);
+     	add_history(line);
         strcpy(str, line);
 		free(line);
     }
@@ -181,11 +183,12 @@ void	freelst(t_lst *tokenlst, t_lst *pipelinelst)
 
 int	main(int ac, char **av, char **ep)
 {
-	char		line[MAXCOM];
+	char		*line;
 	t_lst		*tokenlst;
 	t_lst		*pipelinelst;
 	t_lst		*pipelinelst_tmp;
 
+	line = ft_calloc(MAXCOM, sizeof(char));
 	if (ac > 1)
 	{
 		printf("Error message: too many arguments!\n"); // TODO: временно, надо заменить на соотвуствующую ошибку.
@@ -203,7 +206,8 @@ int	main(int ac, char **av, char **ep)
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
-		execute(pipelinelst);
+		execute(pipelinelst, &line);
+		// add_history(line);
 		// freelst(tokenlst, pipelinelst);
 	}	
 }
