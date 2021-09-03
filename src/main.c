@@ -181,12 +181,61 @@ void	freelst(t_lst *tokenlst, t_lst *pipelinelst)
 	}
 }
 
+static char *env_array_find_value(char *ep)
+{
+	int i;
+	int j;
+	char *value;
+
+	i = 0;
+	while (ep[i] != '=')
+		i++;
+	j = i;
+	while (ep[j])
+		j++;
+	value = ft_substr(ep, i + 1, j);
+	return (value);
+}
+
+static char *env_array_find_key(char *ep)
+{
+	int i;
+	char *key;
+
+	i = 0;
+	while (ep[i] != '=')
+		i++;
+	key = ft_substr(ep, 0, i);
+	return (key);
+}
+
+t_env	*init_env(char **ep)
+{
+	t_env	*env_tmp;
+	int i;
+	int size;
+
+	i = 0;
+	size = 0;
+	while(ep[size])
+		size++;
+	env_tmp = (t_env *) ft_calloc(sizeof(t_env), size);
+	while (i < size)
+	{
+		env_tmp->key = env_array_find_key(ep[i]);
+		env_tmp->value = env_array_find_value(ep[i]);
+		i++;
+	}
+	return (env_tmp);
+}
+
 int	main(int ac, char **av, char **ep)
 {
 	char		*line;
 	t_lst		*tokenlst;
 	t_lst		*pipelinelst;
 	t_lst		*pipelinelst_tmp;
+	t_env		*env;
 
 	line = ft_calloc(MAXCOM, sizeof(char));
 	if (ac > 1)
@@ -194,6 +243,7 @@ int	main(int ac, char **av, char **ep)
 		printf("Error message: too many arguments!\n"); // TODO: временно, надо заменить на соотвуствующую ошибку.
 		return(1);
 	}
+	env = init_env(ep);
 	init_shell();
 	// promp = "\033[0;32mchillyshell\033[0;39m$ \033[0m";
 	while (1)
@@ -206,7 +256,7 @@ int	main(int ac, char **av, char **ep)
 		get_tokenlst(line, &tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		// print_pipelinelst(pipelinelst);
-		execute(pipelinelst, &line);
+		execute(pipelinelst, &line, env);
 		// add_history(line);
 		// freelst(tokenlst, pipelinelst);
 	}	

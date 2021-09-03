@@ -14,6 +14,6 @@
 # define EXECUTE_H
 # include "main.h"
 
-void	execute(t_lst *pipelinelst, char **line);
+void	execute(t_lst *pipelinelst, char **line, t_env *env);
 
 #endif

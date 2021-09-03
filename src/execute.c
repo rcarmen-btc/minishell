@@ -106,7 +106,7 @@ int		handle_heredoc(t_lst *pipelinelst, char **line)
 	return (0);
 }
 
-void	execute(t_lst *pipelinelst, char **line)
+void	execute(t_lst *pipelinelst, char **line, t_env *env)
 {
 	pid_t pid1;
 	pid_t pid2;

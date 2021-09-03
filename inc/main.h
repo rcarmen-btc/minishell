@@ -33,6 +33,13 @@
 # include "execute.h"
 # define MAXCOM 1024 
 
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct t_env *next;
+}	t_env;
+
 void	*ft_realloc(void *ptr, size_t origsize ,size_t newsize);
 
 void	get_tokenlst(char *line, t_lst **tokenlst);
