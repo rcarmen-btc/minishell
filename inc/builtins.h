@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:46:19 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 01:25:52 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/06 11:32:17 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	builtin_echo(char **cmd, t_lst *pipelinelst);
 void	builtin_cd(char *cmd);
 void	builtin_pwd(void);
 void	builtin_export(char **cmd, t_env *env);
-void	builtin_unset(char **cmd);
+void	builtin_unset(char **cmd, t_env *env);
 void	builtin_env(t_env *env);
 void	builtin_exit(char **cmd);
 

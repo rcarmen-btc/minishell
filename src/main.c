@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 01:48:17 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/06 15:25:14 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,14 +274,7 @@ int	main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
-	// init_shell();
-	int i = 0;
-	// while (ep[i])
-	// {
-	// 	printf("%s\n", ep[i]);
-	// 	i++;
-	// }
-	// i++;	
+	init_shell();
 	while (1)
 	{
 		tokenlst = NULL;

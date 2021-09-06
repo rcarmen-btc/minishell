@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 10:18:55 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/06 15:24:57 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	builtins(char **cmd, t_lst *pipelinelst, t_env *env)
 	else if (!(ft_strncmp(cmd[0], "export", ft_strlen("export"))))
 		builtin_export(cmd, env);
 	else if (!(ft_strncmp(cmd[0], "unset", ft_strlen("unset"))))
-		builtin_unset(cmd);
+		builtin_unset(cmd, env);
 	else if (!(ft_strncmp(cmd[0], "env", ft_strlen("env"))))
 		builtin_env(env);
 	else if (!(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
@@ -78,37 +78,72 @@ void	builtin_pwd()
 		perror("getcwd");
 }
 
+int		env_is_exists(t_env *env, char *key, char *value)
+{
+	while (env)
+	{
+		if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)
+		{
+			free(env->value);
+			env->value = value;
+			return (1);
+		}
+		env = env->next;
+	}
+	return (0);
+}
+
 void	builtin_export(char **cmd, t_env *env)
 {
 	t_env	*env_tmp;
-	t_env	*tmp;
 	char	*key;
 	char	*value;
-	
-	tmp = env;
-	key = env_array_find_key(cmd[1]);
-	value = env_array_find_value(cmd[1]);
+	int		i;
 
-	while (tmp)
+	i = 1;
+	while (cmd[i])
 	{
-		if (ft_strncmp(tmp->key, key, ft_strlen(key)) == 0)
+		key = env_array_find_key(cmd[i]);
+		value = env_array_find_value(cmd[i]);
+		if (!env_is_exists(env, key, value))
 		{
-			if (ft_strncmp(tmp->value, value, ft_strlen(value)) != 0)
-			{
-				free(tmp->value);
-				tmp->value = value;
-				return (0);
-			}
+			env_tmp = ft_calloc(1, sizeof(t_env));
+			env_tmp->key = key;
+			env_tmp->value = value;
+			find_last_env(env)->next = env_tmp;
 		}
-		tmp = tmp->next;
+		i++;
 	}
-	env_tmp->key = key;
-	env_tmp->value = value;
-	find_last_env(env)->next = env_tmp;
 }
 
-void	builtin_unset(char **cmd)
+void	env_find_and_del(t_env *env, char *key)
 {
+	t_env *tmp;
+	
+	tmp = env;
+	while (tmp && tmp->next && ft_strncmp(key, tmp->next->key, ft_strlen(key)) != 0)
+		tmp = tmp->next;
+	free(tmp->next->key);
+	free(tmp->next->value);
+	free(tmp->next);
+	if (tmp->next->next == NULL)
+		tmp->next = NULL;
+	else
+		tmp->next = tmp->next->next;
+}
+
+void	builtin_unset(char **cmd, t_env *env)
+{
+	int		i;
+	char	*key;
+	
+	i = 1;
+	while (cmd[i])
+	{
+		key = cmd[i];
+		env_find_and_del(env, key);
+		i++;
+	}
 	
 }
 
