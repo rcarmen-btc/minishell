@@ -9,7 +9,8 @@
 		"stddef.h": "c",
 		"execute.h": "c",
 		"history.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"readline.h": "c"
 	},
 	"editor.renderWhitespace": "all", 
 }
