@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 15:24:57 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/08 09:45:33 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,6 @@ void	builtin_env(t_env *env)
 
 void	builtin_exit(char **cmd)
 {
-
+	printf("exit\n");
+	exit(0);
 }

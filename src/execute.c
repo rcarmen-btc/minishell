@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 01:21:17 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/08 09:45:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		is_builtin_cmd(char **cmd)
 		|| !(ft_strncmp(cmd[0], "unset", ft_strlen("unset")))
 		|| !(ft_strncmp(cmd[0], "env", ft_strlen("env")))
 		|| !(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
-		return (1);
+			return (1);
 	return (-1);
 }
 
@@ -86,7 +86,7 @@ int		handle_heredoc(t_lst *pipelinelst)
 		delim = pipelinelst->next->next->cmd[0];
 		heredoc_line = NULL;
 		heredoc_line = readline("> ");
-		while (ft_strncmp(delim, heredoc_line, ft_strlen(heredoc_line)) != 0 || heredoc_line[0] == '\0')
+		while (ft_strncmp(delim, heredoc_line, ft_strlen(delim)) != 0 || heredoc_line[0] == '\0')
 		{
 			write(fdtmp, heredoc_line, ft_strlen(heredoc_line));
 			write(fdtmp, "\n", 1);
@@ -114,7 +114,7 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 	tmpin = dup(0);
 	infile = get_infile_name(pipelinelst);
 	i = 0;
-	if (pipelinelst->type == TOKEN_LREDIR || pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR)
+	if (pipelinelst && (pipelinelst->type == TOKEN_LREDIR || pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR))
 	{
 		if (pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR)
 		{
@@ -142,14 +142,22 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 			{
 				close(pd[0]);
 				if (pipelinelst->next != NULL && \
-				(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
+				(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
 				pipelinelst->next->next != NULL)
 				{
 					outfile = pipelinelst->next->next->cmd[0];
+					// printf("%s\n", outfile);
 					if (pipelinelst->next->type == TOKEN_RREDIR)
 						fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 					else if (pipelinelst->next->type == TOKEN_APPRDIR)
 						fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
+					else if (pipelinelst->next->type == TOKEN_LREDIR)
+					{
+						fdin = open(outfile, O_RDONLY);
+						dup2(fdin, 0);
+						close(fdin);
+						fdout = dup(pd[1]);
+					}
 					else if (pipelinelst->next->type == TOKEN_HERE_DOC)
 					{
 						fdin = handle_heredoc(pipelinelst);	
@@ -164,6 +172,7 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 				close(fdout);
 				if (is_builtin_cmd(pipelinelst->cmd) == 1)
 				{
+					dup2(tmpin, 0);
 					builtins(pipelinelst->cmd, pipelinelst, env);
 					exit(0);
 				}
@@ -185,20 +194,39 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 	}
 	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && is_builtin_cmd(pipelinelst->cmd) == 1)
 	{
+		dup2(tmpin, 0);
+		if (pipelinelst->next != NULL && \
+		(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
+		pipelinelst->next->next != NULL)
+		{
+			outfile = pipelinelst->next->next->cmd[0];
+			if (pipelinelst->next->type == TOKEN_RREDIR)
+				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			
+			dup2(fdin, 0);
+			dup2(fdout, 1);
+		}
 		builtins(pipelinelst->cmd, pipelinelst, env);
 		return ;
 	}
 	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
 	{
 		if (pipelinelst->next != NULL && \
-		(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
+		(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
 		pipelinelst->next->next != NULL)
 		{
+			// printf("%d\n", pipelinelst->next->next->type);
 			outfile = pipelinelst->next->next->cmd[0];
 			if (pipelinelst->next->type == TOKEN_RREDIR)
 				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			else if (pipelinelst->next->type == TOKEN_APPRDIR)
 				fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
+			else if (pipelinelst->next->type == TOKEN_LREDIR)
+			{
+				fdin = open(outfile, O_RDONLY);
+				dup2(fdin, 0);
+				close(fdin);
+			}
 			else if (pipelinelst->next->type == TOKEN_HERE_DOC)
 			{
 				dup2(tmpin, 0);
@@ -211,13 +239,24 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 		}
 		if (is_builtin_cmd(pipelinelst->cmd) == 1)
 		{
+			dup2(tmpin, 0);
 			builtins(pipelinelst->cmd, pipelinelst, env);
 			exit(0);
 		}
 		else
+		{
+			// line[1] = "-O"; 
+			// line[2] = "3000";
+			// line[3] = NULL;
+			// printf("%s\n", pipelinelst->cmd[0]);
+			// printf("%s\n", pipelinelst->cmd[1]);
+			// printf("%s\n", pipelinelst->cmd[2]);
+			// printf("HIIIII\n");
 			execvp(pipelinelst->cmd[0], pipelinelst->cmd);
- 		perror("exec-");
-		exit(1);
+			// execvp(line[0], line);
+ 			perror("exec-");
+			exit(1);
+		}
 	}
 	wait(&pid2);
 	dup2(tmpin, 0);

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:24:31 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/22 04:27:09 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/08 10:56:16 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ typedef struct s_token
 		TOKEN_CMD,
 		TOKEN_DSTRING,
 		TOKEN_SSTRING,
-		TOKEN_IN_ONE_DSTRING,
-		TOKEN_IN_ONE_SSTRING,
 		TOKEN_PIPE,
 		TOKEN_RREDIR,
 		TOKEN_LREDIR,
@@ -38,6 +36,7 @@ typedef struct s_token
 	char	*value;
 }				t_token;
 
-t_token	*init_token(int type, char *value, char lexer_c);
+// t_token	*init_token(int type, char *value, char lexer_c);
+// t_token *init_token(int type, char *value, char lexer_c, t_lexer *lexer);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/31 17:51:30 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/08 12:34:25 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	is_reserved_symbol(char c)
 {
-	if (c == '|' || c == '<' || c == '>')
+	if (c == '|' || c == '<' || c == '>' || c == '\'' || c == '"')
 		return (1);
 	return(0);
 }
@@ -57,42 +57,42 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 		lexer_skip_whitespace(lexer); //пропускаем пробелы и табы
 		if (lexer->c == '"' || lexer->c == '\'') //если на данный момент мы находимся на символе " или '
 			return (lexer_collect_string(lexer, lexer->c));
-		if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
+		else if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 		!is_reserved_symbol(lexer->c))
 			return (lexer_collect_cmd(lexer));
-		if (lexer->c == '|') //находим пайпы и возвращаем 
+		else if (lexer->c == '|') //находим пайпы и возвращаем 
 			return (lexer_advance_with_token(lexer, \
 			init_token(TOKEN_PIPE, \
-			lexer_get_current_char_as_string(lexer), lexer->c)));
-		if (lexer->c == '>')
+			lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
+		else if (lexer->c == '>')
 		{	
 			if (lexer->str[lexer->i + 1] == '>' && \
 				(lexer->i == 0 || lexer->str[lexer->i - 1] != '>'))
 			{
 				lexer_advance(lexer);
 				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c)));
+				init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c, lexer)));
 			}
 			else
 				return (lexer_advance_with_token(lexer, \
 				init_token(TOKEN_RREDIR, \
-				lexer_get_current_char_as_string(lexer), lexer->c)));
+				lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
 		}
-		if (lexer->c == '<')
+		else if (lexer->c == '<')
 		{
 			if (lexer->str[lexer->i + 1] == '<' && \
 				lexer->str[lexer->i - 1] != '<')
 			{
 				lexer_advance(lexer);
 				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_HERE_DOC, ft_strdup("<<"), lexer->c)));
+				init_token(TOKEN_HERE_DOC, ft_strdup("<<"), lexer->c, lexer)));
 			}
 			else
 				return (lexer_advance_with_token(lexer, \
 				init_token(TOKEN_LREDIR, \
-				lexer_get_current_char_as_string(lexer),  lexer->c)));
+				lexer_get_current_char_as_string(lexer),  lexer->c, lexer)));
 		}
-		lexer_advance(lexer);
+		// lexer_advance(lexer);
 	}
 	return (NULL);
 }
@@ -120,15 +120,15 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 	}
 	lexer_advance(lexer);
 	if (type == '"' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_DSTRING, value, lexer->c));
+		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
 	else if (type == '\'' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_SSTRING, value, lexer->c));
+		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
 	else if (type == '"' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_DSTRING, value, lexer->c));
+		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
 	else if (type == '\'' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_SSTRING, value, lexer->c));
+		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
 	else
-		return (init_token(TOKEN_NULL, value, lexer->c));
+		return (init_token(TOKEN_NULL, value, lexer->c, lexer));
 }
 
 t_token	*lexer_collect_cmd(t_lexer *lexer)
@@ -137,7 +137,7 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 	int		len_val;
 	char	*s;
 
-	// value = ft_calloc(1, sizeof(char *));
+	value = ft_calloc(1, sizeof(char *));
 	value = NULL;
 	len_val = 1;
 	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
@@ -151,8 +151,10 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 		free(s);
 		lexer_advance(lexer);
 	}
-	lexer_advance(lexer);
-	return (init_token(TOKEN_CMD, value, 0));
+	// if (lexer->c != '\'' && lexer->c != '"')
+	// lexer_advance(lexer);
+	return (init_token(TOKEN_CMD, value, lexer->c, lexer));
+	// return (init_token(TOKEN_CMD, value, lexer->str[lexer->i - 1], lexer));
 }
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token)

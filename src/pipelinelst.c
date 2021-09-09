@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/08/31 02:48:51 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/09 02:48:21 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 
 	while (tokenlst != NULL)
 	{
-		// printf("->%s\n", tokenlst->value);
 		pipeline_tmp = ft_calloc(1, sizeof(t_lst));
 		if (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type))
 		{
@@ -70,6 +69,7 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 					while (tokenlst != NULL && \
 						is_str_token(tokenlst->type) && prev_pos == ARG_IN_ONE_WITH_NEXT)
 					{
+						prev_pos = tokenlst->str_position;
 						pipeline_tmp->cmd[cmd_index] = ft_realloc(pipeline_tmp->cmd[cmd_index], 1, \
 							ft_strlen(pipeline_tmp->cmd[cmd_index]) + ft_strlen(tokenlst->value) + 1);
 						ft_strlcat(pipeline_tmp->cmd[cmd_index], tokenlst->value, ft_strlen(tokenlst->value) + ft_strlen(pipeline_tmp->cmd[cmd_index]) + 1);
@@ -77,7 +77,8 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 							tokenlst = tokenlst->next;
 					}
 				}
-				if (tokenlst && (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type)))
+				// else if (tokenlst && (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type)))
+				else
 					tokenlst = tokenlst->next;
 			}
 			if (*pipelinelst == NULL)
@@ -86,17 +87,7 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 				get_last(*pipelinelst)->next = pipeline_tmp;
 		}
 		if (tokenlst && (tokenlst->type != TOKEN_CMD || !is_str_token(tokenlst->type)))
-		{
 			push_back(pipelinelst, tokenlst->value, tokenlst->type, tokenlst->str_position);
-			if (tokenlst->type == TOKEN_LREDIR)
-			{
-				if (tokenlst)
-				{
-					tokenlst = tokenlst->next;
-					push_back(pipelinelst, tokenlst->value, tokenlst->type, tokenlst->str_position);
-				}
-			}
-		}
 		if (tokenlst)
 			tokenlst = tokenlst->next;
 	}

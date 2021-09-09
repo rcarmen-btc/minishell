@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 15:25:14 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/09 02:49:45 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,14 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 
 void	print_pipelinelst(t_lst *pipelinelst)
 {
+	printf("HiIIIII\n");
 	while (pipelinelst)
 	{	
 		int	i = 0;
 		while (pipelinelst->type == TOKEN_CMD_ARGS && pipelinelst->cmd[i])
 		{
 			printf("[%s | %d] ", pipelinelst->cmd[i], i);
-
+			// printf("[%d | %d] ", pipelinelst->type, i);
 			i++;
 		}
 		// printf("\n");
@@ -98,6 +99,7 @@ void	print_pipelinelst(t_lst *pipelinelst)
 		printf("\n");
 		pipelinelst = pipelinelst->next;
 	}
+	printf("HIIIiI\n");
 }
 
 void init_shell()
@@ -129,10 +131,10 @@ int get_cmd_line(char *str, char *line)
 	char		cwd[1024];
   	
 	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
-	prompt_username = ft_strjoin(getenv("USER"), "\e[95m@\033[0m"); // получаем username
+	prompt_username = ft_strjoin(getenv("USER"), "\e[1;95m@\033[0m"); // получаем username
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
-	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[0;32m> \033[0m"); // добавляем цветной '>' 
-	colored_prompt = ft_strjoin("\033[0;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
+	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[1;32m> \033[0m"); // добавляем цветной '>' 
+	colored_prompt = ft_strjoin("\033[1;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
 	// wait(NULL);
     line = readline(colored_prompt);
 	free(prompt_username);
@@ -140,7 +142,10 @@ int get_cmd_line(char *str, char *line)
 	free(prompt_dir_and_name_with_arr);
 	free(colored_prompt);
 	if (line == NULL)
+	{
+		printf("exit\n");
 		exit(0);
+	}
     else if (strlen(line) != 0)
 	{
      	add_history(line);
@@ -258,7 +263,129 @@ void	create_outfiles(t_lst *pipelinelst)
 	
 }
 
-int	main(int ac, char **av, char **ep)
+int		check_the_dollar_and_get_cnt(char *str)
+{
+	int	i;
+	int	doll_cnt;
+	
+	i = 0;
+	doll_cnt = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			doll_cnt++;
+		i++;
+	}
+	return (doll_cnt);
+}
+
+t_env	*get_el_env(t_env *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strncmp(key, env->key, ft_strlen(env->key)) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+char	**replace_doll_to_env(t_lst *tokenlst, t_env *env)
+{
+	int k;
+	int i;
+	char **arr_env;	
+	t_env	*el_env;
+
+	arr_env = ft_split(tokenlst->value, '$');
+	i = 0;
+	while (arr_env[i] != NULL)
+	{
+		el_env = get_el_env(env, arr_env[i]);
+		if (el_env != NULL)
+		{
+			free(arr_env[i]);
+			arr_env[i] = el_env->value;
+		}
+		else
+		{
+			free(arr_env[i]);
+			arr_env[i]  = "";
+		}
+		i++;
+	}
+	return (arr_env);
+	// i = 0;
+	// while (arr_env[i])
+	// {
+	// 	printf("=%s=\n", arr_env[i]);
+	// 	i++;
+	// }
+	
+}
+
+char	*join_all_arr(char **arr_env)
+{
+	int i;
+	int j;
+	int len;
+	char *str_env;
+	
+	i = 0;
+	len = 0;
+	while (arr_env[i])
+	{
+		len = len + ft_strlen(arr_env[i]);
+		i++;
+	}
+	str_env = ft_calloc(len + 1, sizeof(char));
+	len = 0;
+	i = 0;
+	while (arr_env[i])
+	{
+		j = 0;
+		while (arr_env[i][j])
+		{
+			str_env[len] = arr_env[i][j];
+			len++;
+			j++;
+		}
+		i++;
+	}
+	return (str_env);
+}
+
+void	expand_env_vars(t_lst *tokenlst, t_env *env)
+{
+	int		doll_cnt;
+	char	**arr_env;
+
+	while (tokenlst)
+	{
+		if (tokenlst->type == TOKEN_CMD || tokenlst->type == TOKEN_DSTRING)
+		{
+			doll_cnt = check_the_dollar_and_get_cnt(tokenlst->value);
+			if (doll_cnt > 0)
+			{
+				arr_env = replace_doll_to_env(tokenlst, env);
+				free(tokenlst->value);
+				tokenlst->value = join_all_arr(arr_env);
+			}
+		}
+		tokenlst = tokenlst->next;
+	}
+}
+
+void	print_tokenlst(t_lst *tokenlst)
+{
+	while (tokenlst)
+	{
+		printf("%s - %d - %d\n", tokenlst->value, tokenlst->type, tokenlst->str_position);
+		tokenlst = tokenlst->next;
+	}
+}
+
+int		main(int ac, char **av, char **ep)
 {
 	char		*line;
 	t_lst		*tokenlst;
@@ -274,7 +401,7 @@ int	main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
-	init_shell();
+	// init_shell();
 	while (1)
 	{
 		tokenlst = NULL;
@@ -282,9 +409,15 @@ int	main(int ac, char **av, char **ep)
 		in_signals();
 		get_cmd_line(line, NULL);
 		get_tokenlst(line, &tokenlst);
+
+		// print_tokenlst(tokenlst);
+
+		// expand_env_vars(tokenlst, env);
 		get_pipelinelst(tokenlst, &pipelinelst);
+		
 		// print_pipelinelst(pipelinelst);
-		create_outfiles(pipelinelst);
+
+		// create_outfiles(pipelinelst);
 		execute(pipelinelst, &line, env);
 		// freelst(tokenlst, pipelinelst);
 	}	

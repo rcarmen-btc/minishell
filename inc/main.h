@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/06 01:43:35 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/08 10:54:00 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "lexer.h"
+# include "token.h"
 # define MAXCOM 1024 
 
 typedef struct s_env
