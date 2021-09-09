@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/09 02:49:45 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/09 05:21:57 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ t_env	*get_el_env(t_env *env, char *key)
 {
 	while (env)
 	{
-		if (ft_strncmp(key, env->key, ft_strlen(env->key)) == 0)
+		if (ft_strncmp(key, env->key, ft_strlen(key)) == 0)
 			return (env);
 		env = env->next;
 	}
@@ -324,12 +324,53 @@ char	**replace_doll_to_env(t_lst *tokenlst, t_env *env)
 	
 }
 
-char	*join_all_arr(char **arr_env)
+char	*get_start(char *value)
+{
+	char	*res;
+	int		len;
+
+	len = 0;
+	while (value[len] != '$')
+		len++;
+	res = ft_calloc(len + 1, sizeof(char));
+	len = 0;
+	while (value[len] != '$')
+	{
+		res[len] = value[len];
+		len++;
+	}
+	return (res);
+}
+
+char	*get_doll_cnt(char *value)
+{
+	int i;
+	int	len;
+	char	*res;
+	
+	i = ft_strlen(value) - 1;
+	len = 0;
+	while (value[i] == '$')
+	{
+		len++;
+		i--;
+	}
+	res = NULL;
+	if (len > 0)
+		res = ft_calloc(len + 1, sizeof(char));
+	i = 0;
+	while (i < len)
+		res[i++] = '$';
+	return (res);	
+}
+
+char	*join_all_arr(t_lst *tokenlst, char **arr_env)
 {
 	int i;
 	int j;
 	int len;
 	char *str_env;
+	char *start_and_doll;
 	
 	i = 0;
 	len = 0;
@@ -352,6 +393,16 @@ char	*join_all_arr(char **arr_env)
 		}
 		i++;
 	}
+	i = 0;
+	if (tokenlst->value[0] != '$')
+	{
+		start_and_doll = get_start(tokenlst->value);
+		str_env = ft_strjoin(start_and_doll, str_env);
+		free(start_and_doll);
+	}
+	start_and_doll = get_doll_cnt(tokenlst->value);
+	if (start_and_doll)
+		str_env = ft_strjoin(str_env, start_and_doll);
 	return (str_env);
 }
 
@@ -359,6 +410,7 @@ void	expand_env_vars(t_lst *tokenlst, t_env *env)
 {
 	int		doll_cnt;
 	char	**arr_env;
+	char	*tmp;
 
 	while (tokenlst)
 	{
@@ -368,8 +420,9 @@ void	expand_env_vars(t_lst *tokenlst, t_env *env)
 			if (doll_cnt > 0)
 			{
 				arr_env = replace_doll_to_env(tokenlst, env);
-				free(tokenlst->value);
-				tokenlst->value = join_all_arr(arr_env);
+				tmp = tokenlst->value;
+				tokenlst->value = join_all_arr(tokenlst, arr_env);
+				free(tmp);
 			}
 		}
 		tokenlst = tokenlst->next;
@@ -412,7 +465,7 @@ int		main(int ac, char **av, char **ep)
 
 		// print_tokenlst(tokenlst);
 
-		// expand_env_vars(tokenlst, env);
+		expand_env_vars(tokenlst, env);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		
 		// print_pipelinelst(pipelinelst);

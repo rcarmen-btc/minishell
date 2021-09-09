@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/08/26 21:48:15 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/09 05:24:57 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,5 +97,23 @@ fclean: clean
 	fi;
 
 re: fclean all
+
+b_out:
+	@> bash_out
+	@echo hi hi'may' hi"may" hi'may'"may" "may"'hi' >> bash_out
+	
+m_out:
+	@> my_out
+	@echo hi hi'may' hi"may" hi'may'"may" "may"'hi' >> my_out
+
+test:
+	@if diff bash_out my_out; then \
+		echo "it's ok!"; \
+	else \
+		echo "is's ko!"; \
+	fi;
+
+test_clean:
+	@rm -f bash_out my_out
 
 .PHONY: all clean fclean re
