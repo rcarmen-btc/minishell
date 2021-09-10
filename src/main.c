@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/09 05:21:57 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/10 14:58:04 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,42 +44,6 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 		return ptrNew;
 	}
 }
-
-// char	*get_infile_name(t_lst *pipelinelst)
-// {
-// 	char *save;
-
-// 	save = NULL;
-// 	while (pipelinelst)
-// 	{	
-// 		if (pipelinelst->type == TOKEN_LREDIR)
-// 		{
-// 			pipelinelst = pipelinelst->next;
-// 			if (pipelinelst)	
-// 				save = pipelinelst->cmd[0];
-// 		}
-// 		if (pipelinelst)	
-// 			pipelinelst = pipelinelst->next;
-// 	}
-// 	return (save);
-// }
-
-// char	*get_outfile_name(t_lst *pipelinelst)
-// {
-// 	while (pipelinelst)
-// 	{	
-// 		if (pipelinelst->type == TOKEN_RREDIR)
-// 		{
-// 			pipelinelst = pipelinelst->next;
-// 			if (pipelinelst)	
-// 				return (pipelinelst->cmd[0]);
-// 		}
-// 		if (pipelinelst)	
-// 			pipelinelst = pipelinelst->next;
-// 	}
-// 	return (NULL);
-// }
-
 
 void	print_pipelinelst(t_lst *pipelinelst)
 {
@@ -131,11 +95,10 @@ int get_cmd_line(char *str, char *line)
 	char		cwd[1024];
   	
 	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
-	prompt_username = ft_strjoin(getenv("USER"), "\e[1;95m@\033[0m"); // получаем username
+	prompt_username = ft_strjoin(getenv("USER"), "\e[1;95m@\033[0m\e[1;94m"); // получаем username
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
 	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[1;32m> \033[0m"); // добавляем цветной '>' 
 	colored_prompt = ft_strjoin("\033[1;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
-	// wait(NULL);
     line = readline(colored_prompt);
 	free(prompt_username);
 	free(prompt_dir_and_name);
@@ -438,6 +401,22 @@ void	print_tokenlst(t_lst *tokenlst)
 	}
 }
 
+void	add_exit_code(t_env **head_env, int code)
+{
+	t_env *env_tmp;
+
+	env_tmp = ft_calloc(1, sizeof(t_env));
+	if (!env_is_exists(*head_env, "?", ft_itoa(code)))
+	{
+		env_tmp = ft_calloc(1, sizeof(t_env));
+		env_tmp->key = "?";
+		env_tmp->value = ft_itoa(code);
+		env_tmp->next = NULL;
+		find_last_env(*head_env)->next = env_tmp;
+	}
+	// env_tmp->next = NULL;
+}
+
 int		main(int ac, char **av, char **ep)
 {
 	char		*line;
@@ -454,24 +433,25 @@ int		main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
+	in_signals();
 	// init_shell();
 	while (1)
 	{
 		tokenlst = NULL;
 		pipelinelst = NULL;
-		in_signals();
 		get_cmd_line(line, NULL);
 		get_tokenlst(line, &tokenlst);
 
 		// print_tokenlst(tokenlst);
 
 		expand_env_vars(tokenlst, env);
+		// print_tokenlst(tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
 		
 		// print_pipelinelst(pipelinelst);
 
 		// create_outfiles(pipelinelst);
-		execute(pipelinelst, &line, env);
+		add_exit_code(&env, execute(pipelinelst, &line, env, ep));
 		// freelst(tokenlst, pipelinelst);
 	}	
 }

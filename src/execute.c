@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/08 09:45:12 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/10 14:32:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,63 @@ int		handle_heredoc(t_lst *pipelinelst)
 	return (0);
 }
 
-void	execute(t_lst *pipelinelst, char **line, t_env *env)
+char	*get_path_to_exe_heplper(char **path, char *command)
+{
+	char	*slash;
+	char	*with_slash;
+	char	*full_path;
+
+	slash = "/";
+	while (*path != 0)
+	{
+		with_slash = ft_strjoin(slash, command);
+		full_path = ft_strjoin(*path, with_slash);
+		free(with_slash);
+		if (access(full_path, 0) == 0)
+		{
+			while (*path)
+				free(*path++);
+			// free(path);
+			return (full_path);
+		}
+		free(full_path);
+		free(*path);
+		path++;
+	}
+	return (NULL);
+}
+
+char	*get_path_to_exe(t_env *env, char *name)
+{
+	char	**path;
+	char	*res;
+
+	if (access(name, 0) == 0)
+	{
+		return (name);
+	}
+	while (env != NULL)
+	{
+		if (ft_strncmp(env->key, "PATH", 4) == 0)
+			break ;
+		env = env->next;
+	}
+	if (env == NULL)
+	{
+		printf("error command not found\n");
+		return (NULL);
+	}
+	path = ft_split(env->value, ':');
+	res = get_path_to_exe_heplper(path, name);
+	if (res != NULL)
+		return (res);
+	else // TODO add
+		printf("error command not found\n");
+		// error(name);
+	return (NULL);
+}
+
+int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 {
 	pid_t pid1;
 	pid_t pid2;
@@ -111,6 +167,8 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
     int i;
 	int pd[2];
 
+	ex_signals();
+	// in_signals();
 	tmpin = dup(0);
 	infile = get_infile_name(pipelinelst);
 	i = 0;
@@ -206,10 +264,9 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 			dup2(fdin, 0);
 			dup2(fdout, 1);
 		}
-		builtins(pipelinelst->cmd, pipelinelst, env);
-		return ;
+		return (builtins(pipelinelst->cmd, pipelinelst, env));
 	}
-	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
+	else if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
 	{
 		if (pipelinelst->next != NULL && \
 		(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
@@ -218,14 +275,35 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 			// printf("%d\n", pipelinelst->next->next->type);
 			outfile = pipelinelst->next->next->cmd[0];
 			if (pipelinelst->next->type == TOKEN_RREDIR)
+			{
 				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+				if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_LREDIR)
+				{
+					infile = pipelinelst->next->next->next->next->cmd[0];
+					fdin = open(infile, O_RDONLY);
+					dup2(fdin, 0);
+					close(fdin);
+				}
+			}
 			else if (pipelinelst->next->type == TOKEN_APPRDIR)
+			{
 				fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
+				if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_LREDIR)
+				{
+					infile = pipelinelst->next->next->next->next->cmd[0];
+					fdin = open(outfile, O_RDONLY);
+					dup2(fdin, 0);
+					close(fdin);
+				}
+			}
 			else if (pipelinelst->next->type == TOKEN_LREDIR)
 			{
-				fdin = open(outfile, O_RDONLY);
+				infile = pipelinelst->next->next->cmd[0];
+				fdin = open(infile, O_RDONLY);
 				dup2(fdin, 0);
 				close(fdin);
+				if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_RREDIR)
+					outfile = pipelinelst->next->next->next->next->cmd[0];
 			}
 			else if (pipelinelst->next->type == TOKEN_HERE_DOC)
 			{
@@ -245,20 +323,18 @@ void	execute(t_lst *pipelinelst, char **line, t_env *env)
 		}
 		else
 		{
-			// line[1] = "-O"; 
-			// line[2] = "3000";
-			// line[3] = NULL;
-			// printf("%s\n", pipelinelst->cmd[0]);
-			// printf("%s\n", pipelinelst->cmd[1]);
-			// printf("%s\n", pipelinelst->cmd[2]);
-			// printf("HIIIII\n");
-			execvp(pipelinelst->cmd[0], pipelinelst->cmd);
-			// execvp(line[0], line);
+			char *path_to_exe = get_path_to_exe(env, pipelinelst->cmd[0]);
+			if (path_to_exe == NULL)
+				exit(1);
+			execve(path_to_exe, pipelinelst->cmd, ep);
  			perror("exec-");
 			exit(1);
 		}
 	}
-	wait(&pid2);
+	int status;
+	pid2 = wait(&status);
+	status = WEXITSTATUS(status);
 	dup2(tmpin, 0);
 	close(tmpin);
+	return (status);
 }

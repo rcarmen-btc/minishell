@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/07/10 00:26:47 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/10 12:03:17 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,12 +42,12 @@ CC = clang
 CFLAGS = -Wall -Wextra -Werror
 OPT_FLUGS = -O -g3 -pipe
 
-COM_COLOR   = \033[0;34m
-OBJ_COLOR   = \033[0;36m
-OK_COLOR    = \033[0;32m
-ERROR_COLOR = \033[0;31m
-WARN_COLOR  = \033[0;33m
-NO_COLOR    = \033[m
+COM_COLOR   = \033[0;94m
+OBJ_COLOR   = \033[0;96m
+OK_COLOR    = \033[0;92m
+ERROR_COLOR = \033[0;91m
+WARN_COLOR  = \033[0;93m
+NO_COLOR    = \033[0m
 
 OK_STRING    = "[OK]"
 ERROR_STRING = "[ERROR]"

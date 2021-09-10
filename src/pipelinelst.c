@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/09 02:48:21 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/09 22:31:54 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,9 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 				{
 					pipeline_tmp->cmd[cmd_index] = ft_strdup(tokenlst->value);
 					cmd_index++;
+					tokenlst = tokenlst->next;
 				}
-				if (tokenlst->str_position == ARG_IN_ONE_WITH_NEXT)
+				else if (tokenlst->str_position == ARG_IN_ONE_WITH_NEXT)
 				{
 					pipeline_tmp->cmd[cmd_index] = ft_strdup(tokenlst->value);
 					prev_pos = tokenlst->str_position;
@@ -76,10 +77,10 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 						if (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type))
 							tokenlst = tokenlst->next;
 					}
+					cmd_index++;
 				}
 				// else if (tokenlst && (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type)))
-				else
-					tokenlst = tokenlst->next;
+				// else if (tokenlst)
 			}
 			if (*pipelinelst == NULL)
 				*pipelinelst = pipeline_tmp;

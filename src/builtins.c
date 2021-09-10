@@ -6,31 +6,32 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/08 09:45:33 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/10 13:40:39 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	builtins(char **cmd, t_lst *pipelinelst, t_env *env)
+int		builtins(char **cmd, t_lst *pipelinelst, t_env *env)
 {
 	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo"))))
-		builtin_echo(cmd, pipelinelst);
+		return (builtin_echo(cmd, pipelinelst));
 	else if (!(ft_strncmp(cmd[0], "cd", ft_strlen("cd"))))
-		builtin_cd(cmd[1]);
+		return (builtin_cd(cmd[1]));
 	else if (!(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd"))))
-		builtin_pwd();
+		return (builtin_pwd());
 	else if (!(ft_strncmp(cmd[0], "export", ft_strlen("export"))))
-		builtin_export(cmd, env);
+		return (builtin_export(cmd, env));
 	else if (!(ft_strncmp(cmd[0], "unset", ft_strlen("unset"))))
-		builtin_unset(cmd, env);
+		return (builtin_unset(cmd, env));
 	else if (!(ft_strncmp(cmd[0], "env", ft_strlen("env"))))
-		builtin_env(env);
+		return (builtin_env(env));
 	else if (!(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
-		builtin_exit(cmd);
+		return (builtin_exit(cmd));
+	return (0);
 }
 
-void	builtin_echo(char **cmd, t_lst *pipelinelst)
+int		builtin_echo(char **cmd, t_lst *pipelinelst)
 {
 	int	n_flag;
 	int		i;
@@ -51,31 +52,28 @@ void	builtin_echo(char **cmd, t_lst *pipelinelst)
 	}
 	if (n_flag == 0)
 		printf("\n");
+	return (0);
 }
 
-void	builtin_cd(char *cmd)
+int		builtin_cd(char *cmd)
 {
-	if (!cmd)
+	if(chdir(cmd) == -1)
 	{
-		if(chdir(getenv("HOME")) == -1)
-			perror(cmd);
+		perror(cmd);
+		return (1);
 	}
-	else
-	{
-		// printf("%s\n", cmd);
-		if(chdir(cmd) == -1)
-			perror(cmd);
-	}
+	return (0);
 }
 
-void	builtin_pwd()
+int		builtin_pwd()
 {
 	char buff[1024];
-
+	
 	if (getcwd(buff, sizeof(buff)) != NULL)
 		printf("%s\n", buff);
     else
 		perror("getcwd");
+	return (0);
 }
 
 int		env_is_exists(t_env *env, char *key, char *value)
@@ -93,7 +91,7 @@ int		env_is_exists(t_env *env, char *key, char *value)
 	return (0);
 }
 
-void	builtin_export(char **cmd, t_env *env)
+int		builtin_export(char **cmd, t_env *env)
 {
 	t_env	*env_tmp;
 	char	*key;
@@ -110,10 +108,12 @@ void	builtin_export(char **cmd, t_env *env)
 			env_tmp = ft_calloc(1, sizeof(t_env));
 			env_tmp->key = key;
 			env_tmp->value = value;
+			env_tmp->next = NULL;
 			find_last_env(env)->next = env_tmp;
 		}
 		i++;
 	}
+	return (0);
 }
 
 void	env_find_and_del(t_env *env, char *key)
@@ -132,7 +132,7 @@ void	env_find_and_del(t_env *env, char *key)
 		tmp->next = tmp->next->next;
 }
 
-void	builtin_unset(char **cmd, t_env *env)
+int		builtin_unset(char **cmd, t_env *env)
 {
 	int		i;
 	char	*key;
@@ -144,22 +144,24 @@ void	builtin_unset(char **cmd, t_env *env)
 		env_find_and_del(env, key);
 		i++;
 	}
-	
+	return (0);
 }
 
-void	builtin_env(t_env *env)
+int		builtin_env(t_env *env)
 {
 	int	i;
 	
 	i = 0;
 	while (env != NULL)
 	{
-		printf("%s=%s\n", env->key, env->value);
+		if (env->key[0] != '?')
+			printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
+	return (0);
 }
 
-void	builtin_exit(char **cmd)
+int		 builtin_exit(char **cmd)
 {
 	printf("exit\n");
 	exit(0);

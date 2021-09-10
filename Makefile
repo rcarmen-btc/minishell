@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/09/09 05:24:57 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/10 14:38:18 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,8 @@ INC = libft.h main.h token.h cmdlst.h
 INC = src/libft/inc/libft.h inc/main.h
 
 LIBS = -L./src/libft -lft -lreadline
+
+OUTFILE = test/mout
 
 SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c execute.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
@@ -32,13 +34,16 @@ CC = clang
 CFLAGS = #-Wall -Wextra -Werror
 OPT_FLUGS = -O0 -g3 -pipe
 
-HMM_COLOR   = \033[0;35m
-COM_COLOR   = \033[0;34m
-OBJ_COLOR   = \033[0;36m
-OK_COLOR    = \033[0;32m
-ERROR_COLOR = \033[0;31m
-WARN_COLOR  = \033[0;33m
-NO_COLOR    = \033[m
+HMM_COLOR   = \033[0;95m
+COM_COLOR   = \033[0;94m
+OBJ_COLOR   = \033[0;96m
+OK_COLOR    = \033[1;92m
+ERROR_COLOR = \033[1;91m
+WARN_COLOR  = \033[0;93m
+NO_COLOR    = \033[0m
+
+SYAN_COLOR = \e[1;96m
+YELLOW_COLOR = \e[1;93m
 
 OK_STRING    = "[OK]"
 ERROR_STRING = "[ERROR]"
@@ -98,22 +103,43 @@ fclean: clean
 
 re: fclean all
 
-b_out:
-	@> bash_out
-	@echo hi hi'may' hi"may" hi'may'"may" "may"'hi' >> bash_out
-	
-m_out:
-	@> my_out
-	@echo hi hi'may' hi"may" hi'may'"may" "may"'hi' >> my_out
+out:
+	echo "$(SYAN_COLOR)Test cases:$(NO_COLOR)"
+	@> $(OUTFILE)
+	@echo --Full-path--
+	/bin/ls od | /bin/grep i >> $(OUTFILE)
+	/bin/cat test/infile | /bin/wc -l >> $(OUTFILE)
+	@echo ---echo-with-quotes-redirections-pipes-env-variables---
+	echo hi hello hola >> $(OUTFILE)
+	echo "cat lol.c | cat > lol.c" >> $(OUTFILE)
+	echo zero one'o n e' two"tw    o" three'three'"t      hree" four"four"'four' "five" 'six' "seven" >> $(OUTFILE)
+	echo 'cat lol.c | cat > lol.c' >> $(OUTFILE)
+	echo '$USER' >> $(OUTFILE) 
+	echo $$HOME $$HOME'$$HOME' $$HOME"$$HOME" $$HOME'$$HOME'"$$HOME" $$HOME"$$HOME"'$$HOME' "$$HOME" '$$HOME' "$$HOME" >> $(OUTFILE)
+	@echo ---Redirections---
+	cat >> $(OUTFILE) < test/infile
+	grep i >> $(OUTFILE) < test/infile
+	@echo ---Pipes--
+	ls -l src | grep b >> $(OUTFILE)
+	cat < test/infile | grep o | wc >> $(OUTFILE)
+	@echo "$(SYAN_COLOR)$(OUTFILE) out:$(NO_COLOR)"
+	@cat $(OUTFILE)
 
-test:
-	@if diff bash_out my_out; then \
-		echo "it's ok!"; \
+diff:
+	@echo "$(YELLOW_COLOR)======================================$(NO_COLOR)"
+	@echo "$(YELLOW_COLOR)Bash out:$(NO_COLOR)"
+	@cat test/bout
+	@echo "$(YELLOW_COLOR)--------------------------------------$(NO_COLOR)"
+	@echo "$(YELLOW_COLOR)Minishell out:$(NO_COLOR)"
+	@cat test/mout
+	@echo "$(YELLOW_COLOR)======================================$(NO_COLOR)"
+	@if diff test/bout test/mout; then \
+		echo "$(OBJ_COLOR)TESTS $(OK_COLOR)$(OK_STRING)$(NO_COLOR)"; \
 	else \
-		echo "is's ko!"; \
+		echo "$(OBJ_COLOR)TEST $(ERROR_COLOR)[KO]$(NO_COLOR)"; \
 	fi;
 
 test_clean:
-	@rm -f bash_out my_out
+	@rm -f test/bash_out test/my_out
 
 .PHONY: all clean fclean re
