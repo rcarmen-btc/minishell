@@ -417,6 +417,11 @@ void	add_exit_code(t_env **head_env, int code)
 	// env_tmp->next = NULL;
 }
 
+void error_message(char *str)
+{
+	ft_putendl_fd(str, 2);
+}
+
 int		main(int ac, char **av, char **ep)
 {
 	char		*line;
@@ -428,8 +433,8 @@ int		main(int ac, char **av, char **ep)
 	line = ft_calloc(MAXCOM, sizeof(char));
 	if (ac > 1)
 	{
-		printf("Error message: too many arguments!\n"); // TODO: временно, надо заменить на соотвуствующую ошибку.
-		return(1);
+		error_message("Error message: too many arguments!");
+		exit(1);
 	}
 	env = NULL;
 	init_env(ep, &env);

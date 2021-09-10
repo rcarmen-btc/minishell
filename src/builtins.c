@@ -12,7 +12,7 @@
 
 #include "builtins.h"
 
-int		builtins(char **cmd, t_lst *pipelinelst, t_env *env)
+int	builtins(char **cmd, t_lst *pipelinelst, t_env *env)
 {
 	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo"))))
 		return (builtin_echo(cmd, pipelinelst));
@@ -31,10 +31,10 @@ int		builtins(char **cmd, t_lst *pipelinelst, t_env *env)
 	return (0);
 }
 
-int		builtin_echo(char **cmd, t_lst *pipelinelst)
+int	builtin_echo(char **cmd, t_lst *pipelinelst)
 {
 	int	n_flag;
-	int		i;
+	int	i;
 
 	n_flag = 0;
 	i = 1;
@@ -55,9 +55,17 @@ int		builtin_echo(char **cmd, t_lst *pipelinelst)
 	return (0);
 }
 
-int		builtin_cd(char *cmd)
+int	builtin_cd(char *cmd)
 {
-	if(chdir(cmd) == -1)
+	if(!cmd)
+	{
+		if(chdir(getenv("HOME")) == -1)
+		{
+			perror(cmd);
+			return (1);
+		}
+	}
+	else if (chdir(cmd) == -1)
 	{
 		perror(cmd);
 		return (1);
@@ -65,18 +73,18 @@ int		builtin_cd(char *cmd)
 	return (0);
 }
 
-int		builtin_pwd()
+int	builtin_pwd(void)
 {
-	char buff[1024];
-	
+	char	buff[1024];
+
 	if (getcwd(buff, sizeof(buff)) != NULL)
 		printf("%s\n", buff);
-    else
+	else
 		perror("getcwd");
 	return (0);
 }
 
-int		env_is_exists(t_env *env, char *key, char *value)
+int	env_is_exists(t_env *env, char *key, char *value)
 {
 	while (env)
 	{
@@ -91,7 +99,7 @@ int		env_is_exists(t_env *env, char *key, char *value)
 	return (0);
 }
 
-int		builtin_export(char **cmd, t_env *env)
+int	builtin_export(char **cmd, t_env *env)
 {
 	t_env	*env_tmp;
 	char	*key;
@@ -118,8 +126,8 @@ int		builtin_export(char **cmd, t_env *env)
 
 void	env_find_and_del(t_env *env, char *key)
 {
-	t_env *tmp;
-	
+	t_env	*tmp;
+
 	tmp = env;
 	while (tmp && tmp->next && ft_strncmp(key, tmp->next->key, ft_strlen(key)) != 0)
 		tmp = tmp->next;
@@ -132,11 +140,11 @@ void	env_find_and_del(t_env *env, char *key)
 		tmp->next = tmp->next->next;
 }
 
-int		builtin_unset(char **cmd, t_env *env)
+int	builtin_unset(char **cmd, t_env *env)
 {
 	int		i;
 	char	*key;
-	
+
 	i = 1;
 	while (cmd[i])
 	{
@@ -147,10 +155,10 @@ int		builtin_unset(char **cmd, t_env *env)
 	return (0);
 }
 
-int		builtin_env(t_env *env)
+int	builtin_env(t_env *env)
 {
 	int	i;
-	
+
 	i = 0;
 	while (env != NULL)
 	{
@@ -161,8 +169,33 @@ int		builtin_env(t_env *env)
 	return (0);
 }
 
-int		 builtin_exit(char **cmd)
+static void	parse_first_arg(char *arg)
 {
+	int	status;
+
+	if (!arg)
+		return ;
+	status = ft_atoi(arg);
+	while (*arg)
+		if (ft_isdigit(*arg++))
+			return ;
+	error_message("exit: numeric argument required");
+	exit(status);
+}
+
+int	builtin_exit(char **cmd)
+{
+	int	status;
+
+	status = 1;
+	while (cmd[status])
+		status++;
+	parse_first_arg(*(cmd + 1));
+	if (status > 2)
+	{
+		error_message("exit: too many arguments");
+		return (1);
+	}
 	printf("exit\n");
-	exit(0);
+	exit(status);
 }

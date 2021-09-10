@@ -58,4 +58,6 @@ t_env	*find_last_env(t_env *head_env);
 void	in_signals(void);
 void	ex_signals(void);
 
+void	error_message(char *str);
+
 #endif

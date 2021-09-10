@@ -142,15 +142,16 @@ char	*get_path_to_exe(t_env *env, char *name)
 	}
 	if (env == NULL)
 	{
-		printf("error command not found\n");
+		error_message("Error message: command not found!");
 		return (NULL);
 	}
 	path = ft_split(env->value, ':');
 	res = get_path_to_exe_heplper(path, name);
 	if (res != NULL)
 		return (res);
-	else // TODO add
-		printf("error command not found\n");
+	else
+		error_message("Error message: command not found!");
+		//printf("error command not found\n");
 		// error(name);
 	return (NULL);
 }
