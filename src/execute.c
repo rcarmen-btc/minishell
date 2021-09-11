@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/11 11:13:51 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/11 14:08:22 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ int		handle_heredoc(t_lst *pipelinelst)
 	return (0);
 }
 
-char	*get_path_to_exe_heplper(char **path, char *command, t_lst *pipelinelst)
+char	*get_path_to_exe_heplper(char **path, char *command)
 {
 	char	*slash;
 	char	*with_slash;
 	char	*full_path;
-	struct stat *buf;
+	struct stat buf;
 
 	slash = "/";
 	while (*path != 0)
@@ -113,15 +113,12 @@ char	*get_path_to_exe_heplper(char **path, char *command, t_lst *pipelinelst)
 		with_slash = ft_strjoin(slash, command);
 		full_path = ft_strjoin(*path, with_slash);
 		free(with_slash);
-		if (execve(full_path, pipelinelst->cmd, NULL) == -1)
-		{
- 			perror("exec-");
-			exit(1);
-		}
-		else
+		if (stat(full_path, &buf) != -1)
 		{
 			while (*path)
 				free(*path++);
+			// free(path);
+			return (full_path);
 		}
 		free(full_path);
 		free(*path);
@@ -130,39 +127,26 @@ char	*get_path_to_exe_heplper(char **path, char *command, t_lst *pipelinelst)
 	return (NULL);
 }
 
-char	*get_path_to_exe(t_env *env, char *name, t_lst *pipelinelst)
+char	*get_path_to_exe(t_env *env, char *name)
 {
 	char	**path;
 	char	*res;
-	struct stat *buf;
+	struct stat buf;
 
-
-	if (execve(name, pipelinelst->cmd, NULL) == -1)
-	{
-		perror("exec1-");
-		exit(1);
-	}
+	if (stat(name, &buf) != -1)
+		return (name);
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, "PATH", 4) == 0)
 			break ;
 		env = env->next;
 	}
-	if (env == NULL)
-	{
-		error_message("Error message: command not found!");
-		return (NULL);
-	}
 	path = ft_split(env->value, ':');
-	res = get_path_to_exe_heplper(path, name, pipelinelst);
+	res = get_path_to_exe_heplper(path, name);
 	if (res != NULL)
 		return (res);
 	else
-		perror(name);
-		// printf("%s: command not found\n", name);
-		// error_message("Error message: command not found!");
-		//printf("error command not found\n");
-		// error(name);
+		printf("%s: command not found\n", name);
 	return (NULL);
 }
 
@@ -179,7 +163,6 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 	int pd[2];
 
 	ex_signals();
-	// in_signals();
 	tmpin = dup(0);
 	infile = get_infile_name(pipelinelst);
 	i = 0;
@@ -334,7 +317,11 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 		}
 		else
 		{
-			char *path_to_exe = get_path_to_exe(env, pipelinelst->cmd[0], pipelinelst);
+			char *path_to_exe = get_path_to_exe(env, pipelinelst->cmd[0]);
+			if (path_to_exe == NULL)
+				exit(1);
+			execve(path_to_exe, pipelinelst->cmd, ep);
+			exit(1);
 		}
 	}
 	int status;
