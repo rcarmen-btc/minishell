@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/10 14:58:04 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/11 10:42:16 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -421,6 +421,53 @@ void error_message(char *str)
 {
 	ft_putendl_fd(str, 2);
 }
+	
+int	check_line(char *line)
+{
+	int dqoute;
+	int sqoute;
+	int dind;
+	int sind;
+	int	i;
+
+	dqoute = 1;
+	sqoute = 1;
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\'')
+		{
+			sqoute = sqoute * -1;
+			i++;
+			while (line[i] != '\0' && line[i] != '\'')
+			{
+				// if (line[i] == '"')
+					// dqoute = dqoute * -1;
+				i++;
+			}
+			if (line[i] != '\'')
+				exit(1);
+			
+		}
+		if (line[i] == '"')
+		{
+			dqoute = dqoute * -1;
+			i++;
+			while (line[i] != '\0' && line[i] != '"')
+			{
+				if (line[i] == '"')
+					dqoute = dqoute * -1;
+				i++;
+			}
+			if (line[i] != '"')
+				exit(1);
+		}
+		i++;
+	}
+	// if (dqoute != 1 || sqoute != 1)
+	// 	exit(1);
+	return (0);
+}
 
 int		main(int ac, char **av, char **ep)
 {
@@ -438,15 +485,15 @@ int		main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
-	in_signals();
 	// init_shell();
 	while (1)
 	{
+		in_signals();
 		tokenlst = NULL;
 		pipelinelst = NULL;
 		get_cmd_line(line, NULL);
+		check_line(line);
 		get_tokenlst(line, &tokenlst);
-
 		// print_tokenlst(tokenlst);
 
 		expand_env_vars(tokenlst, env);

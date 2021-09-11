@@ -2,6 +2,17 @@ builtins.o
 main.o
 pipelinelst.o
 signals.o
+11
+hi hello hola
+cat lol.c | cat > lol.c
+zero oneo n e twotw    o threethreet      hree fourfourfour five six seven
+cat lol.c | cat > lol.c
+SER
+/home/riser /home/riser$HOME /home/riser/home/riser /home/riser$HOME/home/riser /home/riser/home/riser$HOME /home/riser $HOME /home/riser
+builtins.o
+main.o
+pipelinelst.o
+signals.o
 5
 zero oneo n e twotw    o threethreet      hree fourfourfour five six seven
 /home/riser /home/riser$HOME /home/riser/home/riser /home/riser$HOME/home/riser /home/riser/home/riser$HOME /home/riser $HOME /home/riser
@@ -9,3 +20,13 @@ zero oneo n e twotw    o threethreet      hree fourfourfour five six seven
 0 + 0
 hi
 0
+builtins.o
+main.o
+pipelinelst.o
+signals.o
+zero oneo n e twotw    o threethreet      hree fourfourfour five six seven
+/home/riser /home/riser$HOME /home/riser/home/riser /home/riser$HOME/home/riser /home/riser/home/riser$HOME /home/riser $HOME /home/riser
+hi
+-rw-rw-r-- 1 riser riser 4171 сен 10 18:18 builtins.c
+drwxrwxr-x 6 riser riser 4096 сен 10 18:19 libft
+      6      24     255
