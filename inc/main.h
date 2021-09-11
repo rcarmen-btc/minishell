@@ -34,12 +34,12 @@
 
 typedef struct s_env
 {
-	char *key;
-	char *value;
-	struct s_env *next;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
 }	t_env;
 
-void	*ft_realloc(void *ptr, size_t origsize ,size_t newsize);
+void	*ft_realloc(void *ptr, size_t origsize, size_t newsize);
 
 void	get_tokenlst(char *line, t_lst **tokenlst);
 
@@ -54,7 +54,6 @@ char	*env_array_find_value(char *ep);
 int		env_is_exists(t_env *env, char *key, char *value);
 t_env	*find_last_env(t_env *head_env);
 
-// сигналы
 void	in_signals(void);
 void	ex_signals(void);
 
