@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 18:32:08 by hdanyel           #+#    #+#             */
-/*   Updated: 2021/09/11 14:14:49 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/11 14:18:43 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,17 @@ static void	re_promp(int signal)
 	printf("\n");
 	rl_on_new_line(); //переместились на новую строку
 	rl_replace_line("", 0); //замена содержимого line ""
-	// rl_redisplay(); //замена отображаемого, на текущее содержимое
+	rl_redisplay(); //замена отображаемого, на текущее содержимое
 }
 
+static void	re_promp_ex(int signal)
+{
+	(void)signal;
+	printf("\n");
+	rl_on_new_line(); //переместились на новую строку
+	rl_replace_line("", 0); //замена содержимого line ""
+	// rl_redisplay(); //замена отображаемого, на текущее содержимое
+}
 void	in_signals(void)
 {
 	signal(SIGINT, re_promp);
@@ -35,6 +43,6 @@ static void	quit_process(int signal)
 
 void	ex_signals(void)
 {
-	signal(SIGINT, re_promp);
+	signal(SIGINT, re_promp_ex);
 	signal(SIGQUIT, quit_process);
 }

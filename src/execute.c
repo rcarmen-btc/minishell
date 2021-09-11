@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/11 14:12:43 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/11 14:17:40 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 	int pd[2];
 
 	ex_signals();
-	in_signals();
+	
+	// in_signals();
 	tmpin = dup(0);
 	infile = get_infile_name(pipelinelst);
 	i = 0;
