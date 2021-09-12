@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/11 10:42:16 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/11 20:04:39 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,11 +440,7 @@ int	check_line(char *line)
 			sqoute = sqoute * -1;
 			i++;
 			while (line[i] != '\0' && line[i] != '\'')
-			{
-				// if (line[i] == '"')
-					// dqoute = dqoute * -1;
 				i++;
-			}
 			if (line[i] != '\'')
 				exit(1);
 			
@@ -454,11 +450,7 @@ int	check_line(char *line)
 			dqoute = dqoute * -1;
 			i++;
 			while (line[i] != '\0' && line[i] != '"')
-			{
-				if (line[i] == '"')
-					dqoute = dqoute * -1;
 				i++;
-			}
 			if (line[i] != '"')
 				exit(1);
 		}
