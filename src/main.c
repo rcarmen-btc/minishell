@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/11 20:04:39 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/12 19:18:32 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ int get_cmd_line(char *str, char *line)
 	char		cwd[1024];
   	
 	getcwd(cwd, sizeof(cwd)); // получаем тек. каталог 
-	prompt_username = ft_strjoin(getenv("USER"), "\e[1;95m@\033[0m\e[1;94m"); // получаем username
+	prompt_username = ft_strjoin(getenv("USER"), "\001\e[1;95m\002@\001\033[0m\e[1;94m\002"); // получаем username
 	prompt_dir_and_name = ft_strjoin(prompt_username, cwd);// тек. какалог объединяем с username
-	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\033[1;32m> \033[0m"); // добавляем цветной '>' 
-	colored_prompt = ft_strjoin("\033[1;32m", prompt_dir_and_name_with_arr); // красим в зеленый 
+	prompt_dir_and_name_with_arr = ft_strjoin(prompt_dir_and_name, "\001\033[1;32m\002> \001\033[0m\002"); // добавляем цветной '>' 
+	colored_prompt = ft_strjoin("\001\033[1;32m\002", prompt_dir_and_name_with_arr); // красим в зеленый 
     line = readline(colored_prompt);
 	free(prompt_username);
 	free(prompt_dir_and_name);
