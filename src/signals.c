@@ -16,18 +16,17 @@ static void	re_promp(int signal)
 {
 	(void)signal;
 	printf("\n");
-	rl_on_new_line(); //переместились на новую строку
-	rl_replace_line("", 0); //замена содержимого line ""
-	rl_redisplay(); //замена отображаемого, на текущее содержимое
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 static void	re_promp_ex(int signal)
 {
 	(void)signal;
 	printf("\n");
-	rl_on_new_line(); //переместились на новую строку
-	rl_replace_line("", 0); //замена содержимого line ""
-	// rl_redisplay(); //замена отображаемого, на текущее содержимое
+	rl_on_new_line();
+	rl_replace_line("", 0);
 }
 void	in_signals(void)
 {

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_N
-# define TOKEN_N
+#ifndef TOKEN_H
+# define TOKEN_H
 
 typedef struct s_token
 {
@@ -35,8 +35,5 @@ typedef struct s_token
 	}	str_position;
 	char	*value;
 }				t_token;
-
-// t_token	*init_token(int type, char *value, char lexer_c);
-// t_token *init_token(int type, char *value, char lexer_c, t_lexer *lexer);
 
 #endif

@@ -12,18 +12,7 @@
 
 #include "libft.h"
 
-// void	push(t_lst **head, int val)
-// {
-// 	t_lst	*tmp;
-
-// 	tmp = (t_lst *)malloc(sizeof(t_lst));
-// 	tmp->val = val;
-// 	tmp->next = (*head);
-// 	(*head) = tmp;
-// }
-
-
-void	push_back_pipelinelst(t_lst **head, char *val, int type, int str_position)
+void	push_back_pipelinelst(t_lst **head, char *val, int type, int str_pos)
 {
 	t_lst	*tmp;
 
@@ -31,7 +20,7 @@ void	push_back_pipelinelst(t_lst **head, char *val, int type, int str_position)
 	tmp->value = ft_calloc(ft_strlen(val) + 1, sizeof(char));
 	ft_memcpy(tmp->value, val, ft_strlen(val));
 	tmp->type = type;
-	tmp->str_position = str_position;
+	tmp->str_position = str_pos;
 	tmp->next = NULL;
 	if (*head == NULL)
 		*head = tmp;
@@ -60,9 +49,7 @@ void	push_back(t_lst **head, char *val, int type, int str_position)
 	t_lst	*tmp;
 
 	tmp = (t_lst *)malloc(sizeof(t_lst));
-	// tmp->value = ft_calloc(ft_strlen(val) + 1, sizeof(char));
 	tmp->value = ft_strdup(val);
-	// ft_memcpy(tmp->value, val, ft_strlen(val));
 	tmp->str_position = str_position;
 	tmp->type = type;
 	tmp->next = NULL;
