@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/09/10 14:38:18 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/13 12:49:26 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,12 +34,12 @@ CC = clang
 CFLAGS = #-Wall -Wextra -Werror
 OPT_FLUGS = -O0 -g3 -pipe
 
-HMM_COLOR   = \033[0;95m
-COM_COLOR   = \033[0;94m
-OBJ_COLOR   = \033[0;96m
+HMM_COLOR   = \033[1;95m
+COM_COLOR   = \033[1;94m
+OBJ_COLOR   = \033[1;96m
 OK_COLOR    = \033[1;92m
 ERROR_COLOR = \033[1;91m
-WARN_COLOR  = \033[0;93m
+WARN_COLOR  = \033[1;93m
 NO_COLOR    = \033[0m
 
 SYAN_COLOR = \e[1;96m
@@ -66,15 +66,12 @@ rm -f $@.log; \
 exit $$RESULT
 endef
 
-all: od start $(NAME)
+all: od $(NAME)
 
-$(NAME): $(OBJ_PATH)
+$(NAME): $(OBJ_PATH) 
 	@$(MAKE) all -C src/libft/
 	@$(CC) $^ -o $(NAME) $(LIBS)
 	@echo "$(OK_COLOR)----SUCCSESS MINISHELL----$(NO_COLOR)"
-
-start:
-	@echo "$(HMM_COLOR)----MINISHELL----$(NO_COLOR)"
 
 VPATH = $(SRC_DIR)
 
@@ -102,42 +99,6 @@ fclean: clean
 	fi;
 
 re: fclean all
-
-out:
-	echo "$(SYAN_COLOR)Test cases:$(NO_COLOR)"
-	@> $(OUTFILE)
-	@echo --Full-path--
-	/bin/ls od | /bin/grep i >> $(OUTFILE)
-	/bin/cat test/infile | /bin/wc -l >> $(OUTFILE)
-	@echo ---echo-with-quotes-redirections-pipes-env-variables---
-	echo hi hello hola >> $(OUTFILE)
-	echo "cat lol.c | cat > lol.c" >> $(OUTFILE)
-	echo zero one'o n e' two"tw    o" three'three'"t      hree" four"four"'four' "five" 'six' "seven" >> $(OUTFILE)
-	echo 'cat lol.c | cat > lol.c' >> $(OUTFILE)
-	echo '$USER' >> $(OUTFILE) 
-	echo $$HOME $$HOME'$$HOME' $$HOME"$$HOME" $$HOME'$$HOME'"$$HOME" $$HOME"$$HOME"'$$HOME' "$$HOME" '$$HOME' "$$HOME" >> $(OUTFILE)
-	@echo ---Redirections---
-	cat >> $(OUTFILE) < test/infile
-	grep i >> $(OUTFILE) < test/infile
-	@echo ---Pipes--
-	ls -l src | grep b >> $(OUTFILE)
-	cat < test/infile | grep o | wc >> $(OUTFILE)
-	@echo "$(SYAN_COLOR)$(OUTFILE) out:$(NO_COLOR)"
-	@cat $(OUTFILE)
-
-diff:
-	@echo "$(YELLOW_COLOR)======================================$(NO_COLOR)"
-	@echo "$(YELLOW_COLOR)Bash out:$(NO_COLOR)"
-	@cat test/bout
-	@echo "$(YELLOW_COLOR)--------------------------------------$(NO_COLOR)"
-	@echo "$(YELLOW_COLOR)Minishell out:$(NO_COLOR)"
-	@cat test/mout
-	@echo "$(YELLOW_COLOR)======================================$(NO_COLOR)"
-	@if diff test/bout test/mout; then \
-		echo "$(OBJ_COLOR)TESTS $(OK_COLOR)$(OK_STRING)$(NO_COLOR)"; \
-	else \
-		echo "$(OBJ_COLOR)TEST $(ERROR_COLOR)[KO]$(NO_COLOR)"; \
-	fi;
 
 test_clean:
 	@rm -f test/bash_out test/my_out
