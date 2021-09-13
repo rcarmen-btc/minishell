@@ -13,18 +13,16 @@
 #include "token.h"
 #include "main.h"
 
-t_token *init_token(int type, char *value, char lexer_c, t_lexer *lexer)
+t_token	*init_token(int type, char *value, char lexer_c, t_lexer *lexer)
 {
-	t_token *token = ft_calloc(1, sizeof(t_token));
+	t_token	*token;
 
+	token = ft_calloc(1, sizeof(t_token));
 	if (type == TOKEN_CMD && (lexer_c == '\'' || lexer_c == '"'))
-	{
 		token->str_position = ARG_IN_ONE_WITH_NEXT;
-	}
-	else if ((type == TOKEN_DSTRING || type == TOKEN_SSTRING) && (lexer_c == '\'' || lexer_c == '"'))
-	{
+	else if ((type == TOKEN_DSTRING || type == TOKEN_SSTRING)
+		&& (lexer_c == '\'' || lexer_c == '"'))
 		token->str_position = ARG_IN_ONE_WITH_NEXT;
-	}
 	else
 		token->str_position = ARG_ALONE;
 	token->type = type;

@@ -14,11 +14,12 @@
 
 void	get_tokenlst(char *line, t_lst **tokenlst)
 {
-	t_lexer *lexer;
+	t_lexer	*lexer;
 	t_token	*token;
 
 	lexer = init_lexer(line);
-	while ((token = lexer_get_next_token(lexer)) != NULL)
+	token = lexer_get_next_token(lexer);
+	while (token != NULL)
 	{
 		push_back(tokenlst, token->value, token->type, token->str_position);
 		if (token)
@@ -26,6 +27,7 @@ void	get_tokenlst(char *line, t_lst **tokenlst)
 			free(token->value);
 			free(token);
 		}
+		token = lexer_get_next_token(lexer);
 	}
 	ft_bzero(line, MAXCOM);
 	free(lexer);

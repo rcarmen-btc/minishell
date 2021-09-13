@@ -21,13 +21,13 @@ typedef struct s_lexer
 	char			*str;
 }					t_lexer;
 
-t_lexer *init_lexer(char *str);
+t_lexer	*init_lexer(char *str);
 
 void	lexer_advance(t_lexer *lexer);
 
 void	lexer_skip_whitespace(t_lexer *lexer);
 
-t_token *lexer_get_next_token(t_lexer *lexer);
+t_token	*lexer_get_next_token(t_lexer *lexer);
 
 t_token	*lexer_collect_string(t_lexer *lexer, char type);
 
@@ -35,8 +35,8 @@ t_token	*lexer_collect_cmd(t_lexer *lexer);
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token);
 
-char *lexer_get_current_char_as_string(t_lexer *lexer);
+char	*lexer_get_current_char_as_string(t_lexer *lexer);
 
-t_token *init_token(int type, char *value, char lexer_c, t_lexer *lexer);
+t_token	*init_token(int type, char *value, char lexer_c, t_lexer *lexer);
 
 #endif

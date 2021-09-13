@@ -17,7 +17,7 @@ int	is_reserved_symbol(char c)
 {
 	if (c == '|' || c == '<' || c == '>' || c == '\'' || c == '"')
 		return (1);
-	return(0);
+	return (0);
 }
 
 t_lexer	*init_lexer(char *str)
@@ -42,11 +42,9 @@ void	lexer_advance(t_lexer *lexer)
 
 void	lexer_skip_whitespace(t_lexer *lexer)
 {
-	if (lexer->c == ' ' || lexer->c == 10) 
+	if (lexer->c == ' ' || lexer->c == 10)
 		while (lexer->c == ' ' || lexer->c == 10)
-		{
 			lexer_advance(lexer);
-		}
 }
 
 t_token	*lexer_get_next_token(t_lexer *lexer)
@@ -60,12 +58,12 @@ t_token	*lexer_get_next_token(t_lexer *lexer)
 		else if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 		!is_reserved_symbol(lexer->c))
 			return (lexer_collect_cmd(lexer));
-		else if (lexer->c == '|') //находим пайпы и возвращаем 
+		else if (lexer->c == '|') //находим пайпы и возвращаем
 			return (lexer_advance_with_token(lexer, \
 			init_token(TOKEN_PIPE, \
 			lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
 		else if (lexer->c == '>')
-		{	
+		{
 			if (lexer->str[lexer->i + 1] == '>' && \
 				(lexer->i == 0 || lexer->str[lexer->i - 1] != '>'))
 			{

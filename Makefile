@@ -19,7 +19,8 @@ LIBS = -L./src/libft -lft -lreadline
 
 OUTFILE = test/mout
 
-SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c execute.c echo_cd_pwd_exit.c env_export_unset.c
+SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c execute.c echo_cd_pwd_exit.c \
+		env_export_unset.c
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc
