@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/12 19:09:01 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/13 12:43:38 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,68 @@ char	*get_path_to_exe(t_env *env, char *name)
 	return (NULL);
 }
 
+int check_next(t_lst *pipelinelst, int lvl)
+{
+	if (lvl == 0)
+	{
+		if (pipelinelst->next != NULL && \
+			pipelinelst->next->next != NULL && \
+			pipelinelst->next->next->next != NULL)
+			return (1);
+		return (0);
+	}
+	else if (lvl == 1)
+	{
+		if (pipelinelst->next != NULL && \
+			pipelinelst->next->next != NULL)
+			return (1);
+		return (0);
+	}
+	return (0);
+}
+
+int is_out_redir(t_lst *pipelinelst, int lvl)
+{
+	if (lvl == 0)
+	{
+		if (pipelinelst->next != NULL && \
+			pipelinelst->next->next != NULL && \
+			(pipelinelst->next->type == TOKEN_RREDIR || \
+			pipelinelst->next->type == TOKEN_APPRDIR))
+			return (1);	
+		return (0);
+	}
+	else
+	{
+		if (check_next(pipelinelst, 0) && \
+			pipelinelst->next->next->next->type == TOKEN_RREDIR)
+			return (1);
+		if (check_next(pipelinelst, 0) && \
+			pipelinelst->next->next->next->type == TOKEN_APPRDIR)
+			return (-1);	
+	}
+	return (0);
+}
+int is_in_redir(t_lst *pipelinelst, int lvl)
+{
+	if (lvl == 0)
+	{
+		if (check_next(pipelinelst, 1) && \
+			(pipelinelst->next->type == TOKEN_LREDIR || \
+			pipelinelst->next->type == TOKEN_HERE_DOC))
+			return (1);
+		return (0);
+	}
+	else if (lvl == 1)
+	{
+		if (check_next(pipelinelst, 0) && \
+			pipelinelst->next->next->next->type == TOKEN_LREDIR)
+			return (1);	
+		return (0);	
+	}
+	return (0);
+}
+
 void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 {
 	char	*outfile;
@@ -175,35 +237,27 @@ void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 	int		tmpout;
 	int		pid2;
 	char	*path_to_exe;
-	
+		
 	fdin = dup(0);
 	fdout = dup(1);
+	// printf("%s, %d \n", pipelinelst->cmd[0], pipelinelst->type);
 	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
 	{
-		if (pipelinelst->next != NULL && \
-		(pipelinelst->next->type == TOKEN_RREDIR || \
-		pipelinelst->next->type == TOKEN_APPRDIR) && \
-		pipelinelst->next->next != NULL)
+		if (is_out_redir(pipelinelst, 0))
 		{
 			outfile = pipelinelst->next->next->cmd[0];
 			if (pipelinelst->next->type == TOKEN_RREDIR)
 				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			else
 				fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
-			if (pipelinelst->next->next->next && \
-				pipelinelst->next->next->next->type == TOKEN_LREDIR)
+			if (is_in_redir(pipelinelst, 1))
 			{
 				infile = pipelinelst->next->next->next->next->cmd[0];
 				fdin = open(infile, O_RDONLY);
 			}
 		}
-		else if (pipelinelst->next != NULL && \
-		(pipelinelst->next->type == TOKEN_LREDIR || \
-		pipelinelst->next->type == TOKEN_HERE_DOC) && \
-		pipelinelst->next->next != NULL)
+		else if (is_in_redir(pipelinelst, 0))
 		{
-			if (pipelinelst->next->next->next)
-				outfile = pipelinelst->next->next->next->next->cmd[0];
 			if (pipelinelst->next->type == TOKEN_LREDIR)
 			{
 				infile = pipelinelst->next->next->cmd[0];
@@ -214,9 +268,11 @@ void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 				dup2(tmpin, 0);//todo cum
 				fdin = handle_heredoc(pipelinelst);	
 			}
-			if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_RREDIR)
+			if (pipelinelst->next->next->next)
+				outfile = pipelinelst->next->next->next->next->cmd[0];
+			if (is_out_redir(pipelinelst, 1))
 				fdout = open(outfile, O_WRONLY | O_CREAT| O_TRUNC, 0666);
-			else if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_APPRDIR)
+			else if (is_out_redir(pipelinelst, 1) == -1)
 				fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
 		}
 		else if (pd != NULL)
@@ -252,15 +308,24 @@ void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 	status = WEXITSTATUS(status);
 }
 
+int		check_next_is_rdir(t_lst *pipelinelst)
+{
+	if (pipelinelst->next != NULL && pipelinelst->next->next != NULL && \
+	(pipelinelst->next->type == TOKEN_RREDIR || \
+	pipelinelst->next->type == TOKEN_LREDIR || \
+	pipelinelst->next->type == TOKEN_APPRDIR || \
+	pipelinelst->next->type == TOKEN_HERE_DOC))
+		return (1);
+	return (0);
+}
+
 int		last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env)
 {
 	int ret;
 	int fdout;
 
 	dup2(tmpin, 0);
-	if (pipelinelst->next != NULL && \
-	(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
-	pipelinelst->next->next != NULL)
+	if (check_next_is_rdir(pipelinelst))
 	{
 		if (pipelinelst->next->type == TOKEN_RREDIR)
 		{
@@ -283,21 +348,15 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 	int pd[2];
 	int	tmpin;
 	int	tmpout;
-	
-	//=====
-	int fdin;	
-	int	fdout;
-	char *outfile;
-	char *infile;
-    int i;
-	//=====
-	char *path_to_exe;
 	int status;
 
 	tmpin = dup(0);
 	tmpout = dup(1);
 	ex_signals();
-	if (pipelinelst && (pipelinelst->type == TOKEN_LREDIR || pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR))
+	if (pipelinelst && \
+		(pipelinelst->type == TOKEN_LREDIR || \
+		pipelinelst->type == TOKEN_RREDIR || \
+		pipelinelst->type == TOKEN_APPRDIR))
 	{
 		if (pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR)
 			close(open(pipelinelst->next->cmd[0], O_WRONLY | O_CREAT | O_TRUNC, 0666));
@@ -311,155 +370,23 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 			pipelinelst = pipelinelst->next;
 			continue ;
 		}
-		else if (pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_LREDIR)
+		else if (pipelinelst->type == TOKEN_RREDIR || \
+			pipelinelst->type == TOKEN_LREDIR)
 		{
 			pipelinelst = pipelinelst->next->next;
 			continue ;
 		}
 		redirections_handling(pipelinelst, ep, env, pd);
-		// else if (pipelinelst->type == TOKEN_CMD_ARGS)
-		// {
-		// 	//===============================
-		// 	//===============================
-		// 	if ((pid1 = fork()) == 0) 
-		// 	{
-		// 		close(pd[0]);
-		// 		if (pipelinelst->next != NULL && \
-		// 		(pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
-		// 		pipelinelst->next->next != NULL)
-		// 		{
-		// 			outfile = pipelinelst->next->next->cmd[0];
-		// 			if (pipelinelst->next->type == TOKEN_RREDIR)
-		// 				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-		// 			else if (pipelinelst->next->type == TOKEN_APPRDIR)
-		// 				fdout = open(outfile, O_WRONLY | O_CREAT| O_APPEND, 0666);
-		// 			else if (pipelinelst->next->type == TOKEN_LREDIR)
-		// 			{
-		// 				fdin = open(outfile, O_RDONLY);
-		// 				dup2(fdin, 0);
-		// 				close(fdin);
-		// 				fdout = dup(pd[1]);
-		// 			}
-		// 			else if (pipelinelst->next->type == TOKEN_HERE_DOC)
-		// 			{
-		// 				fdin = handle_heredoc(pipelinelst);	
-		// 				dup2(fdin, 0);
-		// 				close(fdin);
-		// 				fdout = dup(pd[1]);
-		// 			}
-		// 		}
-		// 		else
-		// 			fdout = dup(pd[1]);
-		// 		dup2(fdout, 1);
-		// 		close(fdout);
-		// 		if (is_builtin_cmd(pipelinelst->cmd) == 1)
-		// 		{
-		// 			dup2(tmpin, 0);
-		// 			builtins(pipelinelst->cmd, pipelinelst, env);
-		// 			exit(0);
-		// 		}
-		// 		else
-		// 		{
-		// 			execvp(pipelinelst->cmd[0], pipelinelst->cmd);
-		// 			perror("exec+");
-		// 			exit(1);
-		// 		}
-		// 	}
-		// 	wait(&pid1);
-		// 	close(pd[1]);
-		// 	dup2(pd[0], 0);
-		// 	close(pd[0]);
-			pipelinelst = pipelinelst->next;
-			if (pipelinelst->type == TOKEN_HERE_DOC || pipelinelst->type == TOKEN_APPRDIR)
-				pipelinelst = pipelinelst->next->next;
-		// } 
+		pipelinelst = pipelinelst->next;
+		if (pipelinelst->type == TOKEN_HERE_DOC || \
+			pipelinelst->type == TOKEN_APPRDIR)
+			pipelinelst = pipelinelst->next->next;
 	}
-	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && is_builtin_cmd(pipelinelst->cmd) == 1)
-	{	
+	if (pipelinelst != NULL && \
+		pipelinelst->type == TOKEN_CMD_ARGS && \
+		is_builtin_cmd(pipelinelst->cmd) == 1)
 		return (last_builtin_cmd(pipelinelst, tmpin, tmpout, env));
-		// int ret;
-		// dup2(tmpin, 0);
-		// if (pipelinelst->next != NULL && \
-		// (pipelinelst->next->type == TOKEN_RREDIR || pipelinelst->next->type == TOKEN_LREDIR || pipelinelst->next->type == TOKEN_APPRDIR || pipelinelst->next->type == TOKEN_HERE_DOC) && \
-		// pipelinelst->next->next != NULL)
-		// {
-		// 	outfile = pipelinelst->next->next->cmd[0];
-		// 	if (pipelinelst->next->type == TOKEN_RREDIR)
-		// 	{
-		// 		fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-		// 		dup2(fdout, 1);
-		// 		close(fdout);
-		// 	}
-		// 	dup2(fdin, 0);
-		// }
-		// ret = builtins(pipelinelst->cmd, pipelinelst, env);
-		// dup2(tmpout, 1);
-		// dup2(tmpin, 0);
-	}
-	//===============================
 	redirections_handling(pipelinelst, ep, env, NULL);
-	//===============================
-	// else if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
-	// {
-	// 	if (pipelinelst->next != NULL && \
-	// 	(pipelinelst->next->type == TOKEN_RREDIR || \
-	// 	pipelinelst->next->type == TOKEN_APPRDIR) && \
-	// 	pipelinelst->next->next != NULL)
-	// 	{
-	// 		outfile = pipelinelst->next->next->cmd[0];
-	// 		if (pipelinelst->next->type == TOKEN_RREDIR)
-	// 			fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	// 		else
-	// 			fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	// 		if (pipelinelst->next->next->next && \
-	// 			pipelinelst->next->next->next->type == TOKEN_LREDIR)
-	// 		{
-	// 			infile = pipelinelst->next->next->next->next->cmd[0];
-	// 			fdin = open(infile, O_RDONLY);
-	// 		}
-	// 	}
-	// 	else if (pipelinelst->next != NULL && \
-	// 	(pipelinelst->next->type == TOKEN_LREDIR || \
-	// 	pipelinelst->next->type == TOKEN_HERE_DOC) && \
-	// 	pipelinelst->next->next != NULL)
-	// 	{
-	// 		if (pipelinelst->next->next->next)
-	// 			outfile = pipelinelst->next->next->next->next->cmd[0];
-	// 		if (pipelinelst->next->type == TOKEN_LREDIR)
-	// 		{
-	// 			infile = pipelinelst->next->next->cmd[0];
-	// 			fdin = open(infile, O_RDONLY);
-	// 		}
-	// 		else if (pipelinelst->next->type == TOKEN_HERE_DOC)
-	// 		{
-	// 			// dup2(tmpin, 0);//todo cum
-	// 			fdin = handle_heredoc(pipelinelst);	
-	// 		}
-	// 		if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_RREDIR)
-	// 			fdout = open(outfile, O_WRONLY | O_CREAT| O_TRUNC, 0666);
-	// 		else if (pipelinelst->next->next->next && pipelinelst->next->next->next->type == TOKEN_APPRDIR)
-	// 			fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	// 	}
-	// 	dup2(fdin, 0);
-	// 	close(fdin);
-	// 	dup2(fdout, 1);
-	// 	close(fdout);
-	// 	if (is_builtin_cmd(pipelinelst->cmd) == 1)
-	// 	{
-	// 		dup2(tmpin, 0);
-	// 		builtins(pipelinelst->cmd, pipelinelst, env);
-	// 		exit(0);
-	// 	}
-	// 	else
-	// 	{
-	// 		path_to_exe = get_path_to_exe(env, pipelinelst->cmd[0]);
-	// 		if (path_to_exe == NULL)
-	// 			exit(1);
-	// 		execve(path_to_exe, pipelinelst->cmd, ep);
-	// 		perror(pipelinelst->cmd[0]);
-	// 		exit(1);
-	// 	}
-	// }
 	dup2(tmpin, 0);
 	close(tmpin);
 	return (WEXITSTATUS(status));
