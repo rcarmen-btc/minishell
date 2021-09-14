@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 12:20:19 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 18:07:41 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst)
 		if (tokenlst->type == TOKEN_CMD || is_str_token(tokenlst->type))
 		{
 			cmd_args_cnt = get_cmd_args_cnt(tokenlst);
-			printf("%d\n", cmd_args_cnt);
 			pipeline_tmp->cmd = ft_calloc(cmd_args_cnt + 1, sizeof(char *));
 			pipeline_tmp->cmd[cmd_args_cnt] = NULL;
 			pipeline_tmp->type = TOKEN_CMD_ARGS;

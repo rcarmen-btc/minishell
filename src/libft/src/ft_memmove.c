@@ -6,11 +6,12 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 16:22:56 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/06/11 00:32:46 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 18:40:35 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {

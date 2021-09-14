@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 17:41:59 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 21:56:40 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 	else
 	{
 		ptrNew = ft_calloc(newsize, sizeof(char));
-		if (ptrNew)
+		if (ptrNew && ptr != NULL)
 		{
-			ft_memmove(ptrNew, ptr, newsize);
+			// ft_memmove(ptrNew, ptr, newsize);
+			// ft_memcpy(ptrNew, ptr, newsize);
+			ft_strlcpy(ptrNew, ptr, newsize);
 			free(ptr);
 		}
 		return ptrNew;
@@ -135,15 +137,12 @@ void		freelst(t_lst *tokenlst, t_lst *pipelinelst)
 		tmplst = pipelinelst;
 		pipelinelst = pipelinelst->next;
 		while (tmplst->type == TOKEN_CMD_ARGS && tmplst->cmd[i])
-		{
-			free(tmplst->cmd[i]);
-			i++;
-		}
-		free(tmplst->cmd);
+			free(tmplst->cmd[i++]);
+		if (tmplst->type == TOKEN_CMD_ARGS)
+			free(tmplst->cmd);
 		if (tmplst->type != TOKEN_CMD_ARGS)
 			free(tmplst->value);
 		free(tmplst);
-			// printf("(%s)", pipelinelst->value);
 	}
 }
 
@@ -274,6 +273,7 @@ char	**replace_doll_to_env(t_lst *tokenlst, t_env *env)
 		}
 		i++;
 	}
+	free(arr_env);
 	return (arr_env);
 	// i = 0;
 	// while (arr_env[i])
@@ -497,6 +497,7 @@ int		main(int ac, char **av, char **ep)
 		{
 			freeenv(env);
 			free(line);
+			clear_history();
 			exit(0);
 		}
 		check_line(line);

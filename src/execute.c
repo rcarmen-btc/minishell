@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 11:54:59 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/15 02:44:57 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,23 +106,24 @@ char	*get_path_to_exe_heplper(char **path, char *command)
 	char	*with_slash;
 	char	*full_path;
 	struct stat buf;
+	int		i;
 
+	i = 0;
 	slash = "/";
-	while (*path != 0)
+	while (path[i] != 0)
 	{
 		with_slash = ft_strjoin(slash, command);
-		full_path = ft_strjoin(*path, with_slash);
+		full_path = ft_strjoin(path[i], with_slash);
 		free(with_slash);
 		if (stat(full_path, &buf) != -1)
 		{
-			while (*path)
-				free(*path++);
-			// free(path);
+			while (path[i])
+				free(path[i++]);
 			return (full_path);
 		}
 		free(full_path);
-		free(*path);
-		path++;
+		free(path[i]);
+		i++;
 	}
 	return (NULL);
 }
@@ -164,6 +165,7 @@ char	*get_path_to_exe(t_env *env, char *name)
 	}
 	path = ft_split(env->value, ':');
 	res = get_path_to_exe_heplper(path, name);
+	free(path);
 	if (res != NULL)
 		return (res);
 	else
