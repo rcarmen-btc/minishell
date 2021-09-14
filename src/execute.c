@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/13 12:43:38 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 11:54:59 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int		get_slash_cnt(char *name)
 	int cnt;
 	
 	i = 0;
+	cnt = 0;
 	while (name[i])
 	{
 		if (name[i] == '/')
@@ -144,12 +145,17 @@ int		get_slash_cnt(char *name)
 
 char	*get_path_to_exe(t_env *env, char *name)
 {
-	char	**path;
-	char	*res;
-	struct stat buf;
+	char			**path;
+	char			*res;
+	struct stat		buf;
 
 	if (get_slash_cnt(name) > 0 && stat(name, &buf) != -1)
 		return (name);
+	if (get_slash_cnt(name) > 0)
+	{
+		printf("%s: command not found\n", name);
+		return (NULL);
+	}
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, "PATH", ft_strlen(env->key)) == 0)
@@ -201,12 +207,15 @@ int is_out_redir(t_lst *pipelinelst, int lvl)
 		if (check_next(pipelinelst, 0) && \
 			pipelinelst->next->next->next->type == TOKEN_RREDIR)
 			return (1);
-		if (check_next(pipelinelst, 0) && \
+		else if (check_next(pipelinelst, 0) && \
 			pipelinelst->next->next->next->type == TOKEN_APPRDIR)
-			return (-1);	
+			{
+				return (-1);	
+			}
 	}
 	return (0);
 }
+
 int is_in_redir(t_lst *pipelinelst, int lvl)
 {
 	if (lvl == 0)
@@ -227,60 +236,49 @@ int is_in_redir(t_lst *pipelinelst, int lvl)
 	return (0);
 }
 
-void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
+int		redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 {
-	char	*outfile;
-	char	*infile;
-	int		fdout;
-	int		fdin;
+	char	*in_out_files[2];
+	int		fd[2];
 	int		tmpin;
 	int		tmpout;
-	int		pid2;
+	int		status;
 	char	*path_to_exe;
 		
-	fdin = dup(0);
-	fdout = dup(1);
-	// printf("%s, %d \n", pipelinelst->cmd[0], pipelinelst->type);
-	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && (pid2 = fork()) == 0)
+	fd[0] = dup(0);
+	fd[1] = dup(1);
+	tmpin = dup(0);
+	tmpout = dup(1);
+	if (pipelinelst != NULL && pipelinelst->type == TOKEN_CMD_ARGS && fork() == 0)
 	{
+		if (pd != NULL)
+			fd[1] = pd[1];
 		if (is_out_redir(pipelinelst, 0))
 		{
-			outfile = pipelinelst->next->next->cmd[0];
+			in_out_files[1] = pipelinelst->next->next->cmd[0];
 			if (pipelinelst->next->type == TOKEN_RREDIR)
-				fdout = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+				fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			else
-				fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
+				fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_APPEND, 0666);
 			if (is_in_redir(pipelinelst, 1))
-			{
-				infile = pipelinelst->next->next->next->next->cmd[0];
-				fdin = open(infile, O_RDONLY);
-			}
+				fd[0] = open(pipelinelst->next->next->next->next->cmd[0], O_RDONLY);
 		}
 		else if (is_in_redir(pipelinelst, 0))
 		{
+			dup2(tmpout, 0);
 			if (pipelinelst->next->type == TOKEN_LREDIR)
-			{
-				infile = pipelinelst->next->next->cmd[0];
-				fdin = open(infile, O_RDONLY);
-			}
+				fd[0] = open(pipelinelst->next->next->cmd[0], O_RDONLY);
 			else if (pipelinelst->next->type == TOKEN_HERE_DOC)
-			{
-				dup2(tmpin, 0);//todo cum
-				fdin = handle_heredoc(pipelinelst);	
-			}
-			if (pipelinelst->next->next->next)
-				outfile = pipelinelst->next->next->next->next->cmd[0];
-			if (is_out_redir(pipelinelst, 1))
-				fdout = open(outfile, O_WRONLY | O_CREAT| O_TRUNC, 0666);
-			else if (is_out_redir(pipelinelst, 1) == -1)
-				fdout = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
+				fd[0] = handle_heredoc(pipelinelst);	
+			if (pipelinelst->next->next->next && is_out_redir(pipelinelst, 1) == 1)
+				fd[1] = open(pipelinelst->next->next->next->next->cmd[0], O_WRONLY | O_CREAT| O_TRUNC, 0666);
+			if (pipelinelst->next->next->next && is_out_redir(pipelinelst, 1) == -1)
+				fd[1] = open(pipelinelst->next->next->next->next->cmd[0], O_WRONLY | O_CREAT | O_APPEND, 0666);
 		}
-		else if (pd != NULL)
-			fdout = pd[1];
-		dup2(fdin, 0);
-		close(fdin);
-		dup2(fdout, 1);
-		close(fdout);
+		dup2(fd[0], 0);
+		close(fd[0]);
+		dup2(fd[1], 1);
+		close(fd[1]);
 		if (is_builtin_cmd(pipelinelst->cmd) == 1)
 		{
 			dup2(tmpin, 0);
@@ -297,15 +295,14 @@ void	redirections_handling(t_lst *pipelinelst, char **ep, t_env *env, int pd[2])
 			exit(1);
 		}
 	}
-	int status;
-	pid2 = wait(&status);
+	wait(&status);
 	if (pd != NULL)
 	{
 		close(pd[1]);
 		dup2(pd[0], 0);
 		close(pd[0]);
 	}
-	status = WEXITSTATUS(status);
+	return (WEXITSTATUS(status));
 }
 
 int		check_next_is_rdir(t_lst *pipelinelst)
@@ -341,10 +338,8 @@ int		last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env)
 	return (ret);
 }
 
-int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
+int	execute(t_lst *pipelinelst, t_env *env, char **ep)
 {
-	pid_t pid1;
-	pid_t pid2;
 	int pd[2];
 	int	tmpin;
 	int	tmpout;
@@ -353,15 +348,6 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 	tmpin = dup(0);
 	tmpout = dup(1);
 	ex_signals();
-	if (pipelinelst && \
-		(pipelinelst->type == TOKEN_LREDIR || \
-		pipelinelst->type == TOKEN_RREDIR || \
-		pipelinelst->type == TOKEN_APPRDIR))
-	{
-		if (pipelinelst->type == TOKEN_RREDIR || pipelinelst->type == TOKEN_APPRDIR)
-			close(open(pipelinelst->next->cmd[0], O_WRONLY | O_CREAT | O_TRUNC, 0666));
-		pipelinelst = pipelinelst->next->next;
-	}
 	while (pipelinelst != NULL && is_exists_pipe(pipelinelst))
     {
 		pipe(pd);
@@ -386,8 +372,8 @@ int	execute(t_lst *pipelinelst, char **line, t_env *env, char **ep)
 		pipelinelst->type == TOKEN_CMD_ARGS && \
 		is_builtin_cmd(pipelinelst->cmd) == 1)
 		return (last_builtin_cmd(pipelinelst, tmpin, tmpout, env));
-	redirections_handling(pipelinelst, ep, env, NULL);
+	status = redirections_handling(pipelinelst, ep, env, NULL);
 	dup2(tmpin, 0);
 	close(tmpin);
-	return (WEXITSTATUS(status));
+	return (status);
 }

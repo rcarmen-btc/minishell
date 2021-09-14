@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/10 02:16:39 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 15:45:55 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,19 @@ int		get_cmd_args_cnt(t_lst *tokenlst);
 void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst);
 
 char	*env_array_find_key(char *ep);
+
 char	*env_array_find_value(char *ep);
+
 int		env_is_exists(t_env *env, char *key, char *value);
+
 t_env	*find_last_env(t_env *head_env);
 
+void	freeenv(t_env *env);
+
+void		freelst(t_lst *tokenlst, t_lst *pipelinelst);
+
 void	in_signals(void);
+
 void	ex_signals(void);
 
 void	error_message(char *str);

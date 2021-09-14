@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/13 02:58:23 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 17:41:59 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 		if (ptrNew)
 		{
 			ft_memmove(ptrNew, ptr, newsize);
-			// memmove(ptrNew, ptr, newsize);
-			// ft_bcopy(ptr, ptrNew, newsize);
 			free(ptr);
 		}
 		return ptrNew;
@@ -47,7 +45,6 @@ void *ft_realloc(void *ptr, size_t origsize, size_t newsize)
 
 void	print_pipelinelst(t_lst *pipelinelst)
 {
-	printf("HiIIIII\n");
 	while (pipelinelst)
 	{	
 		int	i = 0;
@@ -107,7 +104,8 @@ int get_cmd_line(char *str, char *line)
 	if (line == NULL)
 	{
 		printf("exit\n");
-		exit(0);
+		rl_clear_history();
+		return (1);
 	}
     else if (strlen(line) != 0)
 	{
@@ -119,34 +117,33 @@ int get_cmd_line(char *str, char *line)
 
 }
 
-void	freelst(t_lst *tokenlst, t_lst *pipelinelst)
+void		freelst(t_lst *tokenlst, t_lst *pipelinelst)
 {
-	t_lst *lsttmp;
+	t_lst	*tmplst;
+	int		i; 
 
 	while (tokenlst)
 	{
-		lsttmp = tokenlst->next;
+		tmplst = tokenlst->next;
 		free(tokenlst->value);
 		free(tokenlst);
-		tokenlst = lsttmp;;
+		tokenlst = tmplst;
 	}
 	while (pipelinelst)
 	{	
-		int	i = 0;
-		lsttmp = pipelinelst->next;
-		while (pipelinelst->type == TOKEN_CMD_ARGS && pipelinelst->cmd[i])
+		i = 0;
+		tmplst = pipelinelst;
+		pipelinelst = pipelinelst->next;
+		while (tmplst->type == TOKEN_CMD_ARGS && tmplst->cmd[i])
 		{
-			// printf("%s ", pipelinelst->cmd[i]);
-			free(pipelinelst->cmd[i]);
+			free(tmplst->cmd[i]);
 			i++;
 		}
-		if (pipelinelst)
-			free(pipelinelst->cmd);
-		if (pipelinelst->type != TOKEN_CMD_ARGS)
-			free(pipelinelst->value);
-			// printf("\n%s\n", pipelinelst->value);
-		free(pipelinelst);
-		pipelinelst = lsttmp;
+		free(tmplst->cmd);
+		if (tmplst->type != TOKEN_CMD_ARGS)
+			free(tmplst->value);
+		free(tmplst);
+			// printf("(%s)", pipelinelst->value);
 	}
 }
 
@@ -403,18 +400,18 @@ void	print_tokenlst(t_lst *tokenlst)
 
 void	add_exit_code(t_env **head_env, int code)
 {
-	t_env *env_tmp;
+	t_env	*env_tmp;
+	char	*str_code;
 
-	env_tmp = ft_calloc(1, sizeof(t_env));
-	if (!env_is_exists(*head_env, "?", ft_itoa(code)))
+	str_code = ft_itoa(code);
+	if (!env_is_exists(*head_env, "?", str_code))
 	{
 		env_tmp = ft_calloc(1, sizeof(t_env));
-		env_tmp->key = "?";
-		env_tmp->value = ft_itoa(code);
+		env_tmp->key = ft_strdup("?");
+		env_tmp->value = str_code;
 		env_tmp->next = NULL;
 		find_last_env(*head_env)->next = env_tmp;
 	}
-	// env_tmp->next = NULL;
 }
 
 void error_message(char *str)
@@ -456,9 +453,22 @@ int	check_line(char *line)
 		}
 		i++;
 	}
-	// if (dqoute != 1 || sqoute != 1)
-	// 	exit(1);
 	return (0);
+}
+
+void	freeenv(t_env *env)
+{
+	t_env *tmpenv;
+
+	while (env)
+	{
+		tmpenv = env->next;		
+		free(env->value);
+		free(env->key);
+		free(env);
+		env = tmpenv;
+	}
+	
 }
 
 int		main(int ac, char **av, char **ep)
@@ -477,25 +487,26 @@ int		main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
-	// init_shell();
+	//init_shell();
 	while (1)
 	{
 		in_signals();
 		tokenlst = NULL;
 		pipelinelst = NULL;
-		get_cmd_line(line, NULL);
+		if (get_cmd_line(line, NULL))
+		{
+			freeenv(env);
+			free(line);
+			exit(0);
+		}
 		check_line(line);
 		get_tokenlst(line, &tokenlst);
-		// print_tokenlst(tokenlst);
-
 		expand_env_vars(tokenlst, env);
 		// print_tokenlst(tokenlst);
 		get_pipelinelst(tokenlst, &pipelinelst);
-		
 		// print_pipelinelst(pipelinelst);
-
-		// create_outfiles(pipelinelst);
-		add_exit_code(&env, execute(pipelinelst, &line, env, ep));
-		// freelst(tokenlst, pipelinelst);
+		create_outfiles(pipelinelst);
+		add_exit_code(&env, execute(pipelinelst, env, ep));
+		freelst(tokenlst, pipelinelst);
 	}	
 }

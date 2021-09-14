@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/08 12:34:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/14 17:37:05 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 	int		len_val;
 	char	*s;
 
-	value = ft_calloc(1, sizeof(char *));
 	value = NULL;
 	len_val = 1;
 	while (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
@@ -149,6 +148,8 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 		free(s);
 		lexer_advance(lexer);
 	}
+	// printf("%s\n", value);
+	// printf("---\n");
 	// if (lexer->c != '\'' && lexer->c != '"')
 	// lexer_advance(lexer);
 	return (init_token(TOKEN_CMD, value, lexer->c, lexer));
