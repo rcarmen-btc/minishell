@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   env_export_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/10 13:40:39 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 14:55:42 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ void	env_find_and_del(t_env *env, char *key)
 	t_env	*tmp;
 
 	tmp = env;
-	while (tmp && tmp->next
-		   && ft_strncmp(key, tmp->next->key, ft_strlen(key)) != 0)
+	while (tmp && tmp->next && \
+		ft_strncmp(key, tmp->next->key, ft_strlen(key)) != 0)
 		tmp = tmp->next;
+	if (tmp->next == NULL)
+		return ;
 	free(tmp->next->key);
 	free(tmp->next->value);
 	free(tmp->next);

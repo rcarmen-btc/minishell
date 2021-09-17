@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 18:32:08 by hdanyel           #+#    #+#             */
-/*   Updated: 2021/09/11 14:18:43 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 15:00:31 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	re_promp_ex(int signal)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }
+
 void	in_signals(void)
 {
 	signal(SIGINT, re_promp);

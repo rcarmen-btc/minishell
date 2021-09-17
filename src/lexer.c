@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 21:51:35 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 00:54:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,51 +47,72 @@ void	lexer_skip_whitespace(t_lexer *lexer)
 			lexer_advance(lexer);
 }
 
+t_token	*lexer_rredir(t_lexer *lexer)
+{
+	if (lexer->str[lexer->i + 1] == '>' && \
+		(lexer->i == 0 || lexer->str[lexer->i - 1] != '>'))
+	{
+		lexer_advance(lexer);
+		return (lexer_advance_with_token(lexer, \
+		init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c, lexer)));
+	}
+	else
+		return (lexer_advance_with_token(lexer, \
+		init_token(TOKEN_RREDIR, \
+		lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
+}
+
+t_token	*lexer_lredir(t_lexer *lexer)
+{
+	if (lexer->str[lexer->i + 1] == '<' && \
+		lexer->str[lexer->i - 1] != '<')
+	{
+		lexer_advance(lexer);
+		return (lexer_advance_with_token(lexer, \
+		init_token(TOKEN_HERE_DOC, ft_strdup("<<"), lexer->c, lexer)));
+	}
+	else
+		return (lexer_advance_with_token(lexer, \
+		init_token(TOKEN_LREDIR, \
+		lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
+}
+
 t_token	*lexer_get_next_token(t_lexer *lexer)
 {
 	while (lexer->c != '\0' && \
 		lexer->i < ft_strlen(lexer->str))
 	{
-		lexer_skip_whitespace(lexer); //пропускаем пробелы и табы
-		if (lexer->c == '"' || lexer->c == '\'') //если на данный момент мы находимся на символе " или '
+		lexer_skip_whitespace(lexer);
+		if (lexer->c == '"' || lexer->c == '\'')
 			return (lexer_collect_string(lexer, lexer->c));
 		else if (ft_isprint(lexer->c) && !ft_isspace(lexer->c) && \
 		!is_reserved_symbol(lexer->c))
 			return (lexer_collect_cmd(lexer));
-		else if (lexer->c == '|') //находим пайпы и возвращаем
+		else if (lexer->c == '|')
 			return (lexer_advance_with_token(lexer, \
 			init_token(TOKEN_PIPE, \
 			lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
 		else if (lexer->c == '>')
-		{
-			if (lexer->str[lexer->i + 1] == '>' && \
-				(lexer->i == 0 || lexer->str[lexer->i - 1] != '>'))
-			{
-				lexer_advance(lexer);
-				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c, lexer)));
-			}
-			else
-				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_RREDIR, \
-				lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
-		}
+			return (lexer_rredir(lexer));
 		else if (lexer->c == '<')
-		{
-			if (lexer->str[lexer->i + 1] == '<' && \
-				lexer->str[lexer->i - 1] != '<')
-			{
-				lexer_advance(lexer);
-				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_HERE_DOC, ft_strdup("<<"), lexer->c, lexer)));
-			}
-			else
-				return (lexer_advance_with_token(lexer, \
-				init_token(TOKEN_LREDIR, \
-				lexer_get_current_char_as_string(lexer),  lexer->c, lexer)));
-		}
+			return (lexer_lredir(lexer));
 	}
 	return (NULL);
+}
+
+t_token	*return_based_on_type(char type, char in_one, \
+char *value, t_lexer *lexer)
+{
+	if (type == '"' && in_one != '"' && in_one != '\'')
+		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
+	else if (type == '\'' && in_one != '"' && in_one != '\'')
+		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
+	else if (type == '"' && (in_one == '"' || in_one == '\''))
+		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
+	else if (type == '\'' && (in_one == '"' || in_one == '\''))
+		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
+	else
+		return (init_token(TOKEN_NULL, value, lexer->c, lexer));
 }
 
 t_token	*lexer_collect_string(t_lexer *lexer, char type)
@@ -116,16 +137,7 @@ t_token	*lexer_collect_string(t_lexer *lexer, char type)
 		lexer_advance(lexer);
 	}
 	lexer_advance(lexer);
-	if (type == '"' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
-	else if (type == '\'' && in_one != '"' && in_one != '\'')
-		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
-	else if (type == '"' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_DSTRING, value, lexer->c, lexer));
-	else if (type == '\'' && (in_one == '"' || in_one == '\''))
-		return (init_token(TOKEN_SSTRING, value, lexer->c, lexer));
-	else
-		return (init_token(TOKEN_NULL, value, lexer->c, lexer));
+	return (return_based_on_type(type, in_one, value, lexer));
 }
 
 t_token	*lexer_collect_cmd(t_lexer *lexer)
