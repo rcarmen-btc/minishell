@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:43:06 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:50:12 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 19:23:14 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	get_env_str_helper_zero(char *value, int *tmp_i, int *cnt_doll)
 void	get_env_str_helper_one(char *value, int *tmp_i, int *var_len)
 {
 	while (value[*tmp_i] && value[*tmp_i] != '$' && \
-		!ft_isspace(value[*tmp_i]) && ft_isalnum(value[*tmp_i]))
+		!ft_isspace(value[*tmp_i]) && (ft_isalnum(value[*tmp_i]) || \
+		value[*tmp_i] == '?'))
 	{
 		(*var_len)++;
 		(*tmp_i)++;
