@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/09/17 15:14:04 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/17 15:57:45 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,13 @@ LIBS = -L./src/libft -lft -lreadline
 
 OUTFILE = test/mout
 
-SRC = main.c lexer.c token.c tokenlst.c pipelinelst.c signals.c builtins.c execute.c builtins_env.c \
-		builtins_dirs.c execute_wtf.c execute_ijk.c
+SRC = builtins.c         execute_sheesh.c  lexer.c        print_lst.c \
+		builtins_dirs.c  execute_wtf.c     lexer_ijk.c    signals.c \
+		builtins_env.c   expand.c          lexer_wtf.c    token.c \
+		execute.c        get_idk.c         tokenlst.c \
+		execute_idk.c    get_ijk.c         main.c \
+		execute_ijk.c    get_wtf.c         pipelinelst.c
+
 OBJ =	$(patsubst %.c, %.o, $(SRC))
 
 INC_DIR = inc/ src/libft/inc

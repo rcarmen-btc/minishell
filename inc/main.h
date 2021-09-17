@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 15:45:55 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 15:42:06 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <curses.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/stat.h>
 # include "libft.h"
 # include "lexer.h"
 # include "token.h"
@@ -66,5 +67,55 @@ void	in_signals(void);
 void	ex_signals(void);
 
 void	error_message(char *str);
+
+void	init_shell(void);
+
+int	get_cmd_line_helper(char *line, char *str);
+
+int	get_cmd_line(char *str, char *line);
+
+void	freelst(t_lst *tokenlst, t_lst *pipelinelst);
+
+char	*env_array_find_value(char *ep);
+
+char	*env_array_find_key(char *ep);
+t_env	*find_last_env(t_env *head_env);
+
+void	init_env(char **ep, t_env **head_env);
+
+void	create_outfiles(t_lst *pipelinelst);
+
+int	check_the_dollar_and_get_cnt(char *str);
+t_env	*get_el_env(t_env *env, char *key);
+
+char	*get_str_befor(char *value, int *i);
+
+char	*get_env_str_helper(char *res, t_env *tmp_env, char *doll);
+
+void	get_env_str_helper_zero(char *value, int *tmp_i, int *cnt_doll);
+
+void	get_env_str_helper_one(char *value, int *tmp_i, int *var_len);
+
+char	*get_env_str(char *value, int *i, t_env *env, char *doll);
+
+void	expand_env_vars_helper(char **res, t_lst *tokenlst, int *i, t_env *env);
+
+void	expand_env_vars(t_lst *tokenlst, t_env *env, int i);
+
+void	add_exit_code(t_env **head_env, int code);
+
+void	error_message(char *str);
+
+int	check_line_helper(char *line, int *i);
+
+int	check_line(char *line);
+
+void	freeenv(t_env *env);
+
+void	print_tokenlst(t_lst *tokenlst);
+
+void	print_pipelinelst(t_lst *pipelinelst);
+
+int	loop(char *line, t_env *env, char **ep, t_lst *tokenlst);
 
 #endif
