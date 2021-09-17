@@ -1,7 +1,0 @@
-{
-	"files.associations": {
-		"execute.h": "c",
-		"main.h": "c",
-		"lexer.h": "c"
-	}
-}
