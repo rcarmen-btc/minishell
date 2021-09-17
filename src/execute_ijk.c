@@ -6,13 +6,13 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:50:41 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:39:06 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-void	in_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files)
+void	in_redir_fd_find(t_lst *pipelinelst, int *fd)
 {
 	if (pipelinelst->next->type == TOKEN_LREDIR)
 		fd[0] = open(pipelinelst->next->next->cmd[0], O_RDONLY);
@@ -29,11 +29,10 @@ void	in_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files)
 void	time_to_execute_the_command(t_lst *pipelinelst, t_env *env, char **ep)
 {
 	char	*path_to_exe;
-	int		tmpin;
 
 	if (is_builtin_cmd(pipelinelst->cmd) == 1)
 	{
-		builtins(pipelinelst->cmd, pipelinelst, env);
+		builtins(pipelinelst->cmd, env);
 		exit(0);
 	}
 	else
@@ -61,7 +60,7 @@ char **in_out_files)
 	if (is_out_redir(pipelinelst, 0))
 		out_redir_fd_find(pipelinelst, fd, in_out_files);
 	else if (is_in_redir(pipelinelst, 0))
-		in_redir_fd_find(pipelinelst, fd, in_out_files);
+		in_redir_fd_find(pipelinelst, fd);
 }	
 
 int	redirections_handling(t_lst *pipelinelst, char **ep, \

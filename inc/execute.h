@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:29:36 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:14:42 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:37:29 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		is_in_redir(t_lst *pipelinelst, int lvl);
 
 void	out_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files);
 
-void	in_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files);
+void	in_redir_fd_find(t_lst *pipelinelst, int *fd);
 
 void	time_to_execute_the_command(t_lst *pipelinelst, t_env *env, char **ep);
 

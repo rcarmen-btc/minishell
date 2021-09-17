@@ -6,16 +6,16 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:05:56 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:33:44 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	builtins(char **cmd, t_lst *pipelinelst, t_env *env)
+int	builtins(char **cmd, t_env *env)
 {
 	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo"))))
-		return (builtin_echo(cmd, pipelinelst));
+		return (builtin_echo(cmd));
 	else if (!(ft_strncmp(cmd[0], "cd", ft_strlen("cd"))))
 		return (builtin_cd(cmd[1], env));
 	else if (!(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd"))))
@@ -62,7 +62,7 @@ int	builtin_exit(char **cmd)
 	exit(status);
 }
 
-int	builtin_echo(char **cmd, t_lst *pipelinelst)
+int	builtin_echo(char **cmd)
 {
 	int	n_flag;
 	int	i;

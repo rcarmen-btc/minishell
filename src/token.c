@@ -6,14 +6,14 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:38 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/14 17:36:34 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:35:02 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include "main.h"
 
-t_token	*init_token(int type, char *value, char lexer_c, t_lexer *lexer)
+t_token	*init_token(int type, char *value, char lexer_c)
 {
 	t_token	*token;
 

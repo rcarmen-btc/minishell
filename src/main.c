@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:49:16 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:36:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	loop(char *line, t_env *env, char **ep, t_lst *tokenlst)
 	return (0);
 }
 
-int	main(int ac, char **av, char **ep)
+int	main(int ac, char **ep)
 {
 	char	*line;
 	t_env	*env;

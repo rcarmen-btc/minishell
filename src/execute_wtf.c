@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:12:34 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:50:48 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:34:18 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env)
 		}
 		dup2(tmpin, 0);
 	}
-	ret = builtins(pipelinelst->cmd, pipelinelst, env);
+	ret = builtins(pipelinelst->cmd, env);
 	dup2(tmpout, 1);
 	dup2(tmpin, 0);
 	return (ret);

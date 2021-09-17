@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:27:00 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:30:00 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:35:18 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token);
 
 char	*lexer_get_current_char_as_string(t_lexer *lexer);
 
-t_token	*init_token(int type, char *value, char lexer_c, t_lexer *lexer);
+t_token	*init_token(int type, char *value, char lexer_c);
 
 int	is_reserved_symbol(char c);
 

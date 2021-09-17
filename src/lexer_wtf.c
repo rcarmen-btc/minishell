@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:25:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:50:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:41:17 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_token	*lexer_collect_cmd(t_lexer *lexer)
 		free(s);
 		lexer_advance(lexer);
 	}
-	return (init_token(TOKEN_CMD, value, lexer->c, lexer));
+	return (init_token(TOKEN_CMD, value, lexer->c));
 }
 
 t_token	*lexer_advance_with_token(t_lexer *lexer, t_token *token)

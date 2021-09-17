@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:24:06 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:35:31 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	handle_heredoc(t_lst *pipelinelst)
 	char	*heredoc_line;
 	int		fdin;
 	int		fdtmp;
-	char	hist[MAXCOM];
 
 	if (pipelinelst->next != NULL)
 	{

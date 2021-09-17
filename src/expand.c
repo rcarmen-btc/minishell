@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:44:05 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:50:58 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:34:33 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	expand_env_vars_helper(char **res, t_lst *tokenlst, int *i, t_env *env)
 
 void	expand_env_vars(t_lst *tokenlst, t_env *env, int i)
 {
-	int		doll_cnt;
 	char	*res;
 
 	while (tokenlst)

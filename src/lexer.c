@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:25:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:31:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:39:38 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ t_token	*lexer_rredir(t_lexer *lexer)
 	{
 		lexer_advance(lexer);
 		return (lexer_advance_with_token(lexer, \
-		init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c, lexer)));
+		init_token(TOKEN_APPRDIR, ft_strdup(">>"), lexer->c)));
 	}
 	else
 		return (lexer_advance_with_token(lexer, \
 		init_token(TOKEN_RREDIR, \
-		lexer_get_current_char_as_string(lexer), lexer->c, lexer)));
+		lexer_get_current_char_as_string(lexer), lexer->c)));
 }

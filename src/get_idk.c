@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:47:41 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:51:23 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:35:46 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int	check_line_helper(char *line, int *i)
 
 int	check_line(char *line)
 {
-	int	dind;
-	int	sind;
 	int	i;
 
 	i = 0;
