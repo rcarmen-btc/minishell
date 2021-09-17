@@ -27,12 +27,12 @@ typedef struct s_token
 		TOKEN_APPRDIR,
 		TOKEN_CMD_ARGS,
 		TOKEN_NULL
-	}		type;
+	}		e_type;
 	enum
 	{
 		ARG_ALONE,
 		ARG_IN_ONE_WITH_NEXT
-	}	str_position;
+	}	e_str_position;
 	char	*value;
 }				t_token;
 

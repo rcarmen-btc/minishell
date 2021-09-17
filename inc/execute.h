@@ -55,7 +55,8 @@ int		check_next_is_rdir(t_lst *pipelinelst);
 
 int		last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env);
 
-int		skip_pipes_and_rdirs(t_lst **pipelinelst, char **ep, t_env *env, int *pd);
+int		skip_pipes_and_rdirs(t_lst **pipelinelst, char **ep, t_env *env, \
+int *pd);
 
 int		check_builtins(t_lst *pipelinelst);
 

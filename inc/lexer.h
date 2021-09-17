@@ -40,7 +40,7 @@ char	*lexer_get_current_char_as_string(t_lexer *lexer);
 
 t_token	*init_token(int type, char *value, char lexer_c);
 
-int	is_reserved_symbol(char c);
+int		is_reserved_symbol(char c);
 
 t_token	*lexer_rredir(t_lexer *lexer);
 

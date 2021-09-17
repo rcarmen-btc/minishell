@@ -60,7 +60,7 @@ t_env	*find_last_env(t_env *head_env);
 
 void	freeenv(t_env *env);
 
-void		freelst(t_lst *tokenlst, t_lst *pipelinelst);
+void	freelst(t_lst *tokenlst, t_lst *pipelinelst);
 
 void	in_signals(void);
 
@@ -70,9 +70,9 @@ void	error_message(char *str);
 
 void	init_shell(void);
 
-int	get_cmd_line_helper(char *line, char *str);
+int		get_cmd_line_helper(char *line, char *str);
 
-int	get_cmd_line(char *str, char *line);
+int		get_cmd_line(char *str, char *line);
 
 void	freelst(t_lst *tokenlst, t_lst *pipelinelst);
 
@@ -85,7 +85,7 @@ void	init_env(char **ep, t_env **head_env);
 
 void	create_outfiles(t_lst *pipelinelst);
 
-int	check_the_dollar_and_get_cnt(char *str);
+int		check_the_dollar_and_get_cnt(char *str);
 t_env	*get_el_env(t_env *env, char *key);
 
 char	*get_str_befor(char *value, int *i);
@@ -106,9 +106,9 @@ void	add_exit_code(t_env **head_env, int code);
 
 void	error_message(char *str);
 
-int	check_line_helper(char *line, int *i);
+int		check_line_helper(char *line, int *i);
 
-int	check_line(char *line);
+int		check_line(char *line);
 
 void	freeenv(t_env *env);
 
@@ -116,6 +116,6 @@ void	print_tokenlst(t_lst *tokenlst);
 
 void	print_pipelinelst(t_lst *pipelinelst);
 
-int	loop(char *line, t_env *env, char **ep, t_lst *tokenlst);
+int		loop(char *line, t_env *env, char **ep, t_lst *tokenlst);
 
 #endif
