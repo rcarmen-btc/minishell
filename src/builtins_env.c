@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 10:07:12 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 20:01:58 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	env_is_exists(t_env *env, char *key, char *value)
 
 	while (env)
 	{
-		key_len = ft_strlen(key); 
+		key_len = ft_strlen(key);
 		if (ft_strlen(env->key) > ft_strlen(key))
 			key_len = ft_strlen(env->key);
 		if (ft_strncmp(env->key, key, key_len) == 0)
@@ -29,6 +29,15 @@ int	env_is_exists(t_env *env, char *key, char *value)
 		}
 		env = env->next;
 	}
+	return (0);
+}
+
+int	builtin_export_helper(char *key, char *value)
+{
+	if (key)
+		free(key);
+	if (value)
+		free(value);
 	return (0);
 }
 
@@ -45,13 +54,7 @@ int	builtin_export(char **cmd, t_env *env)
 		key = env_array_find_key(cmd[i]);
 		value = env_array_find_value(cmd[i]);
 		if (key == NULL || value == NULL || ft_strlen(value) == 0)
-		{
-			if (key)
-				free(key);
-			if (value)
-				free(value);
-			return 0;
-		}
+			return (builtin_export_helper(key, value));
 		if (!env_is_exists(env, key, value))
 		{
 			env_tmp = ft_calloc(1, sizeof(t_env));

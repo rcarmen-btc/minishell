@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 09:17:49 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 19:57:28 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	collecting_str_loop(t_lst **tokenlst, t_lst **pipeline_tmp)
 			(*pipeline_tmp)->cmd[cmd_index] = ft_strdup((*tokenlst)->value);
 			prev_pos = (*tokenlst)->str_position;
 			(*tokenlst) = (*tokenlst)->next;
-			collecting_str_loop_hepler(tokenlst, (*pipeline_tmp), cmd_index, &prev_pos);
+			collecting_str_loop_hepler(tokenlst, (*pipeline_tmp), \
+			cmd_index, &prev_pos);
 			cmd_index++;
 		}
 	}

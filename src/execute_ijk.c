@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 19:53:20 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 20:05:14 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	set_out_and_in(int *fd)
 	close(fd[1]);
 }
 
-t_lst *redirections_handling_helper(t_lst **pipelinelst, int *fd, \
+t_lst	*redirections_handling_helper(t_lst **pipelinelst, int *fd, \
 char **in_out_files)
 {
 	t_lst	*cmd;
@@ -65,7 +65,7 @@ char **in_out_files)
 		out_redir_fd_find(*pipelinelst, fd, in_out_files);
 		*pipelinelst = (*pipelinelst)->next->next;
 	}
-	while (is_in_redir(*pipelinelst, 0))
+	while (*pipelinelst && is_in_redir(*pipelinelst, 0))
 	{
 		in_redir_fd_find(*pipelinelst, fd);
 		*pipelinelst = (*pipelinelst)->next->next;

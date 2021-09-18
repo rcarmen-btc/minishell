@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:44:05 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 17:34:33 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 20:14:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	create_outfiles(t_lst *pipelinelst)
 
 	while (pipelinelst)
 	{
-		if (pipelinelst->type == TOKEN_RREDIR)
+		if (pipelinelst->type == TOKEN_RREDIR && pipelinelst->next)
 		{
 			fd = open(pipelinelst->next->cmd[0], \
 			O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			close(fd);
 		}
-		if (pipelinelst->type == TOKEN_APPRDIR)
+		if (pipelinelst->type == TOKEN_APPRDIR && pipelinelst->next)
 		{
 			fd = open(pipelinelst->next->cmd[0], \
 			O_WRONLY | O_CREAT | O_APPEND, 0666);

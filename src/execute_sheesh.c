@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:24:26 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 10:06:05 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 19:58:09 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,11 @@ int	get_slash_cnt(char *name)
 	return (cnt);
 }
 
-int get_max_nbr(int first, int second)
+int	get_max_nbr(int first, int second)
 {
-	int nbr;
-	nbr = first; 
+	int	nbr;
+
+	nbr = first;
 	if (second > first)
 		nbr = second;
 	return (nbr);
