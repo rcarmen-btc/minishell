@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 20:01:58 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 20:19:49 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,20 +99,6 @@ int	builtin_unset(char **cmd, t_env *env)
 		key = cmd[i];
 		env_find_and_del(env, key);
 		i++;
-	}
-	return (0);
-}
-
-int	builtin_env(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (env != NULL)
-	{
-		if (env->key[0] != '?')
-			printf("%s=%s\n", env->key, env->value);
-		env = env->next;
 	}
 	return (0);
 }
