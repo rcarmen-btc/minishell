@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:17:11 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 10:17:49 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 19:31:42 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	check_next(t_lst *pipelinelst, int lvl)
 {
 	if (lvl == 0)
 	{
-		if (pipelinelst->next != NULL && \
+		if (pipelinelst && \
+			pipelinelst->next != NULL && \
 			pipelinelst->next->next != NULL && \
 			pipelinelst->next->next->next != NULL)
 			return (1);
@@ -54,7 +55,8 @@ int	check_next(t_lst *pipelinelst, int lvl)
 	}
 	else if (lvl == 1)
 	{
-		if (pipelinelst->next != NULL && \
+		if (pipelinelst && \
+			pipelinelst->next != NULL && \
 			pipelinelst->next->next != NULL)
 			return (1);
 		return (0);
@@ -66,7 +68,8 @@ int	is_out_redir(t_lst *pipelinelst, int lvl)
 {
 	if (lvl == 0)
 	{
-		if (pipelinelst->next != NULL && \
+		if (pipelinelst && \
+			pipelinelst->next != NULL && \
 			pipelinelst->next->next != NULL && \
 			(pipelinelst->next->type == TOKEN_RREDIR || \
 			pipelinelst->next->type == TOKEN_APPRDIR))

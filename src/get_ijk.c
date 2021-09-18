@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:46:25 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 09:49:19 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 19:09:10 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	get_cmd_line_helper(char *line, char *str)
 		rl_clear_history();
 		return (1);
 	}
-	else if (strlen(line) != 0)
+	else if (ft_strlen(line) != 0)
 	{
 		add_history(line);
 		strcpy(str, line);

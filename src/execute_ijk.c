@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 13:55:23 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 19:53:20 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,16 @@ char **in_out_files)
 	return (cmd);
 }
 
+void	pd_helper(int *pd)
+{
+	if (pd != NULL)
+	{
+		close(pd[1]);
+		dup2(pd[0], 0);
+		close(pd[0]);
+	}
+}
+
 int	redirections_handling(t_lst **pipelinelst, char **ep, \
 t_env *env, int pd[2])
 {
@@ -95,11 +105,6 @@ t_env *env, int pd[2])
 		time_to_execute_the_command(cmd, env, ep);
 	}
 	wait(&status);
-	if (pd != NULL)
-	{
-		close(pd[1]);
-		dup2(pd[0], 0);
-		close(pd[0]);
-	}
+	pd_helper(pd);
 	return (WEXITSTATUS(status));
 }
