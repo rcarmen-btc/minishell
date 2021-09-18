@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:12:34 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 17:34:18 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 14:05:31 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	skip_pipes_and_rdirs(t_lst **pipelinelst, char **ep, t_env *env, int *pd)
 	}
 	if ((*pipelinelst)->type == TOKEN_CMD_ARGS)
 	{
-		redirections_handling(*pipelinelst, ep, env, pd);
+		redirections_handling(pipelinelst, ep, env, pd);
 		*pipelinelst = (*pipelinelst)->next;
 	}
 	return (0);
@@ -99,9 +99,9 @@ int	execute(t_lst *pipelinelst, t_env *env, char **ep)
 	}
 	if (pipelinelst != NULL && \
 		pipelinelst->type == TOKEN_CMD_ARGS && \
-		is_builtin_cmd(pipelinelst->cmd) == 1 && check_builtins(pipelinelst))
+		is_builtin_cmd(pipelinelst->cmd) == 1)
 		return (last_builtin_cmd(pipelinelst, tmpin, tmpout, env));
-	status = redirections_handling(pipelinelst, ep, env, NULL);
+	status = redirections_handling(&pipelinelst, ep, env, NULL);
 	dup2(tmpin, 0);
 	close(tmpin);
 	return (status);

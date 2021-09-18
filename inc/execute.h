@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:29:36 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 17:37:29 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 12:19:30 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void	time_to_execute_the_command(t_lst *pipelinelst, t_env *env, char **ep);
 
 void	set_out_and_in(int *fd);
 
-void	redirections_handling_helper(t_lst *pipelinelst, int *fd, \
+t_lst	*redirections_handling_helper(t_lst **pipelinelst, int *fd, \
 char **in_out_files);
 
-int		redirections_handling(t_lst *pipelinelst, char **ep, \
+int		redirections_handling(t_lst **pipelinelst, char **ep, \
 t_env *env, int pd[2]);
 
 int		check_next_is_rdir(t_lst *pipelinelst);

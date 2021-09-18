@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:00:07 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 09:17:49 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,12 @@ int	get_cmd_args_cnt(t_lst *tokenlst)
 }
 
 void	collecting_str_loop_hepler(t_lst **tokenlst, \
-t_lst *pipeline_tmp, int cmd_index)
+t_lst *pipeline_tmp, int cmd_index, int *prev_pos)
 {
-	int	prev_pos;
-
 	while ((*tokenlst) != NULL && \
-		is_str_token((*tokenlst)->type) && prev_pos == ARG_IN_ONE_WITH_NEXT)
+		is_str_token((*tokenlst)->type) && *prev_pos == ARG_IN_ONE_WITH_NEXT)
 	{
-		prev_pos = (*tokenlst)->str_position;
+		*prev_pos = (*tokenlst)->str_position;
 		pipeline_tmp->cmd[cmd_index] = ft_realloc(pipeline_tmp->cmd[cmd_index],
 				1, ft_strlen(pipeline_tmp->cmd[cmd_index]) + \
 				ft_strlen((*tokenlst)->value) + 1);
@@ -78,7 +76,7 @@ void	collecting_str_loop(t_lst **tokenlst, t_lst **pipeline_tmp)
 			(*pipeline_tmp)->cmd[cmd_index] = ft_strdup((*tokenlst)->value);
 			prev_pos = (*tokenlst)->str_position;
 			(*tokenlst) = (*tokenlst)->next;
-			collecting_str_loop_hepler(tokenlst, (*pipeline_tmp), cmd_index);
+			collecting_str_loop_hepler(tokenlst, (*pipeline_tmp), cmd_index, &prev_pos);
 			cmd_index++;
 		}
 	}

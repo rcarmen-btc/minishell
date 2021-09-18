@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:46:25 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:47:03 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 09:49:19 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,13 @@ char	*env_array_find_value(char *ep)
 	char	*value;
 
 	i = 0;
-	while (ep[i] != '=')
+	value = NULL;
+	while (ep[i] != '\0' && ep[i] != '=')
 		i++;
 	j = i;
 	while (ep[j])
 		j++;
-	value = ft_substr(ep, i + 1, j);
+	if (j > 0)
+		value = ft_substr(ep, i + 1, j);
 	return (value);
 }

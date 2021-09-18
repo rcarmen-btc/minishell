@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:47:41 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 17:35:46 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 09:33:53 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ char	*env_array_find_key(char *ep)
 	char	*key;
 
 	i = 0;
-	while (ep[i] != '=')
+	key = NULL;
+	while (ep[i] != '\0' && ep[i] != '=')
 		i++;
-	key = ft_substr(ep, 0, i);
+	if (i > 0)
+		key = ft_substr(ep, 0, i);
 	return (key);
 }
 
@@ -46,7 +48,7 @@ int	check_line_helper(char *line, int *i)
 	if (line[*i] == '\'')
 	{
 		sqoute = sqoute * -1;
-		i++;
+		(*i)++;
 		while (line[*i] != '\0' && line[*i] != '\'')
 			(*i)++;
 		if (line[*i] != '\'')

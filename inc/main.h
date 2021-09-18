@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:42:06 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 10:06:13 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	get_tokenlst(char *line, t_lst **tokenlst);
 int		is_str_token(int type);
 
 int		get_cmd_args_cnt(t_lst *tokenlst);
+
+int get_max_nbr(int first, int second);
 
 void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst);
 

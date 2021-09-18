@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_export_unset.c                                 :+:      :+:    :+:   */
+/*   builtins_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 14:55:42 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 10:07:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 int	env_is_exists(t_env *env, char *key, char *value)
 {
+	int	key_len;
+
 	while (env)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)
+		key_len = ft_strlen(key); 
+		if (ft_strlen(env->key) > ft_strlen(key))
+			key_len = ft_strlen(env->key);
+		if (ft_strncmp(env->key, key, key_len) == 0)
 		{
 			free(env->value);
 			env->value = value;
@@ -39,6 +44,14 @@ int	builtin_export(char **cmd, t_env *env)
 	{
 		key = env_array_find_key(cmd[i]);
 		value = env_array_find_value(cmd[i]);
+		if (key == NULL || value == NULL || ft_strlen(value) == 0)
+		{
+			if (key)
+				free(key);
+			if (value)
+				free(value);
+			return 0;
+		}
 		if (!env_is_exists(env, key, value))
 		{
 			env_tmp = ft_calloc(1, sizeof(t_env));
@@ -58,7 +71,8 @@ void	env_find_and_del(t_env *env, char *key)
 
 	tmp = env;
 	while (tmp && tmp->next && \
-		ft_strncmp(key, tmp->next->key, ft_strlen(key)) != 0)
+		ft_strncmp(key, tmp->next->key, \
+		get_max_nbr(ft_strlen(key), ft_strlen(tmp->next->key))) != 0)
 		tmp = tmp->next;
 	if (tmp->next == NULL)
 		return ;

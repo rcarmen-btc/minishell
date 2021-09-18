@@ -6,7 +6,7 @@
 #    By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/03 15:00:17 by rcarmen           #+#    #+#              #
-#    Updated: 2021/09/17 17:31:27 by rcarmen          ###   ########.fr        #
+#    Updated: 2021/09/17 21:26:01 by rcarmen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJ_PATH = $(addprefix $(OBJ_DIR), $(OBJ))
 D_PATH = $(patsubst %.o, %.d, $(OBJ_PATH))
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = # -Wall -Wextra -Werror
 OPT_FLUGS = -O0 -g3 -pipe
 
 HMM_COLOR   = \033[1;95m

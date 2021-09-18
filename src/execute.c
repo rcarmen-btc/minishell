@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 11:28:33 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 17:35:31 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/18 10:16:36 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,20 @@
 
 int	is_builtin_cmd(char **cmd)
 {
-	if (!(ft_strncmp(cmd[0], "echo", ft_strlen("echo")))
-		|| !(ft_strncmp(cmd[0], "cd", ft_strlen("cd")))
-		|| !(ft_strncmp(cmd[0], "pwd", ft_strlen("pwd")))
-		|| !(ft_strncmp(cmd[0], "export", ft_strlen("export")))
-		|| !(ft_strncmp(cmd[0], "unset", ft_strlen("unset")))
-		|| !(ft_strncmp(cmd[0], "env", ft_strlen("env")))
-		|| !(ft_strncmp(cmd[0], "exit", ft_strlen("exit"))))
+	if (!(ft_strncmp(cmd[0], "echo", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("echo"))))
+		|| !(ft_strncmp(cmd[0], "cd", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("cd"))))
+		|| !(ft_strncmp(cmd[0], "pwd", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("pwd"))))
+		|| !(ft_strncmp(cmd[0], "export", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("export"))))
+		|| !(ft_strncmp(cmd[0], "unset", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("unset"))))
+		|| !(ft_strncmp(cmd[0], "env", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("env"))))
+		|| !(ft_strncmp(cmd[0], "exit", get_max_nbr(ft_strlen(cmd[0]), \
+		ft_strlen("exit")))))
 		return (1);
 	return (-1);
 }
