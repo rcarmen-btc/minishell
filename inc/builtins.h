@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:46:19 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 21:46:13 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 20:43:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ int		builtin_cd(char *cmd, t_env *env);
 
 int		builtin_pwd(void);
 
-int		builtin_export(char **cmd, t_env *env);
+int		builtin_export(char **cmd, t_env *env, int i);
 
 int		builtin_unset(char **cmd, t_env *env);
 
 int		builtin_env(t_env *env);
 
-int		builtin_exit(char **cmd);
+int		builtin_exit(char **cmd, t_env *env);
 
 #endif

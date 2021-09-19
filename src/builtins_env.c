@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 20:19:49 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 01:13:25 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,65 @@ int	builtin_export_helper(char *key, char *value)
 		free(key);
 	if (value)
 		free(value);
+	return (1);
+}
+
+void	print_err(char *key, char *value)
+{
+	if (key == NULL)
+		printf("minishell: export: '=%s': not a valid identifier\n", value);
+	else
+		printf("minishell: export: '%s': not a valid identifier\n", key);
+}
+
+int	print_exenv(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	while (env != NULL)
+	{
+		if (env->key[0] != '?')
+			printf("declare -x %s=%s\n", env->key, env->value);
+		env = env->next;
+	}
 	return (0);
 }
 
-int	builtin_export(char **cmd, t_env *env)
+int	ft_is_nbr(char *str)
+{
+	while (*str && !ft_isdigit(*str))
+		str++;
+	if (*str == '\0')
+		return (0);
+	return (1);
+}
+
+int	builtin_export(char **cmd, t_env *env, int i)
 {
 	t_env	*env_tmp;
 	char	*key;
 	char	*value;
-	int		i;
 
+	while (cmd[i])
+		i++;
+	if (i == 1)
+		return (print_exenv(env));
 	i = 1;
 	while (cmd[i])
 	{
 		key = env_array_find_key(cmd[i]);
 		value = env_array_find_value(cmd[i]);
-		if (key == NULL || value == NULL || ft_strlen(value) == 0)
+		if (key == NULL || ft_is_nbr(key))
+		{
+			print_err(key, value);
 			return (builtin_export_helper(key, value));
+		}
+		else if (ft_strlen(value) == 0)
+		{
+			i++;
+			continue ;
+		}
 		if (!env_is_exists(env, key, value))
 		{
 			env_tmp = ft_calloc(1, sizeof(t_env));

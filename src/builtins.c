@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 14:03:05 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 20:43:03 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	builtins(char **cmd, t_env *env)
 		return (builtin_pwd());
 	else if (!(ft_strncmp(cmd[0], "export", get_max_nbr(ft_strlen(cmd[0]), \
 		ft_strlen("export")))))
-		return (builtin_export(cmd, env));
+		return (builtin_export(cmd, env, 1));
 	else if (!(ft_strncmp(cmd[0], "unset", get_max_nbr(ft_strlen(cmd[0]), \
 		ft_strlen("unset")))))
 		return (builtin_unset(cmd, env));
@@ -34,39 +34,53 @@ int	builtins(char **cmd, t_env *env)
 		return (builtin_env(env));
 	else if (!(ft_strncmp(cmd[0], "exit", get_max_nbr(ft_strlen(cmd[0]), \
 		ft_strlen("exit")))))
-		return (builtin_exit(cmd));
+		return (builtin_exit(cmd, env));
 	return (0);
 }
 
 static void	parse_first_arg(char *arg)
 {
-	int	status;
+	char status;
 
 	if (!arg)
 		return ;
-	status = ft_atoi(arg);
+	status = (char)ft_atoi(arg);
 	while (*arg)
-		if (ft_isdigit(*arg++))
-			return ;
-	error_message("exit: numeric argument required");
+		if (!ft_isdigit(*arg++))
+		{
+			error_message("exit: numeric argument required");
+			exit(0);
+		}
 	exit(status);
 }
 
-int	builtin_exit(char **cmd)
+int	builtin_exit(char **cmd, t_env *env)
 {
-	int	status;
+	int	cnt;
+	int	i;
 
-	status = 1;
-	while (cmd[status])
-		status++;
-	parse_first_arg(*(cmd + 1));
-	if (status > 2)
+	cnt = 0;
+	i = 1;
+	printf("exit\n");
+	while (cmd[i])
+	{
+		cnt++;
+		i++;
+	}
+	if (cnt == 1)
+		parse_first_arg(cmd[1]);
+	else if (cnt > 1)
 	{
 		error_message("exit: too many arguments");
 		return (1);
 	}
-	printf("exit\n");
-	exit(status);
+	while (env != NULL)
+	{
+		if (env->key[0] == '?')
+			exit(ft_atoi(env->value));
+		env = env->next;
+	}
+	exit(0);
 }
 
 int	builtin_echo(char **cmd)

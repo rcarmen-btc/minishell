@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/19 16:35:19 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 19:55:04 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ t_env *env, int pd[2])
 		if (fd[0] != -1 && fd[1] != -1)
 			time_to_execute_the_command(cmd, env, ep);
 		else
-			exit(1);
+			exit(0);
 	}
 	wait(&status);
 	pd_helper(pd);
