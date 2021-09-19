@@ -2,6 +2,7 @@
 	"files.associations": {
 		"execute.h": "c",
 		"builtins.h": "c",
-		"token.h": "c"
+		"token.h": "c",
+		"main.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 10:06:13 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 15:56:19 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ typedef struct s_env
 void	*ft_realloc(void *ptr, size_t origsize, size_t newsize);
 
 void	get_tokenlst(char *line, t_lst **tokenlst);
+
+int	ft_open_in(char *name, int type, int fd);
+
+int	ft_open_out(char *name, int type, int fd);
 
 int		is_str_token(int type);
 

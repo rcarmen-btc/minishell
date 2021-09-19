@@ -6,11 +6,12 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/17 15:05:47 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 16:33:49 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include "execute.h"
 
 int	cd_helper(t_env *env)
 {
@@ -52,3 +53,29 @@ int	builtin_pwd(void)
 		perror("getcwd");
 	return (0);
 }
+
+int	ft_open_in(char *name, int type, int fd)
+{
+	int resfd;
+
+	resfd = open(name, type);
+	if (resfd == -1)
+		perror(name);
+	close(fd);
+	return (resfd);
+}
+
+int	ft_open_out(char *name, int type, int fd)
+{
+	int resfd;
+
+	resfd = open(name, type, 0666);
+	if (resfd == -1)
+		perror(name);
+	close(fd);
+	return (resfd);
+}
+
+
+
+

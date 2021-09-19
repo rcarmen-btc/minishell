@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:17:11 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 19:31:42 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 16:03:38 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,14 @@ int	is_in_redir(t_lst *pipelinelst, int lvl)
 void	out_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files)
 {
 	in_out_files[1] = pipelinelst->next->next->cmd[0];
-	if (pipelinelst->next->type == TOKEN_RREDIR)
-		fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (pipelinelst->next->type == TOKEN_RREDIR && \
+		pipelinelst->next->next->type == TOKEN_CMD_ARGS)
+		fd[1] = ft_open_out(in_out_files[1], O_WRONLY | O_CREAT | O_TRUNC, fd[1]);
+		// fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else
-		fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_APPEND, 0666);
+		fd[1] = ft_open_out(in_out_files[1], O_WRONLY | O_CREAT | O_APPEND, fd[1]);
+		// fd[1] = open(in_out_files[1], O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (is_in_redir(pipelinelst, 1))
-		fd[0] = open(pipelinelst->next->next->next->next->cmd[0], O_RDONLY);
+		fd[0] = ft_open_in(pipelinelst->next->next->next->next->cmd[0], O_RDONLY, fd[0]);
+		// fd[0] = open(pipelinelst->next->next->next->next->cmd[0], O_RDONLY);
 }
