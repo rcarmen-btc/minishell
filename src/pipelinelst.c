@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 02:00:01 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 19:57:28 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/19 13:40:17 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_str_token(int type)
 {
-	if (type == TOKEN_DSTRING || type == TOKEN_SSTRING)
+	if (type == TOKEN_DSTRING || type == TOKEN_SSTRING || type == TOKEN_CMD)
 		return (1);
 	return (0);
 }
