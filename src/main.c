@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/19 19:55:22 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 09:05:43 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	main(int ac, char **av, char **ep)
 	}
 	env = NULL;
 	init_env(ep, &env);
-	// init_shell();
+	init_shell();
 	while (1)
 		if (loop(line, env, ep, NULL))
 			continue ;

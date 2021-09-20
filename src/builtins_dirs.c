@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/19 16:33:49 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 10:11:57 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	builtin_pwd(void)
 
 int	ft_open_in(char *name, int type, int fd)
 {
-	int resfd;
+	int	resfd;
 
 	resfd = open(name, type);
 	if (resfd == -1)
@@ -67,7 +67,7 @@ int	ft_open_in(char *name, int type, int fd)
 
 int	ft_open_out(char *name, int type, int fd)
 {
-	int resfd;
+	int	resfd;
 
 	resfd = open(name, type, 0666);
 	if (resfd == -1)
@@ -75,7 +75,3 @@ int	ft_open_out(char *name, int type, int fd)
 	close(fd);
 	return (resfd);
 }
-
-
-
-

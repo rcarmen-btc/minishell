@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/19 20:43:03 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 09:10:10 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,19 @@ int	builtins(char **cmd, t_env *env)
 
 static void	parse_first_arg(char *arg)
 {
-	char status;
+	char	status;
 
 	if (!arg)
 		return ;
 	status = (char)ft_atoi(arg);
 	while (*arg)
+	{
 		if (!ft_isdigit(*arg++))
 		{
 			error_message("exit: numeric argument required");
 			exit(0);
 		}
+	}
 	exit(status);
 }
 
