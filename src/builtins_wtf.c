@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 10:13:23 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:37:04 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/21 01:13:50 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ int	ft_is_nbr(char *str)
 
 int	print_exenv(t_env *env)
 {
-	int	i;
-
-	i = 0;
 	while (env != NULL)
 	{
 		if (env->key[0] != '?')

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 17:16:53 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/21 01:11:34 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,15 @@ int	ft_open_in(char *name, int type, int fd)
 	return (resfd);
 }
 
-int	ft_open_out(char *name, int type, int fd)
+int	ft_open_out(char *name, int type)
 {
 	int	resfd;
 
-	resfd = open(name, type, 0666);
+	if (type == 0)
+		resfd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	else
+		resfd = open(name, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (resfd == -1)
 		perror(name);
-	close(fd);
 	return (resfd);
 }

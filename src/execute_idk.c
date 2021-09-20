@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:17:11 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 09:05:26 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/21 01:21:12 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,10 @@ void	out_redir_fd_find(t_lst *pipelinelst, int *fd, char **in_out_files)
 	if (pipelinelst->next->type == TOKEN_RREDIR && \
 		pipelinelst->next->next->type == TOKEN_CMD_ARGS)
 		fd[1] = ft_open_out(in_out_files[1], \
-				O_WRONLY | O_CREAT | O_TRUNC, fd[1]);
+				O_WRONLY | O_CREAT | O_TRUNC);
 	else
 		fd[1] = ft_open_out(in_out_files[1], \
-				O_WRONLY | O_CREAT | O_APPEND, fd[1]);
+				O_WRONLY | O_CREAT | O_APPEND);
 	if (is_in_redir(pipelinelst, 1))
 		fd[0] = ft_open_in(pipelinelst->next->next->next->next->cmd[0], \
 				O_RDONLY, fd[0]);

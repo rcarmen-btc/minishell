@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:12:34 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/18 20:10:28 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/21 01:51:52 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	check_next_is_rdir(t_lst *pipelinelst)
 int	last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env)
 {
 	int		ret;
-	int		fdout;
 	int		fd[2];
 	char	*in_out_files[2];
 	t_lst	*tmp;
@@ -36,6 +35,7 @@ int	last_builtin_cmd(t_lst *pipelinelst, int tmpin, int tmpout, t_env *env)
 	fd[1] = dup(1);
 	tmp = redirections_handling_helper(&pipelinelst, fd, in_out_files);
 	set_out_and_in(fd);
+	ret = 0;
 	if (is_builtin_cmd(tmp->cmd) == 1)
 		ret = builtins(tmp->cmd, env);
 	dup2(tmpin, 0);

@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:18:25 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/21 01:13:15 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	get_tokenlst(char *line, t_lst **tokenlst);
 
 int		ft_open_in(char *name, int type, int fd);
 
-int		ft_open_out(char *name, int type, int fd);
+int		ft_open_out(char *name, int type);
 
 int		is_str_token(int type);
 

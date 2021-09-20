@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 09:10:10 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 19:44:33 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static void	parse_first_arg(char *arg)
 	{
 		if (!ft_isdigit(*arg++))
 		{
-			error_message("exit: numeric argument required");
-			exit(0);
+			printf("minishell: exit: %s: numeric argument required\n", --arg);
+			exit(2);
 		}
 	}
 	exit(status);
