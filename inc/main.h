@@ -44,9 +44,9 @@ void	*ft_realloc(void *ptr, size_t origsize, size_t newsize);
 
 void	get_tokenlst(char *line, t_lst **tokenlst);
 
-int	ft_open_in(char *name, int type, int fd);
+int		ft_open_in(char *name, int type, int fd);
 
-int	ft_open_out(char *name, int type, int fd);
+int		ft_open_out(char *name, int type, int fd);
 
 int		is_str_token(int type);
 
@@ -54,7 +54,7 @@ int		get_cmd_args_cnt(t_lst *tokenlst);
 
 void	add_env(t_env *env, char *key, char *value);
 
-int get_max_nbr(int first, int second);
+int		get_max_nbr(int first, int second);
 
 void	get_pipelinelst(t_lst *tokenlst, t_lst **pipelinelst);
 

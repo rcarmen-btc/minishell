@@ -18,7 +18,7 @@ int		builtins(char **cmd, t_env *env);
 
 int		builtin_echo(char **cmd);
 
-int builtin_export_helper(char *key, char *value);
+int		builtin_export_helper(char *key, char *value);
 
 int		builtin_cd(char *cmd, t_env *env);
 
