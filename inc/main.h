@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/19 15:56:19 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 10:18:25 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	ft_open_out(char *name, int type, int fd);
 int		is_str_token(int type);
 
 int		get_cmd_args_cnt(t_lst *tokenlst);
+
+void	add_env(t_env *env, char *key, char *value);
 
 int get_max_nbr(int first, int second);
 

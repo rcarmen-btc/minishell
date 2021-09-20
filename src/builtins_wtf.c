@@ -6,11 +6,21 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 10:13:23 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:16:02 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 10:37:04 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+#include "builtins.h"
+
+int	ft_is_nbr(char *str)
+{
+	while (*str && !ft_isdigit(*str))
+		str++;
+	if (*str == '\0')
+		return (0);
+	return (1);
+}
 
 int	print_exenv(t_env *env)
 {
@@ -25,7 +35,6 @@ int	print_exenv(t_env *env)
 	}
 	return (0);
 }
-
 
 int	builtin_export(char **cmd, t_env *env, int i)
 {

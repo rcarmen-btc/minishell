@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:15:55 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 10:16:59 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,6 @@ int	builtin_export_helper(char *key, char *value)
 		free(key);
 	if (value)
 		free(value);
-	return (1);
-}
-
-int	ft_is_nbr(char *str)
-{
-	while (*str && !ft_isdigit(*str))
-		str++;
-	if (*str == '\0')
-		return (0);
 	return (1);
 }
 
