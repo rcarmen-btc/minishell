@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:11:57 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/20 17:16:53 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@
 int	cd_helper(t_env *env)
 {
 	char	*buff;
+	t_env	*tmp;
 
+	tmp = env;
+	while (tmp && \
+		ft_strncmp("PWD", tmp->key, \
+		get_max_nbr(ft_strlen("PWD"), ft_strlen(tmp->key))) != 0)
+		tmp = tmp->next;
+	add_env(env, ft_strdup("OLDPWD"), ft_strdup(tmp->value));
 	buff = ft_calloc(MAXCOM, sizeof(char));
 	getcwd(buff, MAXCOM);
 	env_is_exists(env, "PWD", buff);
