@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/21 01:22:11 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 03:53:09 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	in_redir_fd_find(t_lst *pipelinelst, int *fd)
 	else if (pipelinelst->next->type == TOKEN_HERE_DOC && \
 		pipelinelst->next->next->type == TOKEN_CMD_ARGS)
 		fd[0] = handle_heredoc(pipelinelst);
-	if (pipelinelst->next->next->next && is_out_redir(pipelinelst, 1) == 1 && \
+	if (is_out_redir(pipelinelst, 1) == 1 && pipelinelst->next->next->next && \
+		pipelinelst->next->next->next->next && \
 		pipelinelst->next->next->next->next->type == TOKEN_CMD_ARGS)
 		fd[1] = ft_open_out(pipelinelst->next->next->next->next->cmd[0], 0);
-	if (pipelinelst->next->next->next && is_out_redir(pipelinelst, 1) == -1 && \
+	if (is_out_redir(pipelinelst, 1) == -1 && pipelinelst->next->next->next && \
+		pipelinelst->next->next->next->next && \
 		pipelinelst->next->next->next->next->type == TOKEN_CMD_ARGS)
 		fd[1] = ft_open_out(pipelinelst->next->next->next->next->cmd[0], 1);
 }
@@ -73,23 +75,24 @@ t_env *env, int pd[2])
 	int		fd[2];
 	int		status;
 	t_lst	*cmd;
-	int		tmpout;
 
-	fd[0] = dup(0);
 	fd[1] = dup(1);
-	tmpout = dup(1);
 	cmd = redirections_handling_helper(pipelinelst, fd, in_out_files);
 	if (*pipelinelst != NULL && (*pipelinelst)->type == TOKEN_CMD_ARGS && \
 		fork() == 0)
 	{
-		if (fd[1] == tmpout && pd != NULL)
+		if (pd != NULL)
+		{
+			close(fd[1]);
 			fd[1] = pd[1];
+		}
 		set_out_and_in(fd);
 		if (fd[0] != -1 && fd[1] != -1)
 			time_to_execute_the_command(cmd, env, ep);
 		else
 			exit(0);
 	}
+	close(fd[1]);
 	wait(&status);
 	pd_helper(pd);
 	return (WEXITSTATUS(status));

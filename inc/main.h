@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 16:32:04 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/21 01:13:15 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 03:41:34 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	freelst(t_lst *tokenlst, t_lst *pipelinelst);
 void	in_signals(void);
 
 void	ex_signals(void);
+
+void	pd_helper(int *pd);
 
 void	error_message(char *str);
 
