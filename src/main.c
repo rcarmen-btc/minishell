@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/28 21:26:17 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/21 01:58:13 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 11:08:20 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	loop(char *line, t_env *env, char **ep, t_lst *tokenlst)
 	{
 		freeenv(env);
 		free(line);
-		clear_history();
+		rl_clear_history();
 		exit(0);
 	}
 	if (check_line(line) == 1)

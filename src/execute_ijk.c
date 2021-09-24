@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:13:35 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/24 03:53:09 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 11:10:56 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ t_env *env, int pd[2])
 	t_lst	*cmd;
 
 	fd[1] = dup(1);
+	fd[0] = dup(0);
 	cmd = redirections_handling_helper(pipelinelst, fd, in_out_files);
 	if (*pipelinelst != NULL && (*pipelinelst)->type == TOKEN_CMD_ARGS && \
 		fork() == 0)

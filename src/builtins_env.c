@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 10:36:50 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/20 10:16:59 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 11:20:36 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	env_is_exists(t_env *env, char *key, char *value)
 		key_len = ft_strlen(key);
 		if (ft_strlen(env->key) > ft_strlen(key))
 			key_len = ft_strlen(env->key);
-		if (ft_strncmp(env->key, key, key_len) == 0)
+		if (ft_strncmp(env->key, key, key_len) == 0 && key_len != 0)
 		{
 			free(env->value);
 			env->value = value;
@@ -57,4 +57,6 @@ void	add_env(t_env *env, char *key, char *value)
 		env_tmp->next = NULL;
 		find_last_env(env)->next = env_tmp;
 	}
+	else
+		free(key);
 }
