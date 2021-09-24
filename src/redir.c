@@ -6,7 +6,7 @@
 /*   By: rcarmen <rcarmen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 20:18:48 by rcarmen           #+#    #+#             */
-/*   Updated: 2021/09/21 01:49:55 by rcarmen          ###   ########.fr       */
+/*   Updated: 2021/09/24 11:24:01 by rcarmen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char **in_out_files)
 {
 	t_lst	*cmd;
 
+	fd[1] = dup(1);
+	fd[0] = dup(0);
 	cmd = *pipelinelst;
 	while (*pipelinelst && is_out_redir(*pipelinelst, 0))
 	{
